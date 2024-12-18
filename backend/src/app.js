@@ -4,7 +4,7 @@ import dotenv from 'dotenv';
 import sequelize from './db/pool.js';
 import session from 'express-session';
 import passport from './config/passport-setup.js';
-import authRoutes from './routes/oauthRoutes.js';
+import authRoutes from './routes/authRoutes.js';
 
 // Import models to ensure they're loaded
 import User from './models/User.js';

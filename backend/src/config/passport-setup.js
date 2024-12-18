@@ -1,6 +1,7 @@
 // backend/src/config/passport-setup.js
 import passport from 'passport';
 import { Strategy as GoogleStrategy } from 'passport-google-oauth20';
+import { Strategy as LocalStrategy} from 'passport-local'
 import dotenv from 'dotenv';
 import User from '../models/User.js'; // Your User model
 
@@ -23,10 +24,10 @@ passport.use(new GoogleStrategy({
         // User exists, pass to done
         return done(null, existingUser);
       }
-
+      
       // Ensure required data from Google profile exists
-      const firstName = profile.name?.givenName || 'DefaultFirstName';
-      const lastName = profile.name?.familyName || 'DefaultLastName';
+      const firstName = 'DefaultFirstName'; //const firstName = profile.name?.givenName || 'DefaultFirstName';
+      const lastName = 'DefaultLastName';  //const lastName = profile.name?.familyName || 'DefaultLastName';
       const email = profile.emails?.[0]?.value || 'defaultemail@example.com';
 
       // Create new user if not exists
@@ -42,6 +43,20 @@ passport.use(new GoogleStrategy({
     } catch (error) {
       console.error('Error during Google login:', error);
       return done(error, false);
+    }
+  }
+));
+
+// Local Strategy
+passport.use(new LocalStrategy(
+  async function(email, password, done) {
+    try {
+      const user = await User.findOne({ where: { email } });
+      if (!user) { return done(null, false, { message: 'Incorrect email.' }); }
+      if (!user.validPassword(password)) { return done(null, false, { message: 'Incorrect password.' }); }
+      return done(null, user);
+    } catch (err) {
+      return done(err);
     }
   }
 ));

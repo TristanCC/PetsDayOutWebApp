@@ -24,6 +24,19 @@ router.get('/google/callback',
       res.redirect('http://localhost:5173'); // Successful login
     }
   );
+
+// Local Authentication
+
+app.use(express.json());  // For parsing application/json
+app.use(express.urlencoded({ extended: true }));  // For parsing application/x-www-form-urlencoded
+
+
+router.post('/login', 
+  passport.authenticate('local', {failureRedirect: '/login'}),
+  (req,res) => {
+    res.redirect('/')
+  }
+)
   
 
 // Logout
