@@ -5,6 +5,7 @@ import sequelize from './db/pool.js';
 import session from 'express-session';
 import passport from './config/passport-setup.js';
 import authRoutes from './routes/authRoutes.js';
+import flash from 'connect-flash'; 
 
 // Import models to ensure they're loaded
 import User from './models/User.js';
@@ -15,27 +16,48 @@ dotenv.config();
 const app = express();
 const PORT = process.env.PORT || 5000;
 
+// CORS setup
+const corsOptions = {
+  origin: 'http://localhost:5173',
+  credentials: true,
+};
+app.use(cors(corsOptions));
+app.options('*', cors(corsOptions)); // Handle preflight requests
+
 // Middleware
-app.use(cors());
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
 // Session middleware
 app.use(session({
-  secret: process.env.SESSION_SECRET, // Add to .env
+  secret: process.env.SESSION_SECRET,
   resave: false,
   saveUninitialized: false,
   cookie: { 
-    secure: process.env.NODE_ENV === 'production', // In development, this should be false
-    httpOnly: true, // Ensures cookie is not accessible via JS
-    maxAge: 24 * 60 * 60 * 1000 // 24 hours, can reduce this temporarily for testing
-  }
+    secure: process.env.NODE_ENV === 'production',
+    httpOnly: true,
+    maxAge: 24 * 60 * 60 * 1000,
+    sameSite: process.env.NODE_ENV === 'production' ? 'None' : 'Lax',
+  },
 }));
+
+// Log incoming requests
+app.use((req, res, next) => {
+  console.log('Incoming request:', req.method, req.path);
+  next();
+});
+
+
+// Connect-flash middleware
+app.use(flash());
 
 // Initialize Passport
 app.use(passport.initialize());
 app.use(passport.session());
 
 app.use('/auth', authRoutes);
+
+// add endpoints for updating profile info: first name, last name, password
 
 // Database connection function
 async function connectDatabase() {

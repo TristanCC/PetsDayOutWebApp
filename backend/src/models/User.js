@@ -47,12 +47,11 @@ const User = sequelize.define('User', {
     unique: true,
     allowNull: true
   }
-}, {
-  instanceMethods: {
-    validPassword(password) {
-      return bcrypt.compareSync(password, this.password);
-    }
-  }
 });
+
+// Define `validPassword` as a prototype method
+User.prototype.validPassword = function(password) {
+  return bcrypt.compareSync(password, this.password);
+};
 
 export default User;

@@ -49,17 +49,24 @@ passport.use(new GoogleStrategy({
 
 // Local Strategy
 passport.use(new LocalStrategy(
+  { usernameField: 'email' }, // Explicitly use 'email' instead of the default 'username'
   async function(email, password, done) {
+    email = email.toLowerCase()
     try {
       const user = await User.findOne({ where: { email } });
-      if (!user) { return done(null, false, { message: 'Incorrect email.' }); }
-      if (!user.validPassword(password)) { return done(null, false, { message: 'Incorrect password.' }); }
+      if (!user) {
+        return done(null, false, { message: 'Incorrect email.' });
+      }
+      if (!user.validPassword(password)) {
+        return done(null, false, { message: 'Incorrect password.' });
+      }
       return done(null, user);
     } catch (err) {
       return done(err);
     }
   }
 ));
+
 
 
 // Serialize user for the session
