@@ -15,6 +15,7 @@ function App() {
   useEffect(() => {
     const checkLoginStatus = async () => {
       try {
+        console.log('frontend trying to fetch /auth/status')
         const response = await fetch('/auth/status', {
           method: 'GET',
           credentials: 'include', // Ensure cookies are sent
@@ -28,7 +29,7 @@ function App() {
         }
       } catch (error) {
         console.error('Error checking login status:', error);
-        setIsLoggedIn(false);
+        //setIsLoggedIn(false);
       }
     };
   
@@ -37,32 +38,32 @@ function App() {
 
 
   const handleLogin = async (e) => {
-  e.preventDefault();
-
-  const credentials = { email, password };
-
-  try {
-    const response = await fetch('/auth/login', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(credentials),
-      credentials: 'include',
-    });
-
-    if (!response.ok) {
-      const errorData = await response.text();
-      console.error('Error response from server:', errorData);
-      setError(errorData || 'Login failed.');
-      return;
+    e.preventDefault();
+    
+    const credentials = { email, password };
+    
+    try {
+      const response = await fetch('/auth/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(credentials),
+        credentials: 'include',
+      });
+    
+      if (!response.ok) {
+        const errorData = await response.text();
+        console.error('Error response from server:', errorData);
+        setError(errorData || 'Login failed.');
+        return;
+      }
+    
+      setError(null);
+      setIsLoggedIn(true);
+      window.location.href = '/'; // Redirect to home page
+    } catch (error) {
+      console.error('Error during login:', error);
+      setError('An error occurred during login.');
     }
-
-    setError(null);
-    setIsLoggedIn(true);
-    window.location.href = '/'; // Redirect to home page
-  } catch (error) {
-    console.error('Error during login:', error);
-    setError('An error occurred during login.');
-  }
 };
 
 const handleLogout = async () => {
