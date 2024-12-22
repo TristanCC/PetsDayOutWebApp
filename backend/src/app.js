@@ -3,9 +3,12 @@ import cors from 'cors';
 import dotenv from 'dotenv';
 import sequelize from './db/pool.js';
 import session from 'express-session';
+import flash from 'connect-flash'; 
+
+
 import passport from './config/passport-setup.js';
 import authRoutes from './routes/authRoutes.js';
-import flash from 'connect-flash'; 
+import mainRoutes from './routes/mainRoutes.js'
 
 // Import models to ensure they're loaded
 import User from './models/User.js';
@@ -56,6 +59,7 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 app.use('/auth', authRoutes);
+app.use('/', mainRoutes);
 
 // add endpoints for updating profile info: first name, last name, password
 

@@ -7,6 +7,7 @@ export default defineConfig({
   server: {
     proxy: {
       '/auth': 'http://localhost:5000', // Proxy requests to /auth to the backend
+      '/db': 'http://localhost:5000'
     },
   },
 });

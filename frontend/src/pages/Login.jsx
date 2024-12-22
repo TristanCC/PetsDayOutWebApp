@@ -83,7 +83,7 @@ const handleLogout = async () => {
     <>
       <div className=' flex flex-col gap-3'>
         
-        <h1 className='text-3xl'>A Pet's Day Out Dashboard</h1>
+        <h1 className='text-3xl'>A Pet&apos;s Day Out Dashboard</h1>
         {/* Login form */}
         <form onSubmit={handleLogin} className='flex flex-col w-1/2 self-center gap-2 mt-2 max-w-96'>
           <label htmlFor="email">Email:</label>
