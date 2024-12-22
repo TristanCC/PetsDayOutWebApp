@@ -1,16 +1,16 @@
-import User from '../models/User.js';
+import Customer from '../models/Customer.js';
 
-export const getUsers = async (req, res) => {
+export const getCustomers = async (req, res) => {
   try {
-    const users = await User.findAll();
+    const users = await Customer.findAll();
     
     // Convert Sequelize instances to plain objects
-    const plainUsers = users.map(user => user.toJSON());
+    const plainCustomers = users.map(customer => customer.toJSON());
 
     // Send plain users as JSON
-    res.json(plainUsers);
+    res.json(plainCustomers);
   } catch (error) {
-    console.error('Error fetching users:', error);
-    res.status(500).json({ error: 'Failed to fetch users. Please try again later.' });
+    console.error('Error fetching customers:', error);
+    res.status(500).json({ error: 'Failed to fetch customers. Please try again later.' });
   }
 };

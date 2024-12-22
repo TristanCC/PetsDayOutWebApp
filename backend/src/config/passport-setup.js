@@ -14,7 +14,8 @@ passport.use(new GoogleStrategy({
 },
 async (accessToken, refreshToken, profile, done) => {
   try {
-    let user = await User.findOne({ googleId: profile.id });
+    let user = await User.findOne({ where: { email: profile.emails[0].value } });
+
     if (!user) {
       // If the user doesn't exist, create a new one
       user = new User({
@@ -24,13 +25,19 @@ async (accessToken, refreshToken, profile, done) => {
         lastName: profile.name.familyName,
       });
       await user.save();
+    } else if (!user.googleId) {
+      // If the user exists but doesn't have a googleId, update the user's googleId
+      user.googleId = profile.id;
+      await user.save(); // Save the updated user
     }
+
     return done(null, user);
   } catch (error) {
     return done(error, null);
   }
 }
 ));
+
 
 // Local Strategy
 passport.use(new LocalStrategy(

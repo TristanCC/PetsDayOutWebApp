@@ -20,19 +20,18 @@ function Home() {
 
         if (data.loggedIn) {
           try {
-            console.log('trying to fetch /db/getUsers');
-            const userResponse = await fetch('/db/getUsers', {
+            console.log('trying to fetch /db/getCustomers');
+            const customerResponse = await fetch('/db/getCustomers', {
               method: 'GET',
               credentials: 'include',
             });
-            console.log(userResponse)
 
-            if (!userResponse.ok) {
-              console.error('Failed to fetch users:', userResponse.status, userResponse.statusText);
-              const errorText = await userResponse.text();  // Read error body if exists
+            if (!customerResponse.ok) {
+              console.error('Failed to fetch users:', customerResponse.status, customerResponse.statusText);
+              const errorText = await customerResponse.text();  // Read error body if exists
               console.error('Error response body:', errorText);
             } else {
-              const customers = await userResponse.json();
+              const customers = await customerResponse.json();
               setCustomers(customers);
             }
           } catch (error) {
@@ -53,32 +52,30 @@ function Home() {
 
   return (
     <>
-      <div className="">
-        <h1>A Pet&apos;s Day Out</h1>
-        <div className="card">
+      <h1>A Pet&apos;s Day Out</h1>
+      <div className="card">
           <button onClick={() => setCount((count) => count + 1)}>
             count is {count}
           </button>
-        </div>
-        {isLoggedIn ? (
-          <>
-            <div>
-              <p>You are logged in!</p>
-            </div>
-            <a href="/login">Log out</a>
-          </>
-        ) : (
-          <>
-            <div>
-              <p>You are not logged in.</p>
-            </div>
-            <a href="/login">Log in</a>
-          </>
-        )}
       </div>
+      {isLoggedIn ? (
+        <>
+          <div>
+            <p>You are logged in!</p>
+          </div>
+          <a href="/login">Log out</a>
+        </>
+      ) : (
+        <>
+          <div>
+            <p>You are not logged in.</p>
+          </div>
+          <a href="/login">Log in</a>
+        </>
+      )}
       <div>
         {customers?.map((customer) => (
-          <p key={customer.id}>{customer.email} {customer.firstName}</p>
+          <p key={customer.id}>{customer.firstName} {customer.lastName} {customer.phoneNumber}</p>
         ))}
       </div>
     </>

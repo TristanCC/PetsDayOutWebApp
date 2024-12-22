@@ -12,6 +12,7 @@ import mainRoutes from './routes/mainRoutes.js'
 
 // Import models to ensure they're loaded
 import User from './models/User.js';
+import Customer from './models/Customer.js'
 
 // Load environment variables
 dotenv.config();

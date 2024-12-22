@@ -3,6 +3,6 @@ import * as mainController from '../controllers/mainController.js'
 
 const router = express.Router()
 
-router.get('/db/getUsers', mainController.getUsers)
+router.get('/db/getCustomers', mainController.getCustomers)
 
 export default router

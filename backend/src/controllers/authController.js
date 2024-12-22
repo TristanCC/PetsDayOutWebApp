@@ -45,9 +45,27 @@ export const checkStatus = (req, res) => {
   }
 };
 
-export const googleCallback = (req, res) => {
-  res.redirect('http://localhost:5173');
+export const googleCallback = async (req, res) => {
+  try {
+    const user = req.user; // This is the authenticated user from Passport
+    console.log('Authenticated User:', user); // Add this line to check the user
+
+    if (user) {
+      // User is already authenticated (via local strategy)
+      if (!user.googleId) {
+        user.googleId = req.user.googleId;
+        await user.save();
+      }
+    }
+
+    res.redirect('http://localhost:5173'); // Redirect to your frontend
+  } catch (err) {
+    console.error('Error during Google callback:', err);
+    res.status(500).json({ error: 'Internal server error' });
+  }
 };
+
+
 
 export const logout = (req, res) => {
   req.logout((err) => {
