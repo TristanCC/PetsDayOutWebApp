@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 
+
 function Home() {
   const [count, setCount] = useState(0);
   const [isLoggedIn, setIsLoggedIn] = useState(false); // State to track login status
@@ -74,10 +75,12 @@ function Home() {
         </>
       )}
       <div>
+      
         {customers?.map((customer) => (
           <p key={customer.id}>{customer.firstName} {customer.lastName} {customer.phoneNumber}</p>
         ))}
-      </div>
+
+    </div>
     </>
   );
 }
