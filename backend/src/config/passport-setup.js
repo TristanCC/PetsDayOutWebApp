@@ -8,43 +8,28 @@ import User from '../models/User.js'; // Your User model
 dotenv.config();
 
 passport.use(new GoogleStrategy({
-    clientID: process.env.GOOGLE_CLIENT_ID,
-    clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-    callbackURL: process.env.GOOGLE_CALLBACK_URL,
-    scope: ['profile', 'email']
-  },
-  async (accessToken, refreshToken, profile, done) => {
-    try {
-      // Check if user already exists in database
-      let existingUser = await User.findOne({ 
-        where: { googleId: profile.id } 
-      });
-
-      if (existingUser) {
-        // User exists, pass to done
-        return done(null, existingUser);
-      }
-      
-      // Ensure required data from Google profile exists
-      const firstName = 'DefaultFirstName'; //const firstName = profile.name?.givenName || 'DefaultFirstName';
-      const lastName = 'DefaultLastName';  //const lastName = profile.name?.familyName || 'DefaultLastName';
-      const email = profile.emails?.[0]?.value || 'defaultemail@example.com';
-
-      // Create new user if not exists
-      const newUser = await User.create({
+  clientID: process.env.GOOGLE_CLIENT_ID, // Ensure this is set correctly in your .env file
+  clientSecret: process.env.GOOGLE_CLIENT_SECRET, // Ensure this is set correctly
+  callbackURL: process.env.GOOGLE_CALLBACK_URL || 'http://localhost:5000/auth/google/callback', // Ensure this is set correctly in your .env
+},
+async (accessToken, refreshToken, profile, done) => {
+  try {
+    let user = await User.findOne({ googleId: profile.id });
+    if (!user) {
+      // If the user doesn't exist, create a new one
+      user = new User({
         googleId: profile.id,
-        firstName,
-        lastName,
-        email,
-        // You might want to add more fields
+        email: profile.emails[0].value,
+        firstName: profile.name.givenName,
+        lastName: profile.name.familyName,
       });
-
-      return done(null, newUser);
-    } catch (error) {
-      console.error('Error during Google login:', error);
-      return done(error, false);
+      await user.save();
     }
+    return done(null, user);
+  } catch (error) {
+    return done(error, null);
   }
+}
 ));
 
 // Local Strategy
