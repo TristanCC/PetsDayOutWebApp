@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-
+import Demo from '../components/Table'
 
 function Home() {
   const [count, setCount] = useState(0);
@@ -59,6 +59,9 @@ function Home() {
             count is {count}
           </button>
       </div>
+      <Demo>
+        
+      </Demo>
       {isLoggedIn ? (
         <>
           <div>
