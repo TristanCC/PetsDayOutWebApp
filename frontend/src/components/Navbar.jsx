@@ -6,7 +6,7 @@ function Navbar() {
 
     return (
         <>
-            <div className="bg-white text-[#121212]">
+            <div className="bg-white text-[#121212] w-full">
                 <ul className="flex flex-row justify-around h-full items-center">
                     <li><Link href="/">Home</Link></li>
                 </ul>

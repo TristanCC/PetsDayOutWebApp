@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import Demo from '../components/Table'
+import CustomerInfoModal from '@/components/CustomerInfoModal';
 
 function Home() {
   const [count, setCount] = useState(0);
@@ -59,17 +60,16 @@ function Home() {
             count is {count}
           </button>
       </div>
-      <Demo>
-        
-      </Demo>
+      <CustomerInfoModal></CustomerInfoModal>
       {isLoggedIn ? (
         <>
+          <Demo customers={customers}/> {/* Pass the customers prop here */}
           <div>
             <p>You are logged in!</p>
           </div>
           <a href="/login">Log out</a>
         </>
-      ) : (
+        ) : (
         <>
           <div>
             <p>You are not logged in.</p>
@@ -79,9 +79,9 @@ function Home() {
       )}
       <div>
       
-        {customers?.map((customer) => (
+        {/* {customers?.map((customer) => (
           <p key={customer.id}>{customer.firstName} {customer.lastName} {customer.phoneNumber}</p>
-        ))}
+        ))} */}
 
     </div>
     </>

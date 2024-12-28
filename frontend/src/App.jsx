@@ -10,7 +10,7 @@ function App() {
 
   return (
     <>
-      <div className='flex flex-col min-h-screen'>
+      <div className='flex flex-col min-h-screen items-center'>
         <Navbar />
         <div className='bg-[#FAF9F6] flex-1 text-neutral-600 flex flex-col w-full h-full text-center gap-2 justify-center'>
           <BrowserRouter>
