@@ -1,10 +1,11 @@
 import { useState, useEffect } from 'react';
-import Demo from '../components/Table'
-import CustomerInfoModal from '@/components/CustomerInfoModal';
 
-function Home() {
+import { Button } from '@/components/ui/button'
+
+import Demo from '../components/Table'
+
+function Home({isLoggedIn, setIsLoggedIn}) {
   const [count, setCount] = useState(0);
-  const [isLoggedIn, setIsLoggedIn] = useState(false); // State to track login status
   const [customers, setCustomers] = useState([]);
 
   useEffect(() => {
@@ -55,12 +56,6 @@ function Home() {
   return (
     <>
       <h1>A Pet&apos;s Day Out</h1>
-      <div className="card">
-          <button onClick={() => setCount((count) => count + 1)}>
-            count is {count}
-          </button>
-      </div>
-      <CustomerInfoModal></CustomerInfoModal>
       {isLoggedIn ? (
         <>
           <Demo customers={customers}/> {/* Pass the customers prop here */}
@@ -83,9 +78,22 @@ function Home() {
           <p key={customer.id}>{customer.firstName} {customer.lastName} {customer.phoneNumber}</p>
         ))} */}
 
+      <div>
+        <Button variant="surface">
+          Create Customer
+        </Button>
+      </div>
+
     </div>
     </>
   );
 }
 
 export default Home;
+
+
+{/* <div className="">
+<button onClick={() => setCount((count) => count + 1)}>
+  count is {count}
+</button>
+</div> */}

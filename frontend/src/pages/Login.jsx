@@ -81,11 +81,11 @@ const handleLogout = async () => {
 
   return (
     <>
-      <div className=' flex flex-col gap-3'>
+      <div className=''>
         
         <h1 className='text-3xl'>A Pet&apos;s Day Out Dashboard</h1>
         {/* Login form */}
-        <form onSubmit={handleLogin} className='flex flex-col w-1/2 self-center gap-2 mt-2 max-w-96'>
+        <form onSubmit={handleLogin} className=''>
           <label htmlFor="email">Email:</label>
           <input
             type="email"
@@ -94,7 +94,7 @@ const handleLogout = async () => {
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             required
-            className='bg-neutral-300 p-2 rounded-lg'
+            className=''
           />
           <br />
           <label htmlFor="password">Password:</label>
@@ -105,14 +105,14 @@ const handleLogout = async () => {
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             required
-            className='bg-neutral-300 p-2 rounded-lg'
+            className=''
           />
           <br />
-          <input type="submit" value="Submit" className='btn' />
+          <input type="submit" value="Submit" className='' />
         </form>
         {error && <p style={{ color: 'red' }}>{error}</p>}
         <p></p>
-        <a href="http://localhost:5000/auth/google" className="btn btn-primary">
+        <a href="http://localhost:5000/auth/google" className="">
           Sign in with Google
         </a>
         <p></p>
@@ -120,7 +120,7 @@ const handleLogout = async () => {
         {isLoggedIn ? (
           <div>
             <p>You are logged in!</p>
-            <button onClick={handleLogout} className="btn btn-primary">Log out</button>
+            <button onClick={handleLogout} className="">Log out</button>
           </div>
         ) : (
           <div>

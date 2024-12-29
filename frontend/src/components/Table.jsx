@@ -10,50 +10,92 @@ import {
 import { Button } from "@/components/ui/button"
 import { Checkbox } from "@/components/ui/checkbox"
 import { useState } from "react"
-import CustomerInfoModal from "./CustomerInfoModal"
 
 // Updated handleClickCustomer function
 const handleClickCustomer = (customer) => {
-  
+  // You can add functionality here if needed for customer row click
 }
 
 const Demo = ({ customers }) => {
-    const [selection, setSelection] = useState([]);
+  const [selection, setSelection] = useState([])
 
-    const rows = customers.map((customer) => (
-      <Table.Row
-        key={customer.id}
-        data-selected={selection.includes(customer.id) ? "" : undefined}
-        className="cursor-pointer hover:bg-neutral-800 hover:text-white text-sm sm:text-base"
-        // Pass the customer object to handleClickCustomer
-        onClick={() => handleClickCustomer(customer)}
-      >
-        <Table.Cell>{customer.firstName} {customer.middleName ? customer.middleName[0] + '.' : ""} {customer.lastName}</Table.Cell>
-        <Table.Cell>{customer.phoneNumber}</Table.Cell>
-        <Table.Cell className="truncate">{customer.email ? customer.email : "N/A"}</Table.Cell>
-        <Table.Cell>{customer.numberOfPets ?? "N/A"}</Table.Cell>
-        <Table.Cell className="pr-0 mr-0 text-center">
-          <Button variant="ghost" size="sm" colorPalette="pink">☰</Button>
-        </Table.Cell>
-      </Table.Row>
-    ));
-  
-    return (
-      <div className="overflow-x-auto">
-        <Table.Root interactive showColumnBorder className="max-w-[1200px] table-fixed m-auto text-neutral-400">
-          <Table.Header className="bg-gray-900 text-left text-sm sm:text-base">
-            <Table.Row>
-              <Table.ColumnHeader className="px-2 py-3">Name</Table.ColumnHeader>
-              <Table.ColumnHeader className="px-2 py-3">Phone Number</Table.ColumnHeader>
-              <Table.ColumnHeader className="px-2 py-3 overflow-hidden text-ellipsis">Email</Table.ColumnHeader>
-              <Table.ColumnHeader className="px-2 py-3">Number of Pets</Table.ColumnHeader>
-              <Table.ColumnHeader className="px-2 py-3"></Table.ColumnHeader>
-            </Table.Row>
-          </Table.Header>
-          <Table.Body>{rows}</Table.Body>
-        </Table.Root>
-      </div>
-    );
-};
+  const hasSelection = selection.length > 0
+  const indeterminate = hasSelection && selection.length < customers.length
 
-export default Demo;
+  const rows = customers.map((customer) => (
+    <Table.Row
+      key={customer.id}
+      data-selected={selection.includes(customer.id) ? "" : undefined}
+      className="tableRow"
+      onClick={() => handleClickCustomer(customer)}
+    >
+      <Table.Cell>
+        <Checkbox
+          top="1"
+          aria-label="Select row"
+          checked={selection.includes(customer.id)}
+          onCheckedChange={(changes) => {
+            setSelection((prev) =>
+              changes.checked
+                ? [...prev, customer.id]
+                : selection.filter((id) => id !== customer.id)
+            )
+          }}
+        />
+      </Table.Cell>
+      <Table.Cell>{customer.firstName} {customer.middleName ? customer.middleName[0] + '.' : ""} {customer.lastName}</Table.Cell>
+      <Table.Cell>{customer.phoneNumber}</Table.Cell>
+      <Table.Cell className="email">{customer.email ? customer.email : "N/A"}</Table.Cell>
+      <Table.Cell>{customer.numberOfPets ?? "N/A"}</Table.Cell>
+      {/* <Table.Cell className="">
+        <Button variant="outline" size="sm">☰</Button>
+      </Table.Cell> */}
+    </Table.Row>
+  ))
+
+  return (
+    <div className="table">
+      <Table.Root interactive tableLayout={"fixed"}>
+        <Table.Header>
+          <Table.Row>
+            <Table.ColumnHeader w="6">
+              <Checkbox
+                top="1"
+                aria-label="Select all rows"
+                checked={indeterminate ? "indeterminate" : selection.length > 0}
+                onCheckedChange={(changes) => {
+                  setSelection(
+                    changes.checked ? customers.map((customer) => customer.id) : []
+                  )
+                }}
+              />
+            </Table.ColumnHeader>
+            <Table.ColumnHeader>Name</Table.ColumnHeader>
+            <Table.ColumnHeader>Phone Number</Table.ColumnHeader>
+            <Table.ColumnHeader>Email</Table.ColumnHeader>
+            <Table.ColumnHeader>Number of Pets</Table.ColumnHeader>
+            {/* <Table.ColumnHeader></Table.ColumnHeader> */}
+          </Table.Row>
+        </Table.Header>
+        <Table.Body>{rows}</Table.Body>
+      </Table.Root>
+
+      <ActionBarRoot open={hasSelection}>
+        <ActionBarContent>
+          <ActionBarSelectionTrigger>
+            {selection.length} selected
+          </ActionBarSelectionTrigger>
+          <ActionBarSeparator />
+          <Button variant="outline" size="sm">
+            View info <Kbd>⌫</Kbd>
+          </Button>
+          <Button variant="outline" size="sm">
+            Share <Kbd>T</Kbd>
+          </Button>
+        </ActionBarContent>
+      </ActionBarRoot>
+    </div>
+  )
+}
+
+export default Demo

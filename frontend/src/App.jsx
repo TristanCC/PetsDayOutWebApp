@@ -1,4 +1,6 @@
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import { useState, useEffect } from 'react';
+import { Theme } from '@chakra-ui/react'
 
 import Navbar from './components/Navbar'
 import Home from './pages/Home'
@@ -6,21 +8,37 @@ import Login from './pages/Login'
 
 function App() {
 
+    const [isLoggedIn, setIsLoggedIn] = useState(false); // State to track login status
 //
 
   return (
     <>
-      <div className='flex flex-col min-h-screen items-center'>
-        <Navbar />
-        <div className='bg-[#FAF9F6] flex-1 text-neutral-600 flex flex-col w-full h-full text-center gap-2 justify-center'>
-          <BrowserRouter>
-            <Routes>
-              <Route path="/" element={<Home />}></Route>
-              <Route path='/login' element={<Login/>}></Route>
-            </Routes>
-          </BrowserRouter>
+      <Theme appearance='light' colorPalette="blue">
+        <div className='outerWrapper'>
+          <div className='wrapperLeft'>
+            <Navbar />
+            <div className=''>
+              <BrowserRouter>
+                <Routes>
+                  <Route path="/" element={<Home isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn}/>}></Route>
+                  <Route path='/login' element={<Login/>}></Route>
+                </Routes>
+              </BrowserRouter>
+            </div>
+          </div>
+          <div className='wrapperLeft'>
+            <Navbar />
+            <div className=''>
+              <BrowserRouter>
+                <Routes>
+                  <Route path="/" element={<Home />}></Route>
+                  <Route path='/login' element={<Login/>}></Route>
+                </Routes>
+              </BrowserRouter>
+            </div>
+          </div>
         </div>
-      </div>
+      </Theme>
     </>
   );
 }
