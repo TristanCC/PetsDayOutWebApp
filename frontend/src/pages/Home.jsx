@@ -3,6 +3,7 @@ import { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button'
 
 import Demo from '../components/Table'
+import Login from './Login'
 
 function Home({isLoggedIn, setIsLoggedIn}) {
   const [count, setCount] = useState(0);
@@ -55,7 +56,6 @@ function Home({isLoggedIn, setIsLoggedIn}) {
 
   return (
     <>
-      <h1>A Pet&apos;s Day Out</h1>
       {isLoggedIn ? (
         <>
           <Demo customers={customers}/> {/* Pass the customers prop here */}
@@ -69,7 +69,7 @@ function Home({isLoggedIn, setIsLoggedIn}) {
           <div>
             <p>You are not logged in.</p>
           </div>
-          <a href="/login">Log in</a>
+          <Login/>
         </>
       )}
       <div>

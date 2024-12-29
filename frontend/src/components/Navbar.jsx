@@ -52,7 +52,7 @@ function Navbar() {
                     </PopoverRoot>
                     </div>
                   </Tabs.List>
-                  <Tabs.Content value="first">First panel</Tabs.Content>
+                  <Tabs.Content value="first"></Tabs.Content>
                   <Tabs.Content value="second">Second panel</Tabs.Content>
                 </Tabs.Root>
             </div>

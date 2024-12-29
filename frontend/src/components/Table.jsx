@@ -47,9 +47,9 @@ const Demo = ({ customers }) => {
       <Table.Cell>{customer.phoneNumber}</Table.Cell>
       <Table.Cell className="email">{customer.email ? customer.email : "N/A"}</Table.Cell>
       <Table.Cell>{customer.numberOfPets ?? "N/A"}</Table.Cell>
-      {/* <Table.Cell className="">
+      <Table.Cell className="">
         <Button variant="outline" size="sm">☰</Button>
-      </Table.Cell> */}
+      </Table.Cell>
     </Table.Row>
   ))
 
@@ -74,7 +74,7 @@ const Demo = ({ customers }) => {
             <Table.ColumnHeader>Phone Number</Table.ColumnHeader>
             <Table.ColumnHeader>Email</Table.ColumnHeader>
             <Table.ColumnHeader>Number of Pets</Table.ColumnHeader>
-            {/* <Table.ColumnHeader></Table.ColumnHeader> */}
+            <Table.ColumnHeader></Table.ColumnHeader>
           </Table.Row>
         </Table.Header>
         <Table.Body>{rows}</Table.Body>
@@ -87,7 +87,7 @@ const Demo = ({ customers }) => {
           </ActionBarSelectionTrigger>
           <ActionBarSeparator />
           <Button variant="outline" size="sm">
-            View info <Kbd>⌫</Kbd>
+            Delete <Kbd>⌫</Kbd>
           </Button>
           <Button variant="outline" size="sm">
             Share <Kbd>T</Kbd>
