@@ -1,8 +1,7 @@
 import { useState, useEffect } from 'react';
 
-function Login() {
+function Login({ isLoggedIn, setIsLoggedIn }) {
     
-  const [isLoggedIn, setIsLoggedIn] = useState(false); // State to track login status
   const [error, setError] = useState(null); // For handling login errors
 
   const [email, setEmail] = useState('');

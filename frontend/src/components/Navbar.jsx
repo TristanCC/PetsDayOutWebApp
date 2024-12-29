@@ -41,11 +41,14 @@ function Navbar() {
                         <PopoverArrow />
                         <PopoverBody>
                           <PopoverTitle my="4" fontWeight="medium" fontSize="lg">Find a customer</PopoverTitle>
-                          <div className="flexCol">
-                            <Input variant="subtle" color={"white"} placeholder="First name" size="md" />
-                            <Input variant="subtle" color={"white"} placeholder="Last name" size="md" />
-                            <Input variant="subtle" color={"white"} placeholder="Phone number" size="md" />
-                          </div>
+                          <form action="" onSubmit={console.log('submitted')}>
+                            <div className="flexCol">
+                              <Input variant="subtle" color={"white"} placeholder="First name" size="md" />
+                              <Input variant="subtle" color={"white"} placeholder="Last name" size="md" />
+                              <Input variant="subtle" color={"white"} placeholder="Phone number" size="md" />
+                              <Button type="submit">Search</Button>
+                            </div>
+                          </form>
 
                         </PopoverBody>
                       </PopoverContent>

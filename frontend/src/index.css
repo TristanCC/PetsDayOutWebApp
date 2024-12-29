@@ -1,10 +1,17 @@
+* {
+  word-wrap:normal;
+}
+
 body {
   min-height: 100vh;
   background-color: white;
 }
 
 .outerWrapper {
+  display: flex;
+  flex-wrap: wrap;
   padding: 2rem;
+  gap: 5rem;
 }
 
 .tabs {
@@ -33,6 +40,7 @@ body {
   display: flex;
   flex-direction: column;
   gap: 1rem;
+  color: white;
 }
 
 .themeToggle {
@@ -41,11 +49,19 @@ body {
   right: 1rem;
 }
 
+.email {
+  text-overflow: ellipsis;
+  word-wrap: break-word;
+}
+
 @media (max-width: 510px) {
   .email {
     max-width: 4rem;
     white-space: nowrap;
     overflow: hidden;
-    text-overflow: ellipsis;
+  }
+
+  .outerWrapper {
+    padding: 0.25rem;
   }
 }

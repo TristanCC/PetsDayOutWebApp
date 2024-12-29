@@ -30,13 +30,12 @@ function App() {
               <BrowserRouter>
                 <Routes>
                   <Route path="/" element={<Home isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} />} />
-                  <Route path='/login' element={<Login />} />
+                  <Route path='/login' element={<Login isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} />} />
                 </Routes>
               </BrowserRouter>
             </div>
           </div>
           <div className='wrapperLeft'>
-            <Navbar />
             <div className=''>
               <BrowserRouter>
                 <Routes>
