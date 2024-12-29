@@ -7,6 +7,10 @@ body {
   background-color: white;
 }
 
+.root {
+  min-height: 100vh;
+}
+
 .outerWrapper {
   display: flex;
   flex-wrap: wrap;
@@ -44,9 +48,16 @@ body {
 }
 
 .themeToggle {
-  position: absolute;
-  top: 1rem;
+  position: fixed;
+  bottom: 1rem;
   right: 1rem;
+  
+}
+
+.addCustomerButton {
+  position: relative;
+  bottom: 0;
+  right: 0;
 }
 
 .email {

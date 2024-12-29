@@ -37,7 +37,7 @@ function Navbar() {
                         <LuSearch />
                         </IconButton>
                       </PopoverTrigger>
-                      <PopoverContent css={{ "--popover-bg": "#121212" }}>
+                      <PopoverContent css={{ "--popover-bg": "rgba(250,250,250,0.95)" }}>
                         <PopoverArrow />
                         <PopoverBody>
                           <PopoverTitle my="4" fontWeight="medium" fontSize="lg">Find a customer</PopoverTitle>
@@ -46,7 +46,7 @@ function Navbar() {
                               <Input variant="subtle" color={"white"} placeholder="First name" size="md" />
                               <Input variant="subtle" color={"white"} placeholder="Last name" size="md" />
                               <Input variant="subtle" color={"white"} placeholder="Phone number" size="md" />
-                              <Button type="submit">Search</Button>
+                              <Button colorPalette="blue" type="submit">Search</Button>
                             </div>
                           </form>
 

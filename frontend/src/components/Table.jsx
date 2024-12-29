@@ -78,6 +78,7 @@ const Demo = ({ customers }) => {
           </Table.Row>
         </Table.Header>
         <Table.Body>{rows}</Table.Body>
+
       </Table.Root>
 
       <ActionBarRoot open={hasSelection}>
@@ -94,6 +95,9 @@ const Demo = ({ customers }) => {
           </Button>
         </ActionBarContent>
       </ActionBarRoot>
+      <Button mt="5" className="addCustomerButton" variant="surface">
+          Create Customer
+        </Button>
     </div>
   )
 }

@@ -61,11 +61,8 @@ function Home({isLoggedIn, setIsLoggedIn}) {
       {isLoggedIn ? (
         <>
           <Demo customers={customers}/> {/* Pass the customers prop here */}
-          <div>
-            <p>You are logged in!</p>
-          </div>
           <a href="/login">
-            <Button>Log Out</Button>
+            <Button mt="5" variant="surface">Log Out</Button>
           </a>
         </>
         ) : (
@@ -78,12 +75,6 @@ function Home({isLoggedIn, setIsLoggedIn}) {
         {/* {customers?.map((customer) => (
           <p key={customer.id}>{customer.firstName} {customer.lastName} {customer.phoneNumber}</p>
         ))} */}
-
-      <div>
-        <Button variant="surface">
-          Create Customer
-        </Button>
-      </div>
 
     </div>
     </>
