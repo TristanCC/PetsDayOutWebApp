@@ -1,6 +1,11 @@
 import { useState, useEffect } from 'react';
 
 import { Button } from '@/components/ui/button'
+import { Switch } from "@/components/ui/switch"
+
+import { Icon } from "@chakra-ui/react"
+
+import { FaMoon, FaSun } from "react-icons/fa"
 
 import Demo from '../components/Table'
 import Login from './Login'
@@ -66,9 +71,6 @@ function Home({isLoggedIn, setIsLoggedIn}) {
         </>
         ) : (
         <>
-          <div>
-            <p>You are not logged in.</p>
-          </div>
           <Login/>
         </>
       )}

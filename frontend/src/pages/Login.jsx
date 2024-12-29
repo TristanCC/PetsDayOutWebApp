@@ -81,7 +81,7 @@ const handleLogout = async () => {
 
   return (
     <>
-      <div className=''>
+      <div className=' loginForm'>
         
         <h1 className='text-3xl'>A Pet&apos;s Day Out Dashboard</h1>
         {/* Login form */}
