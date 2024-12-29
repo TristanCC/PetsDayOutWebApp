@@ -11,12 +11,11 @@ function Login({ isLoggedIn, setIsLoggedIn }) {
   useEffect(() => {
     const checkLoginStatus = async () => {
       try {
-        console.log('frontend trying to fetch /auth/status')
         const response = await fetch('/auth/status', {
           method: 'GET',
-          credentials: 'include', // Ensure cookies are sent
+          credentials: 'include',
         });
-      
+    
         if (response.ok) {
           const data = await response.json();
           setIsLoggedIn(data.loggedIn);
@@ -25,12 +24,13 @@ function Login({ isLoggedIn, setIsLoggedIn }) {
         }
       } catch (error) {
         console.error('Error checking login status:', error);
-        //setIsLoggedIn(false);
+        setIsLoggedIn(false); // Set state to false in case of error
       }
     };
   
     checkLoginStatus();
-}, []);
+  }, []);
+  
 
 
   const handleLogin = async (e) => {
@@ -55,7 +55,6 @@ function Login({ isLoggedIn, setIsLoggedIn }) {
     
       setError(null);
       setIsLoggedIn(true);
-      window.location.href = '/'; // Redirect to home page
     } catch (error) {
       console.error('Error during login:', error);
       setError('An error occurred during login.');

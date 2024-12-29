@@ -16,7 +16,7 @@ const handleClickCustomer = (customer) => {
   // You can add functionality here if needed for customer row click
 }
 
-const Demo = ({ customers }) => {
+const Demo = ({ customers, theme, preferredColors }) => {
   const [selection, setSelection] = useState([])
 
   const hasSelection = selection.length > 0
@@ -30,8 +30,8 @@ const Demo = ({ customers }) => {
       onClick={() => handleClickCustomer(customer)}
     >
       <Table.Cell>
-        <Checkbox
-          top="1"
+        <Checkbox className="checkbox"
+        variant="subtle"
           aria-label="Select row"
           checked={selection.includes(customer.id)}
           onCheckedChange={(changes) => {
@@ -45,22 +45,22 @@ const Demo = ({ customers }) => {
       </Table.Cell>
       <Table.Cell>{customer.firstName} {customer.middleName ? customer.middleName[0] + '.' : ""} {customer.lastName}</Table.Cell>
       <Table.Cell>{customer.phoneNumber}</Table.Cell>
-      <Table.Cell className="email">{customer.email ? customer.email : "N/A"}</Table.Cell>
+      {/* <Table.Cell className="email">{customer.email ? customer.email : "N/A"}</Table.Cell> */}
       <Table.Cell>{customer.numberOfPets ?? "N/A"}</Table.Cell>
       <Table.Cell className="">
-        <Button variant="outline" size="sm">☰</Button>
+        <Button variant="outline" size="sm" w="1">☰</Button>
       </Table.Cell>
     </Table.Row>
   ))
 
   return (
     <div className="table">
-      <Table.Root interactive tableLayout={"fixed"}>
+      <Table.Root interactive >
         <Table.Header>
           <Table.Row>
             <Table.ColumnHeader w="6">
-              <Checkbox
-                top="1"
+              <Checkbox className="checkbox"
+                variant="subtle"
                 aria-label="Select all rows"
                 checked={indeterminate ? "indeterminate" : selection.length > 0}
                 onCheckedChange={(changes) => {
@@ -72,7 +72,7 @@ const Demo = ({ customers }) => {
             </Table.ColumnHeader>
             <Table.ColumnHeader>Name</Table.ColumnHeader>
             <Table.ColumnHeader>Phone Number</Table.ColumnHeader>
-            <Table.ColumnHeader>Email</Table.ColumnHeader>
+            {/* <Table.ColumnHeader>Email</Table.ColumnHeader> */}
             <Table.ColumnHeader>Number of Pets</Table.ColumnHeader>
             <Table.ColumnHeader></Table.ColumnHeader>
           </Table.Row>
@@ -81,7 +81,7 @@ const Demo = ({ customers }) => {
 
       </Table.Root>
 
-      <ActionBarRoot open={hasSelection}>
+      <ActionBarRoot open={hasSelection} className="actionBar">
         <ActionBarContent>
           <ActionBarSelectionTrigger>
             {selection.length} selected
@@ -95,7 +95,7 @@ const Demo = ({ customers }) => {
           </Button>
         </ActionBarContent>
       </ActionBarRoot>
-      <Button mt="5" className="addCustomerButton" variant="surface">
+      <Button mt="5" className="addCustomerButton" pos="relative" bottom="0" variant="surface">
           Create Customer
         </Button>
     </div>
