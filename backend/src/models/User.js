@@ -50,8 +50,8 @@ const User = sequelize.define('User', {
 });
 
 // Define `validPassword` as a prototype method
-User.prototype.validPassword = function(password) {
-  return bcrypt.compareSync(password, this.password);
+User.prototype.validPassword = function (password) {
+  return this.password ? bcrypt.compareSync(password, this.password) : false;
 };
 
 export default User;

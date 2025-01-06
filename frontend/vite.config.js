@@ -6,6 +6,7 @@ import jsconfigPaths from "vite-jsconfig-paths"
 export default defineConfig({
   plugins: [react(), jsconfigPaths()],
   server: {
+    host: '0.0.0.0',
     proxy: {
       '/auth': 'http://localhost:5000', // Proxy requests to /auth to the backend
       '/db': 'http://localhost:5000'

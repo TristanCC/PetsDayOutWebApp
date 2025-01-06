@@ -118,11 +118,6 @@ body {
     max-width: 100%; /* Ensure full width on smaller screens */
   }
 
-  .addCustomerButton {
-    bottom: 1rem; /* Adjust position */
-    right: 1rem; /* Adjust position */
-  }
-
   .themeToggle {
     bottom: 2rem; /* Adjust position */
     right: 1rem; /* Adjust position */
