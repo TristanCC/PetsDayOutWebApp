@@ -1,10 +1,13 @@
 import { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
-import Demo from '../components/Table';
+import MyTable from '../components/MyTable';
 import Login from './Login';
+import CustomerInfo from '../components/CustomerInfo';
 
 function Home({ isLoggedIn, setIsLoggedIn, theme, preferredColors, setTheme, setPreferredColors }) {
   const [customers, setCustomers] = useState([]);
+  
+  const [selectedCustomer, setSelectedCustomer] = useState(null);
 
   // This useEffect will run every time `isLoggedIn` changes
   useEffect(() => {
@@ -54,7 +57,8 @@ function Home({ isLoggedIn, setIsLoggedIn, theme, preferredColors, setTheme, set
     <>
       {isLoggedIn ? (
         <>
-          <Demo customers={customers} theme={theme} preferredColors={preferredColors} /> {/* Pass the customers prop here */}
+          <MyTable selectedCustomer={selectedCustomer} setSelectedCustomer={setSelectedCustomer} customers={customers} theme={theme} preferredColors={preferredColors} /> {/* Pass the customers prop here */}
+          {selectedCustomer && (<CustomerInfo selectedCustomer={selectedCustomer} theme={theme} preferredColors={preferredColors} />)}
           <a href="/login">
             <Button mt="5" variant="surface">Log Out</Button>
           </a>

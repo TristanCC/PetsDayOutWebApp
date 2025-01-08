@@ -7,6 +7,7 @@ import { FaMoon, FaSun } from "react-icons/fa";
 import { Box } from "@chakra-ui/react";
 
 import Navbar from './components/Navbar';
+
 import Home from './pages/Home';
 import Login from './pages/Login';
 
@@ -61,11 +62,7 @@ function App() {
             </div>
             <div className='wrapperRight'>
               <div className=''>
-                <BrowserRouter>
-                  <Routes>
-                    {/* <Route path="/" element={<Home />} /> */}
-                  </Routes>
-                </BrowserRouter>
+                {/* Remove the CustomerInfo route */}
               </div>
             </div>
           </div>

@@ -11,30 +11,20 @@ import { Button } from "@/components/ui/button"
 import { Checkbox } from "@/components/ui/checkbox"
 import { useState, useEffect } from "react"
 
-// Updated handleClickCustomer function
-const handleClickCustomer = (customer) => {
-  // You can add functionality here if needed for customer row click
-}
-
-const Demo = ({ customers, theme, preferredColors }) => {
+const MyTable = ({ selectedCustomer, setSelectedCustomer, customers, theme, preferredColors }) => {
   const [selection, setSelection] = useState([])
 
   const hasSelection = selection.length > 0
   const indeterminate = hasSelection && selection.length < customers.length
 
-  useEffect(() => {
-    const onThemeChange = async () => {
-
-    };
-  }, [theme, preferredColors]);
 
   const rows = customers.map((customer) => (
     <Table.Row
       key={customer.id}
       data-selected={selection.includes(customer.id) ? "" : undefined}
       className="tableRow"
-      onClick={() => handleClickCustomer(customer)}
       paddingBlock={"0"}
+      onClick={() => {setSelectedCustomer(customer); console.log(selectedCustomer)}}
     >
       {/* <Table.Cell>
         <Checkbox className="checkbox"
@@ -111,4 +101,4 @@ const Demo = ({ customers, theme, preferredColors }) => {
   )
 }
 
-export default Demo
+export default MyTable

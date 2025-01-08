@@ -110,7 +110,7 @@ const handleLogout = async () => {
         </form>
         {error && <p style={{ color: 'red' }}>{error}</p>}
         <p></p>
-        <a href="http://localhost:5000/auth/google" className="">
+        <a href="http://192.168.12.249:5000/auth/google" className="">
           Sign in with Google
         </a>
         <p></p>
