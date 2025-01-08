@@ -54,7 +54,7 @@ function Home({ isLoggedIn, setIsLoggedIn, theme, preferredColors, setTheme, set
     <>
       {isLoggedIn ? (
         <>
-          <Demo customers={customers} /> {/* Pass the customers prop here */}
+          <Demo customers={customers} theme={theme} preferredColors={preferredColors} /> {/* Pass the customers prop here */}
           <a href="/login">
             <Button mt="5" variant="surface">Log Out</Button>
           </a>

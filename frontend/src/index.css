@@ -40,6 +40,11 @@ body {
   
 }
 
+.addCustomerButton:hover {
+  filter:saturate(115%)
+  
+}
+
 .tabs {
   display: flex;
   justify-content: space-between;
@@ -65,6 +70,7 @@ body {
   max-height: 80vh;
   height: 80vh;
   overflow-y: auto;
+  overflow-x: hidden;
 }
 
 @media (max-width: 510px) {
@@ -78,6 +84,7 @@ body {
   cursor: pointer;
 }
 
+
 .flexCol {
   display: flex;
   flex-direction: column;
@@ -86,7 +93,7 @@ body {
 }
 
 .themeToggle {
-  position: fixed;
+  position: absolute;
   bottom: 1rem;
   right: 1rem;
   
@@ -109,10 +116,7 @@ body {
 }
 
 @media (max-width: 768px) {
-  .outerWrapper {
-    flex-direction: column; /* Stack elements vertically on smaller screens */
-    padding: 1rem; /* Adjust padding */
-  }
+
 
   .wrapperLeft {
     max-width: 100%; /* Ensure full width on smaller screens */
@@ -135,4 +139,42 @@ body {
     padding: 0.25rem;
     flex-direction: column; /* Ensure vertical stacking */
   }
+}
+
+.columnHeader {
+  
+}
+
+@media (max-width: 380px) {
+  .columnHeader {
+    padding-inline: 0.5rem;
+    padding-block: 0.25;
+  }
+
+  .tableRow {
+    padding-inline: 0.5rem;
+    padding-block: 0.25rem;
+  }
+}
+
+::-webkit-scrollbar {
+  width: 5px;
+  height: 5px;
+}
+
+::-webkit-scrollbar-track {
+  -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+  -webkit-border-radius: 10px;
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+  -webkit-border-radius: 10px;
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.3);
+  -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.5);
+}
+
+::-webkit-scrollbar-thumb:window-inactive {
+  background: rgba(255, 255, 255, 0.3);
 }
