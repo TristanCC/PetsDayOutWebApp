@@ -5,6 +5,8 @@ import sequelize from './db/pool.js';
 import session from 'express-session';
 import flash from 'connect-flash'; 
 
+import './db/associations.js'; // Import associations to ensure they're loaded
+
 
 import passport from './config/passport-setup.js';
 import authRoutes from './routes/authRoutes.js';

@@ -33,6 +33,11 @@ const Customer = sequelize.define('Customer', {
     validate: {
       is: /^(\+\d{1,2}\s)?\(?\d{3}\)?[\s.-]\d{3}[\s.-]\d{4}$/
     }
+  },
+  numberOfPets: {
+    type: DataTypes.INTEGER,
+    allowNull: true,
+    defaultValue: 0
   }
 });
 

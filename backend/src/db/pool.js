@@ -1,4 +1,7 @@
 // backend/src/db/pool.js
+
+//initializing and configuring database
+
 import { Sequelize } from 'sequelize';
 import dotenv from 'dotenv';
 

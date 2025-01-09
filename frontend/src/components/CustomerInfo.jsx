@@ -52,7 +52,7 @@ const CustomerInfo = ({ selectedCustomer, theme, preferredColors }) => {
             <div className="customerInfoHeader">
                 <h1>Customer Information</h1>
                 <div className="customerInfoForm">
-                    <form action="">
+                    <form action="" className="customerInfoForm">
                         <div className="customerInfoFormInner">
                             <div className="editInput">
                                 <Field label="First name" required>

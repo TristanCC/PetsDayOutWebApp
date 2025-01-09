@@ -1,4 +1,3 @@
-import User from '../models/User.js';
 
 // Find the user by ID (or another identifier like email)
 const user = await User.create({ firstName: "Tristan", lastName: "Johnston", email:"tristan.c.johnston@gmail.com", password: "bonk"})

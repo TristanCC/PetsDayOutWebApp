@@ -8,8 +8,9 @@ export default defineConfig({
   server: {
     host: '0.0.0.0',
     proxy: {
-      '/auth': 'http://localhost:5000', // Proxy requests to /auth to the backend
-      '/db': 'http://localhost:5000'
+      '/auth': 'http://127.0.0.1:5000', // Use IPv4 loopback
+      '/db': 'http://127.0.0.1:5000',
     },
   },
-});
+  });
+  
