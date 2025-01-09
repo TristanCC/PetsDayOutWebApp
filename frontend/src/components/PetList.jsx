@@ -11,7 +11,15 @@ const fetchPets = async (customerId) => {
 
 const CustomerInfo = ({ customers, theme, preferredColors }) => {
 
-
+//TODO: split customer information (edit info vs pet list) based on dropdown button selection
+//TODO: split customer information (edit info vs pet list) based on dropdown button selection
+//TODO: split customer information (edit info vs pet list) based on dropdown button selection
+//TODO: split customer information (edit info vs pet list) based on dropdown button selection
+//TODO: split customer information (edit info vs pet list) based on dropdown button selection
+//TODO: split customer information (edit info vs pet list) based on dropdown button selection
+//TODO: split customer information (edit info vs pet list) based on dropdown button selection
+//TODO: split customer information (edit info vs pet list) based on dropdown button selection
+// this way we can fetch pets only when needed
 
   return (
     <div className="petList">
