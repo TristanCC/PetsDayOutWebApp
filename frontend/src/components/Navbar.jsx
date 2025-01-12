@@ -21,7 +21,7 @@ function Navbar({theme, preferredColors, setTheme, setPreferredColors}) {
 
     return (
         <>
-              <div className="navbar">
+              <Box colorPalette={preferredColors}>
                   <Tabs.Root value={value} onValueChange={(e) => setValue(e.value)}
                   size="lg"
                   variant="line"
@@ -41,7 +41,7 @@ function Navbar({theme, preferredColors, setTheme, setPreferredColors}) {
                         <PopoverContent asChild>
                           <div>
                             <PopoverArrow />
-                            <PopoverBody color="blue.600" shadow={"rgba(50, 50, 250, 0.25) 0px 6px 12px -2px, rgba(0, 0, 0, 0.3) 0px 3px 7px -3px;"}>
+                            <PopoverBody colorPalette={preferredColors} color="blue.600" shadow={"rgba(50, 50, 250, 0.25) 0px 6px 12px -2px, rgba(0, 0, 0, 0.3) 0px 3px 7px -3px;"}>
                               <PopoverTitle my="4" fontWeight="medium" fontSize="lg">Find a customer</PopoverTitle>
                               <Stack>
                                 <form action="" onSubmit={(e) => {e.preventDefault(); setSearchClicked(true)}}>
@@ -64,7 +64,7 @@ function Navbar({theme, preferredColors, setTheme, setPreferredColors}) {
                     <Tabs.Content value="first"></Tabs.Content>
                     <Tabs.Content value="second">Second panel</Tabs.Content>
                   </Tabs.Root>
-              </div>
+              </Box>
         </>
     )
 }

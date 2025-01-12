@@ -80,15 +80,6 @@ function Home({ isLoggedIn, setIsLoggedIn, theme, preferredColors, setTheme, set
             theme={theme}
             preferredColors={preferredColors}
           />
-          {selectedCustomer && (
-            <div ref={customerInfoRef}>
-              <CustomerInfo
-                selectedCustomer={selectedCustomer}
-              />
-            </div>
-            
-          )}
-
           
           <a href="/login">
             <Button mt="5" variant="surface">
