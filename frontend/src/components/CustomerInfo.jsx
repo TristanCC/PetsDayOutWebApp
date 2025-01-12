@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { FaRegEdit } from "react-icons/fa";
 import { Button, Input, IconButton, HStack, Box } from "@chakra-ui/react";
 import { Field } from "@/components/ui/field";
+import { Textarea } from "@chakra-ui/react"
 
 import PetList from './PetList';
 
@@ -10,6 +11,7 @@ const CustomerInfo = ({ selectedCustomer, preferredColors }) => {
     const [lastName, setLastName] = useState(selectedCustomer.lastName);
     const [email, setEmail] = useState(selectedCustomer.email);
     const [phoneNumber, setPhoneNumber] = useState(selectedCustomer.phoneNumber);
+    const [customerComment, setCustomerComment] = useState(selectedCustomer.customerComment);
 
     const [edit1, setEdit1] = useState(true);
     const [edit2, setEdit2] = useState(true);
@@ -21,6 +23,7 @@ const CustomerInfo = ({ selectedCustomer, preferredColors }) => {
         setLastName(selectedCustomer.lastName);
         setEmail(selectedCustomer.email);
         setPhoneNumber(selectedCustomer.phoneNumber);
+        setCustomerComment(selectedCustomer.customerComment || "");
     }, [selectedCustomer]);
 
     const handleClickEditCustomer = (num) => {
@@ -42,16 +45,18 @@ const CustomerInfo = ({ selectedCustomer, preferredColors }) => {
         }
     };
 
-    const isSaveDisabled = selectedCustomer.firstName === firstName
+    const isSaveDisabled = 
+           selectedCustomer.firstName === firstName
         && selectedCustomer.lastName === lastName
         && selectedCustomer.phoneNumber === phoneNumber
-        && selectedCustomer.email === email;
+        && selectedCustomer.email === email
+        && (selectedCustomer.customerComment || "") === customerComment;
 
     return (
+        
         <div className="customerInfo">
-            <Box bg={{ base: "white", _dark: "black" }} borderRadius={"1rem"} p={"2rem"} >
+            <Box bg={{ base: "white", _dark: "black" }} borderRadius={"1rem"} p={"2rem"} w={"100%"} h={"auto"}>
                 <div className="customerInfoHeader">
-                    <h1>{selectedCustomer.firstName} {selectedCustomer.lastName}</h1>
                         <form action="" className="customerInfoForm">
                             <div className="customerInfoFormInner">
                                 <div className="editInput">
@@ -135,7 +140,28 @@ const CustomerInfo = ({ selectedCustomer, preferredColors }) => {
                                         </HStack>
                                     </Field>
                                 </div>
-                                <Button type="submit" disabled={isSaveDisabled}>Save</Button>
+                                <div className="editInput2">
+                                    <HStack gap="10" width="100%" h={"auto"}>
+                                        
+                                      <Field label="Customer Notes">
+                                        
+                                        <Textarea
+                                            placeholder="Start typing..."
+                                            variant="outline"
+                                            overflowWrap={"break-word"}
+                                            h={"10rem"}
+                                            value={customerComment}
+                                            onChange={(e) => {
+                                                setCustomerComment(e.target.value);
+                                                console.log(selectedCustomer.customerComment);
+                                            }}
+                                        />
+                                      </Field>
+                                      
+                                    </HStack>
+                                </div>
+                                <Button type="submit" disabled={isSaveDisabled}
+                                w={"100%"}>Save</Button>
                             </div>
                         </form>
                 </div>

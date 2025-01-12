@@ -34,6 +34,12 @@ const Customer = sequelize.define('Customer', {
       is: /^(\+\d{1,2}\s)?\(?\d{3}\)?[\s.-]\d{3}[\s.-]\d{4}$/
     }
   },
+
+  customerComment: {
+    type: DataTypes.TEXT,
+    allowNull: true
+  },
+
   numberOfPets: {
     type: DataTypes.INTEGER,
     allowNull: true,

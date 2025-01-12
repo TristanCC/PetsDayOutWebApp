@@ -1,6 +1,5 @@
 import { useState, useEffect, useRef } from "react";
 import { Button } from "@/components/ui/button";
-
 import {
   MenuContent,
   MenuItem,
@@ -10,12 +9,16 @@ import {
   MenuItemGroup,
   MenuSeparator
 } from "@/components/ui/menu"
+import { Icon } from "@chakra-ui/react"
+
+import { LuBookOpenCheck } from "react-icons/lu";
+import { PiDog, PiDogBold } from "react-icons/pi";
+import { LuCircleUser } from "react-icons/lu";
 
 import { Box } from "@chakra-ui/react"
-
 import CustomerInfo from './CustomerInfo';
 
-const MenuRoot1 = ({ customer }) => {
+const MenuRoot1 = ({ customer, preferredColors }) => {
 
   const [customerInfoOpen, setCustomerInfoOpen] = useState(false);
   const customerInfoRef = useRef(null); // Ref to track the CustomerInfo modal
@@ -52,9 +55,33 @@ const MenuRoot1 = ({ customer }) => {
         <MenuContent className="menuContent">
           <MenuItemGroup p={"5px"}>{customer.firstName} {customer.lastName}</MenuItemGroup>
           <MenuSeparator />
-          <MenuItem borderRadius={".75rem"} value="mark-present">✅ Mark Present</MenuItem>
-          <MenuItem borderRadius={".75rem"} value="pets">🐕 Pets</MenuItem>
-          <MenuItem borderRadius={".75rem"} value="customer-info" onClick={(e) => {handleCustomerInfo()}}>✎ Customer Info</MenuItem>
+          <MenuItem borderRadius={".75rem"} value="mark-present"> <div>
+            <Icon fontSize={"1.25rem"} color={"green.500"}>
+              <LuBookOpenCheck />
+            </Icon>
+          </div>
+            <div>
+              Mark Present
+            </div>
+          </MenuItem>
+          <MenuItem borderRadius={".75rem"} value="pets"> <div>
+            <Icon fontSize={"1.25rem"} color={"yellow.500"}>
+              <PiDogBold />
+            </Icon>
+          </div>
+            <div>
+              Pets
+            </div>
+          </MenuItem>
+          <MenuItem borderRadius={".75rem"} value="customer-info" onClick={(e) => {handleCustomerInfo()}}> <div>
+            <Icon fontSize={"1.25rem"} color={"purple.500"}>
+              <LuCircleUser />
+            </Icon>
+          </div>
+            <div>
+              Customer Info
+            </div>
+          </MenuItem>
         </MenuContent>
       </MenuRoot>
       {customerInfoOpen && (

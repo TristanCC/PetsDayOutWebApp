@@ -27,7 +27,6 @@ const MyTable = ({ selectedCustomer, setSelectedCustomer, customers, preferredCo
   const hasSelection = selection.length > 0
   const indeterminate = hasSelection && selection.length < customers.length
 
-
   const rows = customers.map((customer) => (
     <Table.Row
       key={customer.id}
@@ -55,7 +54,7 @@ const MyTable = ({ selectedCustomer, setSelectedCustomer, customers, preferredCo
       {/* <Table.Cell className="email">{customer.email ? customer.email : "N/A"}</Table.Cell> */}
       <Table.Cell className="tableRow">{customer.numberOfPets ?? "N/A"}</Table.Cell>
       <Table.Cell className="tableRow">
-        <MenuRoot1 customer={customer} />
+        <MenuRoot1 customer={customer} preferredColors={preferredColors} />
       </Table.Cell>
     </Table.Row>
   ))
