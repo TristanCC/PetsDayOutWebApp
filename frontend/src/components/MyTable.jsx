@@ -21,7 +21,7 @@ import { Checkbox } from "@/components/ui/checkbox"
 import { useState, useEffect } from "react"
 import MenuRoot1 from "./MenuRoot1"
 
-const MyTable = ({ selectedCustomer, setSelectedCustomer, customers, theme, preferredColors }) => {
+const MyTable = ({ selectedCustomer, setSelectedCustomer, customers, preferredColors }) => {
   const [selection, setSelection] = useState([])
 
   const hasSelection = selection.length > 0
@@ -55,7 +55,7 @@ const MyTable = ({ selectedCustomer, setSelectedCustomer, customers, theme, pref
       {/* <Table.Cell className="email">{customer.email ? customer.email : "N/A"}</Table.Cell> */}
       <Table.Cell className="tableRow">{customer.numberOfPets ?? "N/A"}</Table.Cell>
       <Table.Cell className="tableRow">
-        <MenuRoot1 customer={customer} theme={theme} />
+        <MenuRoot1 customer={customer} />
       </Table.Cell>
     </Table.Row>
   ))

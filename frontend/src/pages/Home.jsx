@@ -6,7 +6,7 @@ import CustomerInfo from '../components/CustomerInfo';
 
 import MenuRoot1 from '@/components/MenuRoot1';
 
-function Home({ isLoggedIn, setIsLoggedIn, theme, preferredColors, setTheme, setPreferredColors }) {
+function Home({ isLoggedIn, setIsLoggedIn, preferredColors, setPreferredColors }) {
   const [customers, setCustomers] = useState([]);
   const [selectedCustomer, setSelectedCustomer] = useState(null);
   const customerInfoRef = useRef(null);
@@ -77,7 +77,6 @@ function Home({ isLoggedIn, setIsLoggedIn, theme, preferredColors, setTheme, set
             selectedCustomer={selectedCustomer}
             setSelectedCustomer={setSelectedCustomer}
             customers={customers}
-            theme={theme}
             preferredColors={preferredColors}
           />
           

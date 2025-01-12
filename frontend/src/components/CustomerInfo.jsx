@@ -5,7 +5,7 @@ import { Field } from "@/components/ui/field";
 
 import PetList from './PetList';
 
-const CustomerInfo = ({ selectedCustomer, theme, preferredColors }) => {
+const CustomerInfo = ({ selectedCustomer, preferredColors }) => {
     const [firstName, setFirstName] = useState(selectedCustomer.firstName);
     const [lastName, setLastName] = useState(selectedCustomer.lastName);
     const [email, setEmail] = useState(selectedCustomer.email);
