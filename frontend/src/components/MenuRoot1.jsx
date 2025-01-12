@@ -24,19 +24,10 @@ const MenuRoot1 = ({ customer, theme }) => {
           Open
         </Button>
       </MenuTrigger>
-      <MenuContent>
-        <MenuItem value="new-txt">New Text File</MenuItem>
-        <MenuItem value="new-file">New File...</MenuItem>
-        <MenuRoot positioning={{ placement: "right-start", gutter: 2 }}>
-          <MenuTriggerItem value="open-recent">Open Recent</MenuTriggerItem>
-          <MenuContent>
-            <MenuItem value="panda">Panda</MenuItem>
-            <MenuItem value="ark">Ark UI</MenuItem>
-            <MenuItem value="chakra">Chakra v3</MenuItem>
-          </MenuContent>
-        </MenuRoot>
-        <MenuItem value="open-file">Open File...</MenuItem>
-        <MenuItem value="export">Export</MenuItem>
+      <MenuContent className="menuContent">
+        <MenuItem value="new-txt">✅ Mark Present</MenuItem>
+        <MenuItem value="new-file">🐕 Edit Pets</MenuItem>
+        <MenuItem value="open-file">✎ Edit Customer Info</MenuItem>
       </MenuContent>
     </MenuRoot>
   );

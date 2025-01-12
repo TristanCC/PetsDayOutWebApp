@@ -162,6 +162,10 @@ h1 {
   font-size: 2rem;
 }
 
+.menuContent {
+  border-radius: 1rem;
+}
+
 @media (max-width: 1360px) {
   .wrapperRight {
     max-width: 800px;
