@@ -39,23 +39,23 @@ function Navbar({theme, preferredColors, setTheme, setPreferredColors}) {
                           </IconButton>
                         </PopoverTrigger>
                         <PopoverContent asChild>
-                     
-                            <Theme hasBackground={false} appearance={theme} colorPalette={preferredColors}>
-                              <PopoverArrow />
-                              <PopoverBody color="blue.600" shadow={"rgba(50, 50, 250, 0.25) 0px 6px 12px -2px, rgba(0, 0, 0, 0.3) 0px 3px 7px -3px;"}>
-                                <PopoverTitle my="4" fontWeight="medium" fontSize="lg">Find a customer</PopoverTitle>
-                                <Stack>
-                                  <form action="" onSubmit={console.log('submitted')}>
-                                    <div className="flexCol">
-                                      <Input variant="subtle"  placeholder="First name" size="md" />
-                                      <Input variant="subtle"  placeholder="Last name" size="md" />
-                                      <Input variant="subtle"  placeholder="Phone number" size="md" />
-                                      <Button type="submit">Search</Button>
-                                    </div>
-                                  </form>
-                                </Stack>
-                              </PopoverBody>
-                            </Theme>
+                          <div>
+                            <PopoverArrow />
+                            <PopoverBody color="blue.600" shadow={"rgba(50, 50, 250, 0.25) 0px 6px 12px -2px, rgba(0, 0, 0, 0.3) 0px 3px 7px -3px;"}>
+                              <PopoverTitle my="4" fontWeight="medium" fontSize="lg">Find a customer</PopoverTitle>
+                              <Stack>
+                                <form action="" onSubmit={(e) => {e.preventDefault(); setSearchClicked(true)}}>
+                                  <div className="flexCol">
+                                    <Input variant="subtle"  placeholder="First name" size="md" />
+                                    <Input variant="subtle"  placeholder="Last name" size="md" />
+                                    <Input variant="subtle"  placeholder="Phone number" size="md" />
+                                    <Button type="submit">Search</Button>
+                                  </div>
+                                </form>
+                              </Stack>
+                            </PopoverBody>
+                          </div>
+
                       
                         </PopoverContent>
                       </PopoverRoot>

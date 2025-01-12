@@ -1,15 +1,25 @@
 "use client"
 
-import { Kbd, Table, Theme } from "@chakra-ui/react"
+import { Box, Kbd, Table, Theme } from "@chakra-ui/react"
 import {
   ActionBarContent,
   ActionBarRoot,
   ActionBarSelectionTrigger,
   ActionBarSeparator,
 } from "@/components/ui/action-bar"
+
+import {
+  MenuContent,
+  MenuItem,
+  MenuRoot,
+  MenuTrigger,
+} from "@/components/ui/menu"
+
+
 import { Button } from "@/components/ui/button"
 import { Checkbox } from "@/components/ui/checkbox"
 import { useState, useEffect } from "react"
+import MenuRoot1 from "./MenuRoot1"
 
 const MyTable = ({ selectedCustomer, setSelectedCustomer, customers, theme, preferredColors }) => {
   const [selection, setSelection] = useState([])
@@ -24,7 +34,7 @@ const MyTable = ({ selectedCustomer, setSelectedCustomer, customers, theme, pref
       data-selected={selection.includes(customer.id) ? "" : undefined}
       className="tableRow"
       paddingBlock={"0"}
-      onClick={() => {setSelectedCustomer(customer); console.log(selectedCustomer)}}
+      onClick={() => {setSelectedCustomer(customer)}}
     >
       {/* <Table.Cell>
         <Checkbox className="checkbox"
@@ -45,16 +55,16 @@ const MyTable = ({ selectedCustomer, setSelectedCustomer, customers, theme, pref
       {/* <Table.Cell className="email">{customer.email ? customer.email : "N/A"}</Table.Cell> */}
       <Table.Cell className="tableRow">{customer.numberOfPets ?? "N/A"}</Table.Cell>
       <Table.Cell className="tableRow">
-        <Button variant="outline" size="sm" w="1">☰</Button>
+        <MenuRoot1 customer={customer} theme={theme} />
       </Table.Cell>
     </Table.Row>
   ))
 
   return (
     <div className="table">
-      <Table.Root interactive>
-        <Table.Header>
-          <Table.Row>
+      <Table.Root interactive stickyHeader >
+        <Table.Header bg={{ base: "white", _dark: "black" }}>
+          <Table.Row alignItems={"center"}>
             {/* <Table.ColumnHeader w="6" className="columnHeader">
               <Checkbox className="checkbox"
                 variant="subtle"
@@ -94,9 +104,6 @@ const MyTable = ({ selectedCustomer, setSelectedCustomer, customers, theme, pref
           </ActionBarContent>
         </ActionBarRoot>
       </Theme> */}
-      <Button mt="5" className="addCustomerButton" pos="sticky" bottom="1rem" variant="solid">
-          Create Customer
-        </Button>
     </div>
   )
 }

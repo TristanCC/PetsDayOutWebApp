@@ -1,15 +1,31 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { Button } from '@/components/ui/button';
 import MyTable from '../components/MyTable';
 import Login from './Login';
 import CustomerInfo from '../components/CustomerInfo';
 
+import MenuRoot1 from '@/components/MenuRoot1';
+
 function Home({ isLoggedIn, setIsLoggedIn, theme, preferredColors, setTheme, setPreferredColors }) {
   const [customers, setCustomers] = useState([]);
-  
   const [selectedCustomer, setSelectedCustomer] = useState(null);
+  const customerInfoRef = useRef(null);
 
-  // This useEffect will run every time `isLoggedIn` changes
+  // Close CustomerInfo when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (customerInfoRef.current && !customerInfoRef.current.contains(event.target)) {
+        setSelectedCustomer(null);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, []);
+
+  // Fetch customers when logged in
   useEffect(() => {
     const fetchCustomers = async () => {
       try {
@@ -51,16 +67,33 @@ function Home({ isLoggedIn, setIsLoggedIn, theme, preferredColors, setTheme, set
     if (isLoggedIn) {
       fetchCustomers();
     }
-  }, [isLoggedIn, setIsLoggedIn]); // Dependency array: Runs when `isLoggedIn` changes
+  }, [isLoggedIn, setIsLoggedIn]);
 
   return (
     <>
       {isLoggedIn ? (
         <>
-          <MyTable selectedCustomer={selectedCustomer} setSelectedCustomer={setSelectedCustomer} customers={customers} theme={theme} preferredColors={preferredColors} /> {/* Pass the customers prop here */}
-          {selectedCustomer && (<CustomerInfo selectedCustomer={selectedCustomer} theme={theme} preferredColors={preferredColors} />)}
+          <MyTable
+            selectedCustomer={selectedCustomer}
+            setSelectedCustomer={setSelectedCustomer}
+            customers={customers}
+            theme={theme}
+            preferredColors={preferredColors}
+          />
+          {selectedCustomer && (
+            <div ref={customerInfoRef}>
+              <CustomerInfo
+                selectedCustomer={selectedCustomer}
+              />
+            </div>
+            
+          )}
+
+          
           <a href="/login">
-            <Button mt="5" variant="surface">Log Out</Button>
+            <Button mt="5" variant="surface">
+              Log Out
+            </Button>
           </a>
         </>
       ) : (
