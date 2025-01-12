@@ -61,7 +61,7 @@ const MyTable = ({ selectedCustomer, setSelectedCustomer, customers, preferredCo
 
   return (
     <div className="table">
-      <Table.Root interactive stickyHeader >
+      <Table.Root interactive stickyHeader scrollBehavior={"smooth"} >
         <Table.Header bg={{ base: "white", _dark: "black" }}>
           <Table.Row alignItems={"center"}>
             {/* <Table.ColumnHeader w="6" className="columnHeader">

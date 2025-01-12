@@ -4,9 +4,11 @@ import { Button, Input, IconButton, HStack, Box } from "@chakra-ui/react";
 import { Field } from "@/components/ui/field";
 import { Textarea } from "@chakra-ui/react"
 
+import { LuCircleX } from "react-icons/lu";
+
 import PetList from './PetList';
 
-const CustomerInfo = ({ selectedCustomer, preferredColors }) => {
+const CustomerInfo = ({ selectedCustomer, setCustomerInfoOpen ,preferredColors }) => {
     const [firstName, setFirstName] = useState(selectedCustomer.firstName);
     const [lastName, setLastName] = useState(selectedCustomer.lastName);
     const [email, setEmail] = useState(selectedCustomer.email);
@@ -55,7 +57,17 @@ const CustomerInfo = ({ selectedCustomer, preferredColors }) => {
     return (
         
         <div className="customerInfo">
-            <Box bg={{ base: "white", _dark: "black" }} borderRadius={"1rem"} p={"2rem"} w={"100%"} h={"auto"}>
+            <Box backdropFilter="grayscale(80%)"
+            bg={{ base: "white", _dark: "black" }}
+            borderRadius={"1rem"}
+            p={"2rem"} w={"100%"} h={"auto"}
+            cursor={"radio"}
+            >
+                <IconButton position={"absolute"} top={"0"}
+                 right={"0"} aria-label="Search database"
+                 size={"lg"} variant={"ghost"} borderRadius={"1rem"} onClick={(e) => setCustomerInfoOpen(false)}>
+                    <LuCircleX />
+                </IconButton>
                 <div className="customerInfoHeader">
                         <form action="" className="customerInfoForm">
                             <div className="customerInfoFormInner">

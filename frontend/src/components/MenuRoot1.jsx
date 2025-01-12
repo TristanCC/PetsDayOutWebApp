@@ -48,7 +48,7 @@ const MenuRoot1 = ({ customer, preferredColors }) => {
     <Box>
       <MenuRoot>
         <MenuTrigger asChild>
-          <Button variant="outline" size="sm">
+          <Button variant="outline" size="sm" an>
           ☰
           </Button>
         </MenuTrigger>
@@ -86,7 +86,7 @@ const MenuRoot1 = ({ customer, preferredColors }) => {
       </MenuRoot>
       {customerInfoOpen && (
         <div ref={customerInfoRef}>
-          <CustomerInfo selectedCustomer={customer} 
+          <CustomerInfo selectedCustomer={customer} setCustomerInfoOpen={setCustomerInfoOpen} 
                 />
         </div>)}
     </Box>
