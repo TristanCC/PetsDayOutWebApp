@@ -2,12 +2,12 @@ import { useState, useEffect, useRef } from 'react';
 import { Button } from '@/components/ui/button';
 import MyTable from '../components/MyTable';
 import Login from './Login';
-import CustomerInfo from '../components/CustomerInfo';
 
-import MenuRoot1 from '@/components/MenuRoot1';
-
-function Home({ isLoggedIn, setIsLoggedIn, preferredColors, setPreferredColors }) {
-  const [customers, setCustomers] = useState([]);
+function Home({ isLoggedIn, setIsLoggedIn, preferredColors }) {
+  const [customers, setCustomers] = useState(() => {
+    const cachedData = localStorage.getItem('customers');
+    return cachedData ? JSON.parse(cachedData) : [];
+  });
   const [selectedCustomer, setSelectedCustomer] = useState(null);
   const customerInfoRef = useRef(null);
 
@@ -29,7 +29,7 @@ function Home({ isLoggedIn, setIsLoggedIn, preferredColors, setPreferredColors }
   useEffect(() => {
     const fetchCustomers = async () => {
       try {
-        console.log('frontend trying to fetch /auth/status');
+        console.log('Checking login status...');
         const response = await fetch('/auth/status', {
           method: 'GET',
           credentials: 'include',
@@ -40,19 +40,18 @@ function Home({ isLoggedIn, setIsLoggedIn, preferredColors, setPreferredColors }
           setIsLoggedIn(data.loggedIn);
 
           if (data.loggedIn) {
-            console.log('trying to fetch /db/getCustomers');
+            console.log('Fetching customers...');
             const customerResponse = await fetch('/db/getCustomers', {
               method: 'GET',
               credentials: 'include',
             });
 
             if (!customerResponse.ok) {
-              console.error('Failed to fetch users:', customerResponse.status, customerResponse.statusText);
-              const errorText = await customerResponse.text();
-              console.error('Error response body:', errorText);
+              console.error('Failed to fetch customers:', customerResponse.status, customerResponse.statusText);
             } else {
               const customers = await customerResponse.json();
               setCustomers(customers);
+              localStorage.setItem('customers', JSON.stringify(customers));
             }
           }
         } else {
@@ -64,10 +63,10 @@ function Home({ isLoggedIn, setIsLoggedIn, preferredColors, setPreferredColors }
       }
     };
 
-    if (isLoggedIn) {
+    if (isLoggedIn && customers.length === 0) {
       fetchCustomers();
     }
-  }, [isLoggedIn, setIsLoggedIn]);
+  }, [isLoggedIn, setIsLoggedIn, customers.length]);
 
   return (
     <>
@@ -87,9 +86,7 @@ function Home({ isLoggedIn, setIsLoggedIn, preferredColors, setPreferredColors }
           </a>
         </>
       ) : (
-        <>
-          <Login isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} />
-        </>
+        <Login isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} />
       )}
     </>
   );
