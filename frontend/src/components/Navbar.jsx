@@ -3,6 +3,7 @@ import { useState } from "react"
 import { IconButton } from "@chakra-ui/react"
 import { LuSearch } from "react-icons/lu"
 import { Box, Stack } from "@chakra-ui/react"
+import MyTable from '../components/MyTable';
 
 import { Button, Input, Text, Theme } from "@chakra-ui/react"
 import {
@@ -14,14 +15,15 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover"
 
-function Navbar({theme, preferredColors, setTheme, setPreferredColors}) {
+function Navbar({isLoggedIn, setIsLoggedIn ,theme, preferredColors, setTheme, setPreferredColors, customers, selectedCustomer, setSelectedCustomer }) {
 
     const [value, setValue] = useState("first")
     const [searchClicked, setSearchClicked] = useState(false)
+    const [filtered, setFiltered] = useState([])
 
     return (
         <>
-              <Box colorPalette={preferredColors}>
+              <Box colorPalette={preferredColors} zIndex="1000">
                   <Tabs.Root value={value} onValueChange={(e) => setValue(e.value)}
                   size="lg"
                   variant="line"
@@ -61,8 +63,15 @@ function Navbar({theme, preferredColors, setTheme, setPreferredColors}) {
                       </PopoverRoot>
                       </div>
                     </Tabs.List>
-                    <Tabs.Content value="first"></Tabs.Content>
-                    <Tabs.Content value="second">Second panel</Tabs.Content>
+                    <Tabs.Content value="first" display={"flex"} justifyContent={"center"} w={"100%"} >
+                    {isLoggedIn ? <MyTable
+                    selectedCustomer={selectedCustomer}
+                    setSelectedCustomer={setSelectedCustomer}
+                    customers={customers}
+                    preferredColors={preferredColors}
+                    />: <Text>Please log in</Text>}
+                    </Tabs.Content>
+                    <Tabs.Content value="second" >Second panel</Tabs.Content>
                   </Tabs.Root>
               </Box>
         </>

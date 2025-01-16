@@ -1,4 +1,6 @@
 import { useState, useEffect } from 'react';
+import { Button } from "@/components/ui/button"
+
 
 function Login({ isLoggedIn, setIsLoggedIn }) {
     
@@ -79,9 +81,9 @@ const handleLogout = async () => {
 
   return (
     <>
+    { !isLoggedIn ? (
       <div className=' loginForm'>
-        
-        <h1 className='text-3xl'>A Pet&apos;s Day Out Dashboard</h1>
+
         {/* Login form */}
         <form onSubmit={handleLogin} className=''>
           <label htmlFor="email">Email:</label>
@@ -115,19 +117,17 @@ const handleLogout = async () => {
         </a>
         <p></p>
         {/* Conditional rendering based on login status */}
-        {isLoggedIn ? (
-          <div>
-            <p>You are logged in!</p>
-            <button onClick={handleLogout} className="">Log out</button>
-          </div>
-        ) : (
-          <div>
-            <p>You are not logged in.</p>
-          </div>
-        )}
       </div>
+    )
+    : (
+      <div className=''>
+        <h1>Welcome to the Dashboard!</h1>
+        <Button onClick={handleLogout} >Log Out</Button>
+      </div>
+    )}
     </>
   );
 }
 
 export default Login;
+

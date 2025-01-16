@@ -21,6 +21,11 @@ function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false); // State to track login status
   const [checked, setChecked] = useState(true); // Switch state, true for light, false for dark
   const [preferredColors, setPreferredColors] = useState('blue');
+  const [customers, setCustomers] = useState(() => {
+    const cachedData = localStorage.getItem('customers');
+    return cachedData ? JSON.parse(cachedData) : [];
+  });
+  const [selectedCustomer, setSelectedCustomer] = useState(null);
 
 
   return (
@@ -28,7 +33,7 @@ function App() {
         <Box colorPalette={preferredColors} bg={{ base: "white", _dark: "black" }}>
           <div className='outerWrapper'>
             <div className='wrapperLeft'>
-              <Navbar preferredColors={preferredColors} setPreferredColors={setPreferredColors} />
+              <Navbar isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} preferredColors={preferredColors} setPreferredColors={setPreferredColors} customers={customers} selectedCustomer={selectedCustomer} setSelectedCustomer={setSelectedCustomer} />
               <div className='wrapperInner'>
                 <BrowserRouter>
                   <Routes>

@@ -1,6 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
 import { Button } from '@/components/ui/button';
-import MyTable from '../components/MyTable';
 import Login from './Login';
 
 function Home({ isLoggedIn, setIsLoggedIn, preferredColors }) {
@@ -72,15 +71,9 @@ function Home({ isLoggedIn, setIsLoggedIn, preferredColors }) {
     <>
       {isLoggedIn ? (
         <>
-          <MyTable
-            selectedCustomer={selectedCustomer}
-            setSelectedCustomer={setSelectedCustomer}
-            customers={customers}
-            preferredColors={preferredColors}
-          />
-          
+          {/* Remove MyTable component */}
           <a href="/login">
-            <Button mt="5" variant="surface">
+            <Button mt="5" variant="surface" >
               Log Out
             </Button>
           </a>
