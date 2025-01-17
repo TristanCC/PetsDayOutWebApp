@@ -1,0 +1,23 @@
+Desired flow:
+
+not logged in? route to log in page
+logged in? route to home page with table of all customers
+
+Home functionality:
+ - Add Customer
+ - Add/View/Edit Pets
+ - Add/Edit/View Customer info
+ - Search/filter Customer based on name or phone number (think about formatting)
+ - Mark Customer present (how to track?)
+ - Filter present customers tab
+
+Login functionality:
+ - User authentication
+ - Error handling for incorrect credentials
+ - Redirect to home page upon successful login
+
+Potential improvements:
+ - Add notifications for important events (e.g., new customer added)
+ - Improve UI/UX for better user experience
+ - Add unit and integration tests for critical components
+ - Optimize performance for large datasets (pagination?)
