@@ -30,7 +30,7 @@ function Navbar({isLoggedIn, setIsLoggedIn ,theme, preferredColors, setTheme, se
                   >
                     <Tabs.List className="tabs">
                       <div className="tabs">
-                          <Tabs.Trigger fontSize="2xl" letterSpacing="wider" value="first"><Text>All</Text></Tabs.Trigger>
+                          <Tabs.Trigger fontSize="2xl" letterSpacing="wider" value="first"><Text>Customers</Text></Tabs.Trigger>
                           <Tabs.Trigger fontSize="2xl" letterSpacing="wider" value="second"><Text>Present</Text></Tabs.Trigger>
                       </div>
                       <div className="tabs">
@@ -44,7 +44,7 @@ function Navbar({isLoggedIn, setIsLoggedIn ,theme, preferredColors, setTheme, se
                           <div>
                             <PopoverArrow />
                             <PopoverBody colorPalette={preferredColors} color="blue.600" shadow={"rgba(50, 50, 250, 0.25) 0px 6px 12px -2px, rgba(0, 0, 0, 0.3) 0px 3px 7px -3px;"}>
-                              <PopoverTitle my="4" fontWeight="medium" fontSize="lg">Find a customer</PopoverTitle>
+                              <PopoverTitle my="4" fontWeight="medium" fontSize="lg">Find a customer {value === "first"?"":"in Present"}</PopoverTitle>
                               <Stack>
                                 <form action="" onSubmit={(e) => {e.preventDefault(); setSearchClicked(true)}}>
                                   <div className="flexCol">
