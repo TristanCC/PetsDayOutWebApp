@@ -1,5 +1,16 @@
 import Customer from '../models/Customer.js';
 
+export const createCustomer = async (req, res) => {
+  const { firstName, middleName, lastName, email, phoneNumber, customerComment} = req.body
+
+  try {
+    await Customer.create({firstName, middleName, lastName, email, phoneNumber, customerComment})
+
+  } catch(error) {
+    console.log(`error creating customer:`, error)
+  }
+}
+
 export const getCustomers = async (req, res) => {
   try {
     const users = await Customer.findAll();

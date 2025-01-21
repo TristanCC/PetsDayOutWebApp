@@ -108,7 +108,7 @@ const CustomerInfo = ({ selectedCustomer, setCustomerInfoOpen, updateCustomerInS
             cursor={"radio"}
             >
                 <IconButton position={"absolute"} top={"0"}
-                 right={"0"} aria-label="Search database"
+                 right={"0"} aria-label="close update customer"
                  size={"lg"} variant={"ghost"} borderRadius={"1rem"} onClick={() => setCustomerInfoOpen(false)}>
                     <LuCircleX />
                 </IconButton>

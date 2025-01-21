@@ -20,6 +20,7 @@ import { Button } from "@/components/ui/button"
 import { Checkbox } from "@/components/ui/checkbox"
 import { useState, useEffect } from "react"
 import MenuRoot1 from "./MenuRoot1"
+import CreateCustomer from "./CreateCustomer"
 
 const MyTable = ({ selectedCustomer, setSelectedCustomer, customers, preferredColors, updateCustomerInState }) => {
   const [selection, setSelection] = useState([])
@@ -84,7 +85,7 @@ const MyTable = ({ selectedCustomer, setSelectedCustomer, customers, preferredCo
           </Table.Row>
         </Table.Header>
         <Table.Body>{rows}</Table.Body>
-
+        
       </Table.Root>
 
       {/* <Theme asChild hasBackground={false} appearance={theme} colorPalette={preferredColors}>
