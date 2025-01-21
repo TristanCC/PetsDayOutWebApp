@@ -15,7 +15,7 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover"
 
-function Navbar({isLoggedIn, setIsLoggedIn ,theme, preferredColors, setTheme, setPreferredColors, customers, selectedCustomer, setSelectedCustomer }) {
+function Navbar({isLoggedIn, setIsLoggedIn ,theme, preferredColors, setTheme, setPreferredColors, customers, selectedCustomer, setSelectedCustomer, updateCustomerInState }) {
 
     const [value, setValue] = useState("first")
     const [searchClicked, setSearchClicked] = useState(false)
@@ -30,8 +30,8 @@ function Navbar({isLoggedIn, setIsLoggedIn ,theme, preferredColors, setTheme, se
                   >
                     <Tabs.List className="tabs">
                       <div className="tabs">
-                          <Tabs.Trigger fontSize="2xl" letterSpacing="wider" value="first">All</Tabs.Trigger>
-                          <Tabs.Trigger fontSize="2xl" letterSpacing="wider" value="second">Present</Tabs.Trigger>
+                          <Tabs.Trigger fontSize="2xl" letterSpacing="wider" value="first"><Text>All</Text></Tabs.Trigger>
+                          <Tabs.Trigger fontSize="2xl" letterSpacing="wider" value="second"><Text>Present</Text></Tabs.Trigger>
                       </div>
                       <div className="tabs">
                       <PopoverRoot >
@@ -69,6 +69,7 @@ function Navbar({isLoggedIn, setIsLoggedIn ,theme, preferredColors, setTheme, se
                     setSelectedCustomer={setSelectedCustomer}
                     customers={customers}
                     preferredColors={preferredColors}
+                    updateCustomerInState={updateCustomerInState} // Pass the function here
                     />: <Text>Please log in</Text>}
                     </Tabs.Content>
                     <Tabs.Content value="second" >Second panel</Tabs.Content>

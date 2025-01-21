@@ -6,9 +6,9 @@ import { Textarea } from "@chakra-ui/react"
 
 import { LuCircleX } from "react-icons/lu";
 
-import PetList from './PetList';
+// import PetList from './PetList';
 
-const CustomerInfo = ({ selectedCustomer, setCustomerInfoOpen ,preferredColors }) => {
+const CustomerInfo = ({ selectedCustomer, setCustomerInfoOpen }) => {
     const [firstName, setFirstName] = useState(selectedCustomer.firstName);
     const [lastName, setLastName] = useState(selectedCustomer.lastName);
     const [email, setEmail] = useState(selectedCustomer.email);
@@ -54,6 +54,26 @@ const CustomerInfo = ({ selectedCustomer, setCustomerInfoOpen ,preferredColors }
         && selectedCustomer.email === email
         && (selectedCustomer.customerComment || "") === customerComment;
 
+
+    const handleSubmit = (e) => {
+        e.preventDefault()
+        fetch(`/db/updateCustomer/${selectedCustomer.id}`,{
+            method: "PUT",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+                firstName: firstName,
+                lastName: lastName,
+                email: email,
+                phoneNumber: phoneNumber,
+                customerComment: customerComment
+            }),
+        })
+        console.log("Customer Info Submitted");
+
+    }
+
     return (
         
         <div className="customerInfo">
@@ -65,11 +85,11 @@ const CustomerInfo = ({ selectedCustomer, setCustomerInfoOpen ,preferredColors }
             >
                 <IconButton position={"absolute"} top={"0"}
                  right={"0"} aria-label="Search database"
-                 size={"lg"} variant={"ghost"} borderRadius={"1rem"} onClick={(e) => setCustomerInfoOpen(false)}>
+                 size={"lg"} variant={"ghost"} borderRadius={"1rem"} onClick={() => setCustomerInfoOpen(false)}>
                     <LuCircleX />
                 </IconButton>
                 <div className="customerInfoHeader">
-                        <form action="" className="customerInfoForm">
+                        <form action="" className="customerInfoForm" onSubmit={handleSubmit}>
                             <div className="customerInfoFormInner">
                                 <div className="editInput">
                                     <Field label="First name" required >

@@ -1,6 +1,6 @@
 "use client"
 
-import { Box, Kbd, Table, Theme } from "@chakra-ui/react"
+import { Box, Kbd, Table, Theme, Text } from "@chakra-ui/react"
 import {
   ActionBarContent,
   ActionBarRoot,
@@ -21,7 +21,7 @@ import { Checkbox } from "@/components/ui/checkbox"
 import { useState, useEffect } from "react"
 import MenuRoot1 from "./MenuRoot1"
 
-const MyTable = ({ selectedCustomer, setSelectedCustomer, customers, preferredColors }) => {
+const MyTable = ({ selectedCustomer, setSelectedCustomer, customers, preferredColors, updateCustomerInState }) => {
   const [selection, setSelection] = useState([])
 
   const hasSelection = selection.length > 0
@@ -49,12 +49,12 @@ const MyTable = ({ selectedCustomer, setSelectedCustomer, customers, preferredCo
           }}
         />
       </Table.Cell> */}
-      <Table.Cell className="tableRow">{customer.firstName} {customer.middleName ? customer.middleName[0] + '.' : ""} {customer.lastName}</Table.Cell>
-      <Table.Cell className="tableRow">{customer.phoneNumber}</Table.Cell>
+      <Table.Cell className="tableRow"><Text>{customer.firstName} {customer.middleName ? customer.middleName[0] + '.' : ""} {customer.lastName}</Text></Table.Cell>
+      <Table.Cell className="tableRow"><Text>{customer.phoneNumber}</Text></Table.Cell>
       {/* <Table.Cell className="email">{customer.email ? customer.email : "N/A"}</Table.Cell> */}
-      <Table.Cell className="tableRow">{customer.numberOfPets ?? "N/A"}</Table.Cell>
+      <Table.Cell className="tableRow"><Text>{customer.numberOfPets ?? "N/A"}</Text></Table.Cell>
       <Table.Cell className="tableRow">
-        <MenuRoot1 customer={customer} preferredColors={preferredColors} />
+        <MenuRoot1 customer={customer} preferredColors={preferredColors} setSelectedCustomer={setSelectedCustomer} updateCustomerInState={updateCustomerInState} />
       </Table.Cell>
     </Table.Row>
   ))
@@ -76,10 +76,10 @@ const MyTable = ({ selectedCustomer, setSelectedCustomer, customers, preferredCo
                 }}
               />
             </Table.ColumnHeader> */}
-            <Table.ColumnHeader className="columnHeader">Name</Table.ColumnHeader>
-            <Table.ColumnHeader className="columnHeader">Phone Number</Table.ColumnHeader>
+            <Table.ColumnHeader className="columnHeader"><Text>Name</Text></Table.ColumnHeader>
+            <Table.ColumnHeader className="columnHeader"><Text>Phone Number</Text></Table.ColumnHeader>
             {/* <Table.ColumnHeader>Email</Table.ColumnHeader> */}
-            <Table.ColumnHeader className="columnHeader">Number of Pets</Table.ColumnHeader>
+            <Table.ColumnHeader className="columnHeader"><Text>Number of Pets</Text></Table.ColumnHeader>
             <Table.ColumnHeader w={"6"} className="columnHeader"/>
           </Table.Row>
         </Table.Header>
