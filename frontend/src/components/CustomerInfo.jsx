@@ -8,7 +8,7 @@ import { LuCircleX } from "react-icons/lu";
 
 // import PetList from './PetList';
 
-const CustomerInfo = ({ selectedCustomer, setCustomerInfoOpen }) => {
+const CustomerInfo = ({ selectedCustomer, setCustomerInfoOpen, updateCustomerInState }) => {
     const [firstName, setFirstName] = useState(selectedCustomer.firstName);
     const [middleName, setMiddleName] = useState(selectedCustomer.middleName);
     const [lastName, setLastName] = useState(selectedCustomer.lastName);
@@ -61,8 +61,8 @@ const CustomerInfo = ({ selectedCustomer, setCustomerInfoOpen }) => {
 
 
     const handleSubmit = (e) => {
-        e.preventDefault()
-        fetch(`/db/updateCustomer/${selectedCustomer.id}`,{
+        e.preventDefault();
+        fetch(`/db/updateCustomer/${selectedCustomer.id}`, {
             method: "PUT",
             headers: {
                 "Content-Type": "application/json",
@@ -73,11 +73,15 @@ const CustomerInfo = ({ selectedCustomer, setCustomerInfoOpen }) => {
                 lastName: lastName,
                 email: email,
                 phoneNumber: phoneNumber,
-                customerComment: customerComment
+                customerComment: customerComment,
             }),
         })
-        console.log("Customer Info Submitted");
-
+        .then(response => response.json())
+        .then(data => {
+            updateCustomerInState(data);
+        })
+        .catch(error => console.error('Error updating customer:', error));
+        setCustomerInfoOpen(false);
     }
 
     return (
