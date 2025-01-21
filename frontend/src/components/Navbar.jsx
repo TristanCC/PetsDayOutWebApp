@@ -65,7 +65,7 @@ function Navbar({isLoggedIn, setIsLoggedIn ,theme, preferredColors, setTheme, se
                       </div>
                     </Tabs.List>
                     <Tabs.Content value="first" display={"flex"} justifyContent={"center"} pt={"2rem"} w={"100%"}
-                    maxH={"66vh"} >
+                    maxH={"74vh"} >
                     {isLoggedIn ? <MyTable
                     selectedCustomer={selectedCustomer}
                     setSelectedCustomer={setSelectedCustomer}
