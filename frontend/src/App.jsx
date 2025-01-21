@@ -27,17 +27,38 @@ function App() {
   });
   const [selectedCustomer, setSelectedCustomer] = useState(null);
 
+  useEffect(() => {
+    const fetchCustomers = async () => {
+      try {
+        const response = await fetch('/db/getCustomers');
+        const data = await response.json();
+        setCustomers(data);
+      } catch (error) {
+        console.error('Error fetching customers:', error);
+      }
+    };
+
+    fetchCustomers();
+  }, []);
+
+  const updateCustomerInState = (updatedCustomer) => {
+    setCustomers((prevCustomers) =>
+      prevCustomers.map((customer) =>
+        customer.id === updatedCustomer.id ? updatedCustomer : customer
+      )
+    );
+  };
 
   return (
     <>
         <Box colorPalette={preferredColors} bg={{ base: "white", _dark: "black" }}>
           <div className='outerWrapper'>
             <div className='wrapperLeft'>
-              <Navbar isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} preferredColors={preferredColors} setPreferredColors={setPreferredColors} customers={customers} selectedCustomer={selectedCustomer} setSelectedCustomer={setSelectedCustomer} />
+              <Navbar isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} preferredColors={preferredColors} setPreferredColors={setPreferredColors} customers={customers} selectedCustomer={selectedCustomer} setSelectedCustomer={setSelectedCustomer} updateCustomerInState={updateCustomerInState} />
               <div className='wrapperInner'>
                 <BrowserRouter>
                   <Routes>
-                    <Route path="/" element={<Home isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} preferredColors={preferredColors} setPreferredColors={setPreferredColors} />} />
+                    <Route path="/" element={<Home isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} preferredColors={preferredColors} setPreferredColors={setPreferredColors} customers={customers} selectedCustomer={selectedCustomer} setSelectedCustomer={setSelectedCustomer} updateCustomerInState={updateCustomerInState} />} />
                     <Route path='/login' element={<Login isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} preferredColors={preferredColors} setPreferredColors={setPreferredColors} />} />
                   </Routes>
                 </BrowserRouter>
@@ -45,7 +66,12 @@ function App() {
             </div>
             <div className='wrapperRight'>
               <div className=''>
-                {/* Remove the CustomerInfo route */}
+                {selectedCustomer && (
+                  <CustomerInfo
+                    selectedCustomer={selectedCustomer}
+                    setCustomerInfoOpen={setSelectedCustomer}
+                  />
+                )}
               </div>
             </div>
           </div>

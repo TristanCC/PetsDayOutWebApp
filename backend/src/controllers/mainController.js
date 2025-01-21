@@ -15,9 +15,11 @@ export const getCustomers = async (req, res) => {
   }
 };
 
+
+
 export const updateCustomer = async (req, res) => {
   const { id } = req.params;
-  const { firstName, lastName, email, phoneNumber, customerComment } = req.body;
+  const { firstName, middleName, lastName, email, phoneNumber, customerComment } = req.body;
 
 
   try {
@@ -28,9 +30,8 @@ export const updateCustomer = async (req, res) => {
     if (!customer) {
       return res.status(404).json({ error: 'Customer not found' });
     }
-    console.log("recieved customer: ", customer.firstName);
-    // Use .update() directly instead of setting properties manually
-    await customer.update({ firstName, lastName, email, phoneNumber, customerComment });
+    
+    await customer.update({ firstName, middleName, lastName, email, phoneNumber, customerComment });
 
     console.log('Customer updated successfully!!!');
     

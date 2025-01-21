@@ -33,7 +33,7 @@ const MyTable = ({ selectedCustomer, setSelectedCustomer, customers, preferredCo
       data-selected={selection.includes(customer.id) ? "" : undefined}
       className="tableRow"
       paddingBlock={"0"}
-      onClick={() => {setSelectedCustomer(customer)}}
+      
     >
       {/* <Table.Cell>
         <Checkbox className="checkbox"

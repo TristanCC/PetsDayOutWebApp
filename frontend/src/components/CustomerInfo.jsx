@@ -10,6 +10,7 @@ import { LuCircleX } from "react-icons/lu";
 
 const CustomerInfo = ({ selectedCustomer, setCustomerInfoOpen }) => {
     const [firstName, setFirstName] = useState(selectedCustomer.firstName);
+    const [middleName, setMiddleName] = useState(selectedCustomer.middleName);
     const [lastName, setLastName] = useState(selectedCustomer.lastName);
     const [email, setEmail] = useState(selectedCustomer.email);
     const [phoneNumber, setPhoneNumber] = useState(selectedCustomer.phoneNumber);
@@ -20,8 +21,10 @@ const CustomerInfo = ({ selectedCustomer, setCustomerInfoOpen }) => {
     const [edit3, setEdit3] = useState(true);
     const [edit4, setEdit4] = useState(true);
 
+
     useEffect(() => {
         setFirstName(selectedCustomer.firstName);
+        setMiddleName(selectedCustomer.middleName)
         setLastName(selectedCustomer.lastName);
         setEmail(selectedCustomer.email);
         setPhoneNumber(selectedCustomer.phoneNumber);
@@ -44,11 +47,13 @@ const CustomerInfo = ({ selectedCustomer, setCustomerInfoOpen }) => {
                 break;
             default:
                 break;
+        
         }
     };
 
     const isSaveDisabled = 
            selectedCustomer.firstName === firstName
+        && selectedCustomer.middleName === middleName
         && selectedCustomer.lastName === lastName
         && selectedCustomer.phoneNumber === phoneNumber
         && selectedCustomer.email === email
@@ -64,6 +69,7 @@ const CustomerInfo = ({ selectedCustomer, setCustomerInfoOpen }) => {
             },
             body: JSON.stringify({
                 firstName: firstName,
+                middleName: middleName,
                 lastName: lastName,
                 email: email,
                 phoneNumber: phoneNumber,
@@ -77,7 +83,21 @@ const CustomerInfo = ({ selectedCustomer, setCustomerInfoOpen }) => {
     return (
         
         <div className="customerInfo">
-            <Box backdropFilter="grayscale(80%)"
+            <Box className="transparentBackground"
+            pos={"fixed"}
+            w={"100vw"}
+            h={"100vh"}
+            top={"0px"}
+            bottom={"0px"}
+            backgroundColor={"rgba(18, 18, 18, 0.5)"}
+            backdropFilter="blur(5px)"
+            opacity={"100%"}
+            zIndex={-1}
+            pointerEvents={"none"}
+            >
+            </Box>
+
+            <Box
             bg={{ base: "white", _dark: "black" }}
             borderRadius={"1rem"}
             p={"2rem"} w={"100%"} h={"auto"}
@@ -92,24 +112,40 @@ const CustomerInfo = ({ selectedCustomer, setCustomerInfoOpen }) => {
                         <form action="" className="customerInfoForm" onSubmit={handleSubmit}>
                             <div className="customerInfoFormInner">
                                 <div className="editInput">
-                                    <Field label="First name" required >
-                                        <HStack w={"100%"}>
-                                            <Input
-                                                disabled={edit1}
-                                                variant="subtle"
-                                                fontSize={"lg"}
-                                                value={firstName}
-                                                size="md"
-                                                onChange={(e) => setFirstName(e.target.value)}
-                                            />
-                                            <IconButton
-                                                aria-label="Edit first name"
-                                                onClick={() => handleClickEditCustomer(1)}
-                                            >
-                                                <FaRegEdit />
-                                            </IconButton>
-                                        </HStack>
-                                    </Field>
+                                    <HStack maxW={"275px"} w={"100%"}>
+                                        <Field label="First name" required >
+                                            <HStack w={"100%"}>
+                                                <Input
+                                                    disabled={edit1}
+                                                    variant="subtle"
+                                                    fontSize={"md"}
+                                                    value={firstName}
+                                                    size="md"
+                                                    onChange={(e) => setFirstName(e.target.value)}
+                                                />
+                                            </HStack>
+                                        </Field>
+                                        <Field label="Middle" >
+                                            <HStack w={"100%"}>
+                                                <Input
+                                                    disabled={edit1}
+                                                    variant="subtle"
+                                                    fontSize={"md"}
+                                                    value={middleName? middleName : ""}
+                                                    placeholder="N/A"
+                                                    size="md"
+                                                    onChange={(e) => setMiddleName(e.target.value)}
+                                                    
+                                                />
+                                                <IconButton
+                                                    aria-label="Edit first name or middle name"
+                                                    onClick={() => handleClickEditCustomer(1)}
+                                                >
+                                                    <FaRegEdit />
+                                                </IconButton>
+                                            </HStack>
+                                        </Field>
+                                    </HStack>
                                 </div>
                                 <div className="editInput">
                                     <Field label="Last name" required>
@@ -117,7 +153,7 @@ const CustomerInfo = ({ selectedCustomer, setCustomerInfoOpen }) => {
                                             <Input
                                                 disabled={edit2}
                                                 variant="subtle"
-                                                fontSize={"lg"}
+                                                fontSize={"md"}
                                                 value={lastName}
                                                 size="md"
                                                 onChange={(e) => setLastName(e.target.value)}
@@ -137,7 +173,7 @@ const CustomerInfo = ({ selectedCustomer, setCustomerInfoOpen }) => {
                                             <Input
                                                 disabled={edit4}
                                                 variant="subtle"
-                                                fontSize={"lg"}
+                                                fontSize={"md"}
                                                 value={phoneNumber}
                                                 size="md"
                                                 onChange={(e) => setPhoneNumber(e.target.value)}
@@ -157,7 +193,7 @@ const CustomerInfo = ({ selectedCustomer, setCustomerInfoOpen }) => {
                                             <Input
                                                 disabled={edit3}
                                                 variant="subtle"
-                                                fontSize={"lg"}
+                                                fontSize={"md"}
                                                 value={email ? email : ""}
                                                 placeholder="N/A"
                                                 size="md"
@@ -178,6 +214,7 @@ const CustomerInfo = ({ selectedCustomer, setCustomerInfoOpen }) => {
                                       <Field label="Customer Notes">
                                         
                                         <Textarea
+                                        fontSize={"md"}
                                             placeholder="Start typing..."
                                             variant="outline"
                                             overflowWrap={"break-word"}
