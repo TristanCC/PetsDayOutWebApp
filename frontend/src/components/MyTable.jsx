@@ -84,7 +84,9 @@ const MyTable = ({ selectedCustomer, setSelectedCustomer, customers, preferredCo
             <Table.ColumnHeader w={"6"} className="columnHeader"/>
           </Table.Row>
         </Table.Header>
-        <Table.Body>{rows}</Table.Body>
+        <Table.Body >
+          {rows}
+        </Table.Body>
         
       </Table.Root>
 

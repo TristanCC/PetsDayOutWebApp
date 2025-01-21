@@ -51,7 +51,9 @@ function App() {
 
   return (
     <>
-        <Box colorPalette={preferredColors} bg={{ base: "white", _dark: "black" }}>
+        <Box colorPalette={preferredColors} bg={{ base: "white", _dark: "black" }}
+         w={"100%"} display={"flex"} justifyContent={"center"} alignContent={"center"}
+         alignSelf={"center"} alignItems={"center"}>
           <div className='outerWrapper'>
             <div className='wrapperLeft'>
               <Navbar isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} preferredColors={preferredColors} setPreferredColors={setPreferredColors} customers={customers} selectedCustomer={selectedCustomer} setSelectedCustomer={setSelectedCustomer} updateCustomerInState={updateCustomerInState} />
@@ -64,18 +66,9 @@ function App() {
                 </BrowserRouter>
               </div>
             </div>
-            <div className='wrapperRight'>
-              <div className=''>
-                {selectedCustomer && (
-                  <CustomerInfo
-                    selectedCustomer={selectedCustomer}
-                    setCustomerInfoOpen={setSelectedCustomer}
-                  />
-                )}
-              </div>
-            </div>
+
           </div>
-          <ColorModeButton position={"fixed"} bottom={"0"}></ColorModeButton>
+          <ColorModeButton position={"fixed"} bottom={"0"} left={"0"}></ColorModeButton>
         </Box>
     </>
   );

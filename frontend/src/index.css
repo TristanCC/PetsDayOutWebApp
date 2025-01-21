@@ -7,8 +7,16 @@ body, .root, .outerWrapper {
   min-height: 100vh;
 }
 
+#root {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  align-content: center;
+}
+
 body {
   background-color: white;
+  min-width: 100%;
 }
 
 .outerWrapper {
@@ -16,19 +24,25 @@ body {
   flex-wrap: wrap;
   gap: 5rem;
   justify-content: center;
-  align-items: baseline;
+  align-items:center;
+
+
   width: 100%;
   height: auto;
+  max-height: 100vh;
+
 }
 
 
 .wrapperLeft {
-  display: flex;
+
   flex-direction: column;
   height: 100%;
   max-width: 800px;
   flex: 1 1 100%;
   position: relative; /* Add this line */
+  align-items: center;
+  justify-content: space-around;
 }
 
 .wrapperRight {
@@ -47,7 +61,7 @@ body {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 1rem;
+  padding: 1%;
   background-color: inherit; /* Add this line */
   z-index: 1000; /* Add this line */
 }

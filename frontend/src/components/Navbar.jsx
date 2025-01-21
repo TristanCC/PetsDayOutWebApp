@@ -25,8 +25,9 @@ function Navbar({isLoggedIn, setIsLoggedIn ,theme, preferredColors, setTheme, se
         <>
               <Box colorPalette={preferredColors} zIndex="1000">
                   <Tabs.Root value={value} onValueChange={(e) => setValue(e.value)}
-                  size="lg"
+                  size="sm"
                   variant="line"
+          
                   >
                     <Tabs.List className="tabs">
                       <div className="tabs">
@@ -63,7 +64,8 @@ function Navbar({isLoggedIn, setIsLoggedIn ,theme, preferredColors, setTheme, se
                       </PopoverRoot>
                       </div>
                     </Tabs.List>
-                    <Tabs.Content value="first" display={"flex"} justifyContent={"center"} w={"100%"} >
+                    <Tabs.Content value="first" display={"flex"} justifyContent={"center"} pt={"2rem"} w={"100%"}
+                    maxH={"66vh"} >
                     {isLoggedIn ? <MyTable
                     selectedCustomer={selectedCustomer}
                     setSelectedCustomer={setSelectedCustomer}

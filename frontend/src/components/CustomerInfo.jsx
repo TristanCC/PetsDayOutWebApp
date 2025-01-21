@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { FaRegEdit } from "react-icons/fa";
-import { Button, Input, IconButton, HStack, Box } from "@chakra-ui/react";
+import { Button, Input, IconButton, HStack, Box, Text } from "@chakra-ui/react";
 import { Field } from "@/components/ui/field";
 import { Textarea } from "@chakra-ui/react"
 
@@ -112,6 +112,10 @@ const CustomerInfo = ({ selectedCustomer, setCustomerInfoOpen, updateCustomerInS
                  size={"lg"} variant={"ghost"} borderRadius={"1rem"} onClick={() => setCustomerInfoOpen(false)}>
                     <LuCircleX />
                 </IconButton>
+                        <Text fontSize={"2xl"} fontWeight={"medium"} mb={"1rem"}
+                         position={"relative"} justifySelf={"center"}
+                         bottom={"0.75rem"}
+                         >Customer Info</Text>
                 <div className="customerInfoHeader">
                         <form action="" className="customerInfoForm" onSubmit={handleSubmit}>
                             <div className="customerInfoFormInner">

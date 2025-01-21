@@ -83,7 +83,7 @@ const CreateCustomer = ({ setCustomerInfoOpen }) => {
         <Text fontSize={"2xl"} fontWeight={"medium"} mb={"1rem"}
          position={"relative"} justifySelf={"center"}
          bottom={"0.75rem"}
-         >Create New Customer</Text>
+         >Create Customer</Text>
         <div className="customerInfoHeader">
           <form onSubmit={handleSubmit} className="customerInfoForm">
             <div className="formWrapper">
