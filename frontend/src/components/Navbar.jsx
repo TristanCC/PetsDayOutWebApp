@@ -15,7 +15,7 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover"
 
-function Navbar({isLoggedIn, setIsLoggedIn ,theme, preferredColors, setTheme, setPreferredColors, customers, selectedCustomer, setSelectedCustomer, updateCustomerInState }) {
+function Navbar({isLoggedIn, setIsLoggedIn ,theme, preferredColors, setTheme, setPreferredColors, customers, selectedCustomer, setSelectedCustomer, updateCustomerInState, deleteCustomerInState }) {
 
     const [value, setValue] = useState("first")
     const [searchClicked, setSearchClicked] = useState(false)
@@ -72,6 +72,7 @@ function Navbar({isLoggedIn, setIsLoggedIn ,theme, preferredColors, setTheme, se
                     customers={customers}
                     preferredColors={preferredColors}
                     updateCustomerInState={updateCustomerInState} // Pass the function here
+                    deleteCustomerInState={deleteCustomerInState}
                     />: <Text>Please log in</Text>}
                     </Tabs.Content>
                     <Tabs.Content value="second" >Second panel</Tabs.Content>

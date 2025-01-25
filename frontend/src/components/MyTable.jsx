@@ -22,7 +22,7 @@ import { useState, useEffect } from "react"
 import MenuRoot1 from "./MenuRoot1"
 import CreateCustomer from "./CreateCustomer"
 
-const MyTable = ({ selectedCustomer, setSelectedCustomer, customers, preferredColors, updateCustomerInState }) => {
+const MyTable = ({ selectedCustomer, setSelectedCustomer, customers, preferredColors, updateCustomerInState, deleteCustomerInState }) => {
   const [selection, setSelection] = useState([])
 
   const hasSelection = selection.length > 0
@@ -55,7 +55,8 @@ const MyTable = ({ selectedCustomer, setSelectedCustomer, customers, preferredCo
       {/* <Table.Cell className="email">{customer.email ? customer.email : "N/A"}</Table.Cell> */}
       <Table.Cell className="tableRow"><Text>{customer.numberOfPets ?? "N/A"}</Text></Table.Cell>
       <Table.Cell className="tableRow">
-        <MenuRoot1 customer={customer} preferredColors={preferredColors} setSelectedCustomer={setSelectedCustomer} updateCustomerInState={updateCustomerInState} />
+        <MenuRoot1 customer={customer} preferredColors={preferredColors} setSelectedCustomer={setSelectedCustomer}
+        updateCustomerInState={updateCustomerInState} deleteCustomerInState={deleteCustomerInState} />
       </Table.Cell>
     </Table.Row>
   ))

@@ -21,3 +21,6 @@ Potential improvements:
  - Improve UI/UX for better user experience
  - Add unit and integration tests for critical components
  - Optimize performance for large datasets (pagination?)
+
+Misc:
+ - optionally link customers together to share pet pool

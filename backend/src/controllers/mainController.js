@@ -13,12 +13,12 @@ export const createCustomer = async (req, res) => {
 
 export const getCustomers = async (req, res) => {
   try {
-    const users = await Customer.findAll();
+    const customers = await Customer.findAll();
     
     // Convert Sequelize instances to plain objects
-    const plainCustomers = users.map(customer => customer.toJSON());
+    const plainCustomers = customers.map(customer => customer.toJSON());
 
-    // Send plain users as JSON
+    // Send plain customers as JSON
     res.json(plainCustomers);
   } catch (error) {
     console.error('Error fetching customers:', error);
@@ -50,5 +50,28 @@ export const updateCustomer = async (req, res) => {
   } catch (error) {
     console.error('Error updating customer:', error);
     res.status(500).json({ error: 'Failed to update customer. Please try again later.' });
+  }
+};
+
+export const deleteCustomer = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    console.log(id)
+
+    const customerToDelete = await Customer.findOne({ where: { id: `${id}` } });
+
+    if (!customerToDelete) {
+      return res.status(404).json({ error: 'Customer not found' });
+    }
+
+    const deletedCustomer = customerToDelete.toJSON(); // Capture customer data before deletion
+
+    await customerToDelete.destroy();
+
+    res.json(deletedCustomer); // Send the deleted customer data back to the frontend
+  } catch (error) {
+    console.error('Error deleting customer:', error);
+    res.status(500).json({ error: 'Failed to delete customer. Please try again later.' });
   }
 };
