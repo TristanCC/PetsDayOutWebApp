@@ -141,12 +141,6 @@ const CreateCustomer = ({ setCustomerInfoOpen }) => {
                         </HStack>
                       </Field>
                     </div>
-                  </>
-                )}
-
-                {/* Form fields for step 2 */}
-                {(!isMobile || step === 2) && (
-                  <>
                     <div className="editInput">
                       <Field label="Phone number" required>
                         <HStack w={"100%"}>
@@ -177,14 +171,22 @@ const CreateCustomer = ({ setCustomerInfoOpen }) => {
                   </>
                 )}
 
+                {/* Form fields for step 2 */}
+                {(isMobile && step === 2) && (
+                  <>
+                    <h1>this is step 2</h1>
+                    <CustomerCreationPet/>
+                  </>
+                )}
+
                 {/* Navigation buttons for mobile view */}
                 {isMobile && (
                   <HStack w={"100%"} mt={"1rem"}>
-                    {step > 1 && (
-                      <Button onClick={handlePrevStep} w={"50%"}>
-                        Back
-                      </Button>
-                    )}
+                   
+                    <Button onClick={handlePrevStep} w={"50%"} disabled={step === 1}>
+                      Back
+                    </Button>
+                    
                     {step < 2 && (
                       <Button onClick={handleNextStep} w={"50%"}>
                         Next
@@ -201,12 +203,15 @@ const CreateCustomer = ({ setCustomerInfoOpen }) => {
                 {/* Submit button for desktop view */}
                 {!isMobile && (
                   <Button type="submit" w={"100%"} mt={"1rem"}>
-                    Next
+                    Submit
                   </Button>
                 )}
               </div>
 
               {/* Additional form fields for desktop view */}
+              {!isMobile &&
+                <CustomerCreationPet/>
+              }
             </div>
           </form>
         </div>
