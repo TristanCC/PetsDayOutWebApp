@@ -106,6 +106,7 @@ const CustomerInfo = ({ selectedCustomer, setCustomerInfoOpen, updateCustomerInS
             borderRadius={"1rem"}
             p={"2rem"} w={"100%"} h={"auto"}
             cursor={"radio"}
+            
             >
                 <IconButton position={"absolute"} top={"0"}
                  right={"0"} aria-label="close update customer"
