@@ -75,13 +75,13 @@ const MenuRoot1 = ({ customer, preferredColors, setSelectedCustomer, updateCusto
 
   return (
     <Box>
-      <MenuRoot size={"md"}>
+      <MenuRoot size={"md"} >
         <MenuTrigger asChild>
           <Button variant="outline" size="md">
             ☰
           </Button>
         </MenuTrigger>
-        <MenuContent className="menuContent">
+        <MenuContent className="menuContent" bg={{ base: "white", _dark: "primarySurface" }}>
           <MenuItemGroup p={"0.5rem"}>{customer.firstName} {customer.lastName}</MenuItemGroup>
           <MenuSeparator />
           <MenuItem borderRadius={".75rem"} value="mark-present">

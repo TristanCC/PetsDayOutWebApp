@@ -6,7 +6,7 @@ logged in? route to home page with table of all customers
 Home functionality:
  - Add Customer
  - Add/View/Edit Pets
- - Add/Edit/View Customer info
+ x Add/Edit/View Customer info
  - Search/filter Customer based on name or phone number (think about formatting)
  - Mark Customer present (how to track?)
  - Filter present customers tab
@@ -24,3 +24,5 @@ Potential improvements:
 
 Misc:
  - optionally link customers together to share pet pool
+ - delete confirmation modal
+ - on customer delete, check (likely using a join table) for linked customers, if so, don't delete pets

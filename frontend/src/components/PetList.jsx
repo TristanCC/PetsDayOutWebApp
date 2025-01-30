@@ -7,7 +7,6 @@ import {
   Text,
   Box,
   Flex,
-  HStack
 } from "@chakra-ui/react";
 import {
   AccordionItem,
@@ -42,7 +41,7 @@ const PetList = ({ customer, preferredColors, handleEditPet, closePetsPanel }) =
 
     
     <div className="customerInfo">
-    <Box className="transparentBackground"
+    <Box className="transparentBackground" 
     pos={"fixed"}
     w={"100vw"}
     h={"100vh"}
@@ -57,7 +56,7 @@ const PetList = ({ customer, preferredColors, handleEditPet, closePetsPanel }) =
     </Box>
 
     <Box
-    bg={{ base: "white", _dark: "black" }}
+    bg={{ base: "white", _dark: "primarySurface" }}
     borderRadius={"1rem"}
     p={"2rem"} w={"100%"} h={"auto"}
     cursor={"radio"}
@@ -78,13 +77,10 @@ const PetList = ({ customer, preferredColors, handleEditPet, closePetsPanel }) =
         <Box display={"flex"} flexDir={"column"} gap={"1rem"}>
         <AccordionRoot multiple variant={"enclosed"}>
       {pets.map((item, index) => (
-        <HStack>
-            <AccordionItem key={index} value={item.name}>
-                  <AccordionItemTrigger>{item.name}</AccordionItemTrigger>
-              <AccordionItemContent>{item.breed}</AccordionItemContent>
-            </AccordionItem>
-            <Box><IconButton/></Box>
-        </HStack>
+        <AccordionItem key={index} value={item.name}>
+          <AccordionItemTrigger>{item.name}</AccordionItemTrigger>
+          <AccordionItemContent>{item.breed}</AccordionItemContent>
+        </AccordionItem>
       ))}
     </AccordionRoot>
         </Box>

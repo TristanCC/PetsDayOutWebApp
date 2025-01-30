@@ -66,7 +66,7 @@ const CreateCustomer = ({ setCustomerInfoOpen }) => {
 
       {/* Modal content */}
       <Box
-        bg={{ base: "white", _dark: "black" }}
+        bg={{ base: "white", _dark: "primarySurface" }}
         borderRadius={"1rem"}
         p={"2rem"}
         w={"100%"}

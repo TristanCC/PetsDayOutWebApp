@@ -102,7 +102,7 @@ const CustomerInfo = ({ selectedCustomer, setCustomerInfoOpen, updateCustomerInS
             </Box>
 
             <Box
-            bg={{ base: "white", _dark: "black" }}
+            bg={{ base: "white", _dark: "primarySurface" }}
             borderRadius={"1rem"}
             p={"2rem"} w={"100%"} h={"auto"}
             cursor={"radio"}

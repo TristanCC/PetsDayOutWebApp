@@ -11,7 +11,8 @@ const customConfig = defineConfig({
   theme: {
     tokens: {
       colors: {
-        primary: { value: "#121212" },
+        primary: { value: "#121212 " },
+        primarySurface: { value: "#0E0E0E"},
         secondary: { value: "#EE0F0F" },
       },
       fonts: {

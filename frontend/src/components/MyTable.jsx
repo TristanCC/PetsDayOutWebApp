@@ -34,6 +34,7 @@ const MyTable = ({ selectedCustomer, setSelectedCustomer, customers, preferredCo
       data-selected={selection.includes(customer.id) ? "" : undefined}
       className="tableRow"
       paddingBlock={"0"}
+      bg={{ base: "white", _dark: "primary" }}
       
     >
       {/* <Table.Cell>
@@ -64,8 +65,8 @@ const MyTable = ({ selectedCustomer, setSelectedCustomer, customers, preferredCo
   return (
     <div className="table">
       <Table.Root interactive stickyHeader scrollBehavior={"smooth"} >
-        <Table.Header bg={{ base: "white", _dark: "black" }}>
-          <Table.Row alignItems={"center"}>
+        <Table.Header bg={{ base: "white", _dark: "primary" }} borderRadius={"0"}>
+          <Table.Row alignItems={"center"} bg={{ base: "white", _dark: "primary" }}>
             {/* <Table.ColumnHeader w="6" className="columnHeader">
               <Checkbox className="checkbox"
                 variant="subtle"

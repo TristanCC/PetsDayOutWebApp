@@ -29,6 +29,13 @@ const Present = sequelize.define('Present', {
     type: DataTypes.DATEONLY,
     allowNull: false,
   },
+  status: {
+    type: DataTypes.STRING,
+    allowNull: false,
+    validate: {
+      isIn: [['present', 'archived']]
+    }
+  }
 });
 
 // Define the associations
