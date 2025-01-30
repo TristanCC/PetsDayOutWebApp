@@ -35,6 +35,7 @@ const MyTable = ({ selectedCustomer, setSelectedCustomer, customers, preferredCo
       className="tableRow"
       paddingBlock={"0"}
       bg={{ base: "white", _dark: "primary" }}
+      w={"100%"}
       
     >
       {/* <Table.Cell>
@@ -53,8 +54,7 @@ const MyTable = ({ selectedCustomer, setSelectedCustomer, customers, preferredCo
       </Table.Cell> */}
       <Table.Cell className="tableRow"><Text>{customer.firstName} {customer.middleName ? customer.middleName[0] + '.' : ""} {customer.lastName}</Text></Table.Cell>
       <Table.Cell className="tableRow"><Text>{customer.phoneNumber}</Text></Table.Cell>
-      {/* <Table.Cell className="email">{customer.email ? customer.email : "N/A"}</Table.Cell> */}
-      <Table.Cell className="tableRow"><Text>{customer.numberOfPets ?? "N/A"}</Text></Table.Cell>
+      <Table.Cell className="tableRow email"><Text>{customer.email ?? "N/A"}</Text></Table.Cell>
       <Table.Cell className="tableRow">
         <MenuRoot1 customer={customer} preferredColors={preferredColors} setSelectedCustomer={setSelectedCustomer}
         updateCustomerInState={updateCustomerInState} deleteCustomerInState={deleteCustomerInState} />
@@ -65,8 +65,8 @@ const MyTable = ({ selectedCustomer, setSelectedCustomer, customers, preferredCo
   return (
     <div className="table">
       <Table.Root interactive stickyHeader scrollBehavior={"smooth"} >
-        <Table.Header bg={{ base: "white", _dark: "primary" }} borderRadius={"0"}>
-          <Table.Row alignItems={"center"} bg={{ base: "white", _dark: "primary" }}>
+        <Table.Header bg={{ base: "white", _dark: "primary" }}>
+          <Table.Row alignItems={"center"} bg={{ base: "white", _dark: "primarySurface" }}>
             {/* <Table.ColumnHeader w="6" className="columnHeader">
               <Checkbox className="checkbox"
                 variant="subtle"
@@ -81,8 +81,7 @@ const MyTable = ({ selectedCustomer, setSelectedCustomer, customers, preferredCo
             </Table.ColumnHeader> */}
             <Table.ColumnHeader className="columnHeader"><Text>Name</Text></Table.ColumnHeader>
             <Table.ColumnHeader className="columnHeader"><Text>Phone Number</Text></Table.ColumnHeader>
-            {/* <Table.ColumnHeader>Email</Table.ColumnHeader> */}
-            <Table.ColumnHeader className="columnHeader"><Text>Number of Pets</Text></Table.ColumnHeader>
+            <Table.ColumnHeader className="columnHeader email"><Text>Email</Text></Table.ColumnHeader>
             <Table.ColumnHeader w={"6"} className="columnHeader"/>
           </Table.Row>
         </Table.Header>
@@ -113,3 +112,13 @@ const MyTable = ({ selectedCustomer, setSelectedCustomer, customers, preferredCo
 }
 
 export default MyTable
+
+// Add the following CSS to your stylesheet or in a style tag
+// .email {
+//   display: table-cell;
+// }
+// @media (max-width: 768px) {
+//   .email {
+//     display: none;
+//   }
+// }

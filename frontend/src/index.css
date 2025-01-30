@@ -24,9 +24,7 @@ body {
   flex-wrap: wrap;
   gap: 5rem;
   justify-content: center;
-  align-items:center;
-
-
+  align-items: center;
   width: 100%;
   height: auto;
   max-height: 100vh;
@@ -81,7 +79,6 @@ body {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  border-radius: 1rem;
   /* box-shadow: rgba(50, 50, 250, 0.25) 0px 6px 12px -2px, rgba(0, 0, 0, 0.3) 0px 3px 7px -3px;
   outline: 2px solid rgba(250, 250, 250, 0.1); */
   max-height: 70vh;
@@ -190,6 +187,13 @@ h1 {
     flex-direction: column;
   }
 
+  .email {
+    display: none;
+  }
+
+  .outerWrapper {
+    align-items: baseline;
+  }
 }
 
 @media (max-width: 510px) {
@@ -197,16 +201,11 @@ h1 {
     max-width: 4rem;
     white-space: nowrap;
     overflow: hidden;
-  }
-
-  .outerWrapper {
-    padding: 0.25rem;
-    flex-direction: column;
+    text-overflow: ellipsis;
   }
 
   .table {
     outline: none;
-    margin: 1rem;
   }
 }
 

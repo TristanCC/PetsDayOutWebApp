@@ -23,13 +23,16 @@ function Navbar({isLoggedIn, setIsLoggedIn ,theme, preferredColors, setTheme, se
 
     return (
         <>
-              <Box colorPalette={preferredColors} zIndex="1000" bg={{ base: "white", _dark: "primarySurface" }} borderRadius={"1rem"}>
+              <Box colorPalette={preferredColors} zIndex="1000" 
+              bg={{ base: "white", _dark: "primarySurface" }} borderRadius={"1rem"}
+              >
                   <Tabs.Root value={value} onValueChange={(e) => setValue(e.value)}
                   size="sm"
                   variant="line"
-          
+
                   >
-                    <Tabs.List className="tabs">
+                    {isLoggedIn && (
+                      <Tabs.List className="tabs">
                       <div className="tabs">
                           <Tabs.Trigger fontSize="2xl" letterSpacing="wider" value="first"><Text>Customers</Text></Tabs.Trigger>
                           <Tabs.Trigger fontSize="2xl" letterSpacing="wider" value="second"><Text>Present</Text></Tabs.Trigger>
@@ -64,8 +67,9 @@ function Navbar({isLoggedIn, setIsLoggedIn ,theme, preferredColors, setTheme, se
                       </PopoverRoot>
                       </div>
                     </Tabs.List>
+                    )}
                     <Tabs.Content value="first" display={"flex"} justifyContent={"center"} pt={"0"} w={"100%"}
-                    maxH={"74vh"} >
+                    maxH={"74vh"}>
                     {isLoggedIn ? <MyTable
                     selectedCustomer={selectedCustomer}
                     setSelectedCustomer={setSelectedCustomer}
