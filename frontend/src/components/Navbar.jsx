@@ -15,7 +15,9 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover"
 
-function Navbar({isLoggedIn, setIsLoggedIn ,theme, preferredColors, setTheme, setPreferredColors, customers, selectedCustomer, setSelectedCustomer, updateCustomerInState, deleteCustomerInState }) {
+function Navbar({isLoggedIn, setIsLoggedIn ,theme, preferredColors, setTheme, 
+  setPreferredColors, customers, selectedCustomer, setSelectedCustomer, updateCustomerInState, 
+  deleteCustomerInState,limit, offset, setOffset }) {
 
     const [value, setValue] = useState("first")
     const [searchClicked, setSearchClicked] = useState(false)
@@ -34,8 +36,8 @@ function Navbar({isLoggedIn, setIsLoggedIn ,theme, preferredColors, setTheme, se
                     {isLoggedIn && (
                       <Tabs.List className="tabs">
                       <div className="tabs">
-                          <Tabs.Trigger fontSize="2xl" letterSpacing="wider" value="first"><Text>Customers</Text></Tabs.Trigger>
-                          <Tabs.Trigger fontSize="2xl" letterSpacing="wider" value="second"><Text>Present</Text></Tabs.Trigger>
+                          <Tabs.Trigger fontSize={window.innerWidth > 500 ? "2xl" : "xl"} letterSpacing="wider" value="first"><Text>Customers</Text></Tabs.Trigger>
+                          <Tabs.Trigger fontSize={window.innerWidth > 500 ? "2xl" : "xl"} letterSpacing="wider" value="second"><Text>Present</Text></Tabs.Trigger>
                       </div>
                       <div className="tabs">
                       <PopoverRoot >
@@ -77,7 +79,11 @@ function Navbar({isLoggedIn, setIsLoggedIn ,theme, preferredColors, setTheme, se
                     preferredColors={preferredColors}
                     updateCustomerInState={updateCustomerInState} // Pass the function here
                     deleteCustomerInState={deleteCustomerInState}
-                    />: <Text>Please log in</Text>}
+                    limit={limit}
+                    offset={offset}
+                    setOffset={setOffset}
+                    />
+                    : <Text>Please log in</Text>}
                     </Tabs.Content>
                     <Tabs.Content value="second" >Second panel</Tabs.Content>
                   </Tabs.Root>

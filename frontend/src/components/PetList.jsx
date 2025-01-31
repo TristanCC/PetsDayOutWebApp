@@ -23,19 +23,24 @@ import { LuCircleX } from "react-icons/lu";
 
 const PetList = ({ customer, preferredColors, handleEditPet, closePetsPanel }) => {
     const [pets, setPets] = useState([]);
+    const [loading, setLoading] = useState(true)
 
     useEffect(() => {
         const fetchPets = async () => {
             try {
+                setLoading(true)
                 const response = await fetch(`db/getPets/${customer.id}`);
                 if (!response.ok) {
                     throw new Error('Network response was not ok');
                 }
                 const data = await response.json();
                 setPets(Array.isArray(data) ? data : []);
+                setLoading(false)
             } catch (error) {
                 console.error('Error fetching pets:', error);
                 setPets([]);
+                setLoading(false)
+                
             }
         };
 
@@ -59,11 +64,22 @@ const PetList = ({ customer, preferredColors, handleEditPet, closePetsPanel }) =
                 zIndex={-1}
                 pointerEvents={"none"}
             ></Box>
-            {pets.length === 0 ? (
+            {loading ? (
                 <Box
                     bg={{ base: "white", _dark: "primarySurface" }}
                     borderRadius={"1rem"}
-                    p={"2rem"}
+                    p={"1rem"}
+                    w={"100%"}
+                    h={"auto"}
+                    cursor={"radio"}
+                >
+                    <Text>Fetching pets...</Text>
+                </Box>
+            ) : pets.length === 0 ? (
+                <Box
+                    bg={{ base: "white", _dark: "primarySurface" }}
+                    borderRadius={"1rem"}
+                    p={"1rem"}
                     w={"100%"}
                     h={"auto"}
                     cursor={"radio"}
@@ -81,7 +97,7 @@ const PetList = ({ customer, preferredColors, handleEditPet, closePetsPanel }) =
                         <LuCircleX />
                     </IconButton>
                     <EmptyState
-                        icon={<GiSniffingDog fontSize={"4xl"}/>}
+                        icon={<Box fontSize={"3.5rem"}><GiSniffingDog/></Box>}
                         title={`Start tracking pets!`}
                         description={`No pets are being tracked for ${customer.firstName} yet.`}
                     >

@@ -1,6 +1,6 @@
 "use client"
 
-import { Box, Kbd, Table, Theme, Text } from "@chakra-ui/react"
+import { Box, Kbd, Table, Theme, Text, Button } from "@chakra-ui/react"
 import {
   ActionBarContent,
   ActionBarRoot,
@@ -16,24 +16,24 @@ import {
 } from "@/components/ui/menu"
 
 
-import { Button } from "@/components/ui/button"
 import { Checkbox } from "@/components/ui/checkbox"
 import { useState, useEffect } from "react"
 import MenuRoot1 from "./MenuRoot1"
 import CreateCustomer from "./CreateCustomer"
 
-const MyTable = ({ selectedCustomer, setSelectedCustomer, customers, preferredColors, updateCustomerInState, deleteCustomerInState }) => {
+const MyTable = ({ selectedCustomer, setSelectedCustomer, customers, preferredColors, updateCustomerInState, deleteCustomerInState, limit, offset, setOffset }) => {
   const [selection, setSelection] = useState([])
 
   const hasSelection = selection.length > 0
   const indeterminate = hasSelection && selection.length < customers.length
+
+  
 
   const rows = customers.map((customer) => (
     <Table.Row
       key={customer.id}
       data-selected={selection.includes(customer.id) ? "" : undefined}
       className="tableRow"
-      paddingBlock={"0"}
       bg={{ base: "white", _dark: "primary" }}
       w={"100%"}
       
@@ -64,21 +64,9 @@ const MyTable = ({ selectedCustomer, setSelectedCustomer, customers, preferredCo
 
   return (
     <div className="table">
-      <Table.Root interactive stickyHeader scrollBehavior={"smooth"} >
+      <Table.Root interactive stickyHeader striped scrollBehavior={"smooth"} overflow={"hidden"} >
         <Table.Header bg={{ base: "white", _dark: "primary" }}>
-          <Table.Row alignItems={"center"} bg={{ base: "white", _dark: "primarySurface" }}>
-            {/* <Table.ColumnHeader w="6" className="columnHeader">
-              <Checkbox className="checkbox"
-                variant="subtle"
-                aria-label="Select all rows"
-                checked={indeterminate ? "indeterminate" : selection.length > 0}
-                onCheckedChange={(changes) => {
-                  setSelection(
-                    changes.checked ? customers.map((customer) => customer.id) : []
-                  )
-                }}
-              />
-            </Table.ColumnHeader> */}
+          <Table.Row alignItems={"center"} bg={{ base: "white", _dark: "primaryMidpoint" }}>
             <Table.ColumnHeader className="columnHeader"><Text>Name</Text></Table.ColumnHeader>
             <Table.ColumnHeader className="columnHeader"><Text>Phone Number</Text></Table.ColumnHeader>
             <Table.ColumnHeader className="columnHeader email"><Text>Email</Text></Table.ColumnHeader>
@@ -88,25 +76,27 @@ const MyTable = ({ selectedCustomer, setSelectedCustomer, customers, preferredCo
         <Table.Body >
           {rows}
         </Table.Body>
-        
       </Table.Root>
-
-      {/* <Theme asChild hasBackground={false} appearance={theme} colorPalette={preferredColors}>
-        <ActionBarRoot open={hasSelection} closeOnInteractOutside={true}  className="actionBar">
-          <ActionBarContent>
-            <ActionBarSelectionTrigger>
-              {selection.length} selected
-            </ActionBarSelectionTrigger>
-            <ActionBarSeparator />
-            <Button variant="outline" colorPalette={preferredColors} size="sm">
-              Mark Present <Kbd>✓</Kbd>
-            </Button>
-            <Button variant="outline" colorPalette={preferredColors} size="sm">
-              Cancel
-            </Button>
-          </ActionBarContent>
-        </ActionBarRoot>
-      </Theme> */}
+      <Box display={"flex"} justifyContent={"space-between"}>
+        <Button
+          m={"1rem"}
+          variant={"outline"}
+          onClick={() => setOffset((prevOffset) => Math.max(prevOffset - limit, 0))}
+          isDisabled={offset === 0}
+          
+        >
+          Previous
+        </Button>
+        <Button
+          m={"1rem"}
+          variant={"outline"}
+          onClick={() => setOffset((prevOffset) => prevOffset + limit)}
+          isDisabled={customers.length < limit}
+          
+        >
+          Next
+        </Button>
+      </Box>
     </div>
   )
 }

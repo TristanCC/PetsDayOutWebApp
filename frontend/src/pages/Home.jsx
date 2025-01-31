@@ -40,10 +40,10 @@ function Home({ isLoggedIn, setIsLoggedIn, preferredColors, customers, selectedC
       {isLoggedIn ? (
         <>
           <HStack flex={1} justifyContent={"space-between"}>
-            <Button mt="5" variant="ghost" onClick={handleNavigate}>
+            <Button mt="5" ml="5" variant="ghost" onClick={handleNavigate}>
               Log Out
             </Button>
-            <Button mt="5" variant="surface" onClick={handleFormOpen}>
+            <Button mt="5" mr="5" variant="surface" onClick={handleFormOpen}>
               Add Customer
             </Button>
           </HStack>

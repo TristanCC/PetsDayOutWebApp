@@ -12,8 +12,12 @@ export const createCustomer = async (req, res) => {
 }
 
 export const getCustomers = async (req, res) => {
+  const { limit, offset } = req.query
   try {
-    const customers = await Customer.findAll();
+    const customers = await Customer.findAll({
+      limit,
+      offset
+    });
     
     // Convert Sequelize instances to plain objects
     const plainCustomers = customers.map(customer => customer.toJSON());

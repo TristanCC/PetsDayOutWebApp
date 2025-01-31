@@ -12,6 +12,7 @@ const customConfig = defineConfig({
     tokens: {
       colors: {
         primary: { value: "#121212 " },
+        primaryMidpoint: {value: "#0F0F0F"},
         primarySurface: { value: "#0E0E0E"},
         secondary: { value: "#EE0F0F" },
       },

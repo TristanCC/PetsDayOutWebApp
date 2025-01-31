@@ -26,10 +26,14 @@ function App() {
   });
   const [selectedCustomer, setSelectedCustomer] = useState(null);
 
+  const limit = window.innerHeight > 900 ? 11 : window.innerHeight > 500 ? 6 : 3;
+
+  const [offset, setOffset] = useState(0)
+
   useEffect(() => {
     const fetchCustomers = async () => {
       try {
-        const response = await fetch('/db/getCustomers');
+        const response = await fetch(`/db/getCustomers?limit=${limit}&offset=${offset}`);
         const data = await response.json();
         setCustomers(data);
       } catch (error) {
@@ -38,7 +42,7 @@ function App() {
     };
 
     fetchCustomers();
-  }, []);
+  }, [limit, offset, setOffset]);
 
   const updateCustomerInState = (updatedCustomer) => {
     setCustomers((prevCustomers) =>
@@ -78,6 +82,9 @@ function App() {
               setSelectedCustomer={setSelectedCustomer}
               updateCustomerInState={updateCustomerInState}
               deleteCustomerInState={deleteCustomerInState}
+              limit={limit}
+              offset={offset}
+              setOffset={setOffset}
             />
             <div className='wrapperInner'>
               <BrowserRouter>
@@ -94,6 +101,10 @@ function App() {
                         selectedCustomer={selectedCustomer}
                         setSelectedCustomer={setSelectedCustomer}
                         updateCustomerInState={updateCustomerInState}
+                        deleteCustomerInState={deleteCustomerInState}
+                        limit={limit}
+                        offset={offset}
+                        setOffset={setOffset}
                       />
                     }
                   />
