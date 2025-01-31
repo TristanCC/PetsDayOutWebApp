@@ -84,7 +84,7 @@ const MenuRoot1 = ({ customer, preferredColors, setSelectedCustomer, updateCusto
         <MenuContent className="menuContent" bg={{ base: "white", _dark: "primarySurface" }}>
           <MenuItemGroup p={"0.5rem"}>{customer.firstName} {customer.lastName}</MenuItemGroup>
           <MenuSeparator />
-          <MenuItem borderRadius={".75rem"} value="mark-present">
+          <MenuItem borderRadius={".75rem"} value="mark-present" cursor={"pointer"}>
             <div>
               <Icon fontSize={"1.25rem"} color={"green.500"}>
                 <LuBookOpenCheck />
@@ -92,7 +92,7 @@ const MenuRoot1 = ({ customer, preferredColors, setSelectedCustomer, updateCusto
             </div>
             <Text fontSize={"1rem"}>Mark Present</Text>
           </MenuItem>
-          <MenuItem borderRadius={".75rem"} value="pets" onClick={handlePets}>
+          <MenuItem borderRadius={".75rem"} value="pets" onClick={handlePets} cursor={"pointer"}>
             <div>
               <Icon fontSize={"1.25rem"} color={"yellow.500"}>
                 <PiDogBold />
@@ -100,7 +100,7 @@ const MenuRoot1 = ({ customer, preferredColors, setSelectedCustomer, updateCusto
             </div>
             <Text fontSize={"1rem"}>Pets</Text>
           </MenuItem>
-          <MenuItem borderRadius={".75rem"} value="customer-info" onClick={handleCustomerInfo}>
+          <MenuItem borderRadius={".75rem"} value="customer-info" onClick={handleCustomerInfo} cursor={"pointer"}>
             <div>
               <Icon fontSize={"1.25rem"} color={"purple.500"}>
                 <LuCircleUser />
@@ -108,7 +108,7 @@ const MenuRoot1 = ({ customer, preferredColors, setSelectedCustomer, updateCusto
             </div>
             <Text fontSize={"1rem"}>Customer Info</Text>
           </MenuItem>
-          <MenuItem borderRadius={".75rem"} value="delete-customer" onClick={handleDeleteCustomer}>
+          <MenuItem borderRadius={".75rem"} value="delete-customer" onClick={handleDeleteCustomer} cursor={"pointer"} >
             <div>
               <Icon fontSize={"1.25rem"} color={"red.500"}>
                 <LuArchive />

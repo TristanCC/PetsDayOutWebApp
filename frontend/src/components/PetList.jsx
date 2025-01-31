@@ -66,7 +66,8 @@ const PetList = ({ customer, preferredColors, handleEditPet, closePetsPanel }) =
             ></Box>
             {loading ? (
                 <Box
-                    bg={{ base: "white", _dark: "primarySurface" }}
+                    bg={{ base: "primarySurfaceL", _dark: "transparent" }}
+                    textAlign={"center"}
                     borderRadius={"1rem"}
                     p={"1rem"}
                     w={"100%"}
@@ -77,7 +78,7 @@ const PetList = ({ customer, preferredColors, handleEditPet, closePetsPanel }) =
                 </Box>
             ) : pets.length === 0 ? (
                 <Box
-                    bg={{ base: "white", _dark: "primarySurface" }}
+                    bg={{ base: "primarySurfaceL", _dark: "primarySurface" }}
                     borderRadius={"1rem"}
                     p={"1rem"}
                     w={"100%"}
@@ -108,7 +109,7 @@ const PetList = ({ customer, preferredColors, handleEditPet, closePetsPanel }) =
                 </Box>
             ) : (
                 <Box
-                    bg={{ base: "white", _dark: "primarySurface" }}
+                    bg={{ base: "primarySurfaceL", _dark: "primarySurface" }}
                     borderRadius={"1rem"}
                     p={"2rem"}
                     w={"100%"}

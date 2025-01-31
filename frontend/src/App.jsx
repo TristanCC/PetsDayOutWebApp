@@ -62,7 +62,7 @@ function App() {
     <>
       <Box
         colorPalette={preferredColors}
-        bg={{ base: "white", _dark: "primary" }}
+        bg={{ base: "primaryL", _dark: "primary" }}
         w={"100%"}
         display={"flex"}
         justifyContent={"center"}

@@ -15,7 +15,10 @@ const CustomerInfo = ({ selectedCustomer, setCustomerInfoOpen, updateCustomerInS
     const [email, setEmail] = useState(selectedCustomer.email);
     const [phoneNumber, setPhoneNumber] = useState(selectedCustomer.phoneNumber);
     const [customerComment, setCustomerComment] = useState(selectedCustomer.customerComment);
+    const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
 
+    const [editFirstName, setEditFirstName] = useState(true);
+    const [editMiddleName, setEditMiddleName] = useState(true);
     const [edit1, setEdit1] = useState(true);
     const [edit2, setEdit2] = useState(true);
     const [edit3, setEdit3] = useState(true);
@@ -29,21 +32,56 @@ const CustomerInfo = ({ selectedCustomer, setCustomerInfoOpen, updateCustomerInS
         setEmail(selectedCustomer.email);
         setPhoneNumber(selectedCustomer.phoneNumber);
         setCustomerComment(selectedCustomer.customerComment || "");
+
+        const handleResize = () => {
+            setIsMobile(window.innerWidth <= 768);
+        };
+
+        window.addEventListener('resize', handleResize);
+        return () => window.removeEventListener('resize', handleResize);
     }, [selectedCustomer]);
 
     const handleClickEditCustomer = (num) => {
         switch (num) {
             case 1:
-                setEdit1(!edit1);
+                if (isMobile) {
+                    if (!edit1) {
+                        setFirstName(selectedCustomer.firstName);
+                        setMiddleName(selectedCustomer.middleName);
+                    }
+                    setEdit1(!edit1);
+                } else {
+                    if (!editFirstName) {
+                        setFirstName(selectedCustomer.firstName);
+                    }
+                    setEditFirstName(!editFirstName);
+                }
                 break;
             case 2:
+                if (!edit2) {
+                    setLastName(selectedCustomer.lastName);
+                }
                 setEdit2(!edit2);
                 break;
             case 3:
+                if (!edit3) {
+                    setEmail(selectedCustomer.email);
+                }
                 setEdit3(!edit3);
                 break;
             case 4:
+                if (!edit4) {
+                    setPhoneNumber(selectedCustomer.phoneNumber);
+                }
                 setEdit4(!edit4);
+                break;
+            case 5:
+                if (!isMobile) {
+                    if (!editMiddleName) {
+                        setMiddleName(selectedCustomer.middleName);
+                    }
+                    setEditMiddleName(!editMiddleName);
+                }
                 break;
             default:
                 break;
@@ -94,7 +132,7 @@ const CustomerInfo = ({ selectedCustomer, setCustomerInfoOpen, updateCustomerInS
             top={"0px"}
             bottom={"0px"}
             backgroundColor={"rgba(18, 18, 18, 0.5)"}
-            backdropFilter="blur(5px)"
+            backdropFilter={"blur(20px)"}
             opacity={"100%"}
             zIndex={-1}
             pointerEvents={"none"}
@@ -102,60 +140,118 @@ const CustomerInfo = ({ selectedCustomer, setCustomerInfoOpen, updateCustomerInS
             </Box>
 
             <Box
-            bg={{ base: "white", _dark: "primarySurface" }}
+            bg={{ base: "transparent", _dark: "transparent" }}
+            color={"white"}
             borderRadius={"1rem"}
-            p={"2rem"} w={"100%"} h={"auto"}
+             h={"auto"}
             cursor={"radio"}
+            display={"flex"}
+            flexDir={"column"}
+            alignItems={"start"}
             
             >
-                <IconButton position={"absolute"} top={"0"}
-                 right={"0"} aria-label="close update customer"
-                 size={"lg"} variant={"ghost"} borderRadius={"1rem"} onClick={() => setCustomerInfoOpen(false)}>
-                    <LuCircleX />
-                </IconButton>
-                        <Text fontSize={"2xl"} fontWeight={"medium"} mb={"1rem"}
-                         position={"relative"} justifySelf={"center"}
-                         bottom={"0.75rem"}
-                         >Customer Info</Text>
-                <div className="customerInfoHeader">
+                <HStack display={"flex"} justifyItems={"start"}>
+                    <IconButton position={"absolute"} 
+                        aria-label="close update customer"  mb={"1rem"} right={0}
+                        size={"lg"} variant={"ghost"} borderRadius={"1rem"} onClick={() => setCustomerInfoOpen(false)}>
+                        <LuCircleX />
+                    </IconButton>
+                            <Text fontSize={"2xl"} fontWeight={"medium"} mb={"1rem"}
+                             position={"relative"} justifySelf={"start"} alignSelf={"center"}
+                             >Customer Info</Text>
+                </HStack>
+                <Box className="customerInfoHeader" alignSelf={"center"}>
                         <form action="" className="customerInfoForm" onSubmit={handleSubmit}>
-                            <div className="customerInfoFormInner">
-                                <div className="editInput">
-                                    <HStack maxW={"275px"} w={"100%"}>
-                                        <Field label="First name" required >
-                                            <HStack w={"100%"}>
+                            <Box className="customerInfoFormInner"
+                            display={"flex"} >
+                                <Box className="editInput">
+                                    {isMobile ? (
+                                        <HStack >
+                                            <Field label="First name" required >
+                                                <HStack>
+                                                    <Input
+                                                        disabled={edit1}
+                                                        variant="subtle"
+                                                        fontSize={"md"}
+                                                        value={firstName}
+                                                        size="md"
+                                                        onChange={(e) => setFirstName(e.target.value)}
+                                                        bg={{ base: "primaryL", _dark: "primary" }}
+                                                        color={{ base: "black", _dark: "white" }}
+                                        
+                                                    />
+                                                </HStack>
+                                            </Field>
+                                            <Field label="Middle" >
+                                                <HStack w={"100%"}>
+                                                    <Input
+                                                        disabled={edit1}
+                                                        variant="subtle"
+                                                        fontSize={"md"}
+                                                        value={middleName? middleName : ""}
+                                                        placeholder="N/A"
+                                                        size="md"
+                                                        onChange={(e) => setMiddleName(e.target.value)}
+                                                        bg={{ base: "primaryL", _dark: "primary" }}
+                                                        color={{ base: "black", _dark: "white" }}
+                                                    />
+                                                    <IconButton
+                                                        aria-label="Edit first name or middle name"
+                                                        onClick={() => handleClickEditCustomer(1)}
+                                                    >
+                                                        <FaRegEdit />
+                                                    </IconButton>
+                                                </HStack>
+                                            </Field>
+                                        </HStack>
+                                    ) : (
+                                        <>
+                                        <Field label="First name" required>
+                                            <HStack w={"100%"}mb={"1rem"}>
                                                 <Input
-                                                    disabled={edit1}
+                                                    disabled={editFirstName}
                                                     variant="subtle"
                                                     fontSize={"md"}
                                                     value={firstName}
                                                     size="md"
                                                     onChange={(e) => setFirstName(e.target.value)}
+                                                    bg={{ base: "primaryL", _dark: "primary" }}
+                                                    color={{ base: "black", _dark: "white" }}
+                                    
                                                 />
+                                                <IconButton
+                                                    aria-label="Edit first name"
+                                                    onClick={() => handleClickEditCustomer(1)}
+                                                    >
+                                                        <FaRegEdit />
+                                                </IconButton>                
                                             </HStack>
                                         </Field>
                                         <Field label="Middle" >
                                             <HStack w={"100%"}>
                                                 <Input
-                                                    disabled={edit1}
+                                                    disabled={editMiddleName}
                                                     variant="subtle"
                                                     fontSize={"md"}
                                                     value={middleName? middleName : ""}
                                                     placeholder="N/A"
                                                     size="md"
                                                     onChange={(e) => setMiddleName(e.target.value)}
-                                                    
+                                                    bg={{ base: "primaryL", _dark: "primary" }}
+                                                    color={{ base: "black", _dark: "white" }}
                                                 />
                                                 <IconButton
-                                                    aria-label="Edit first name or middle name"
-                                                    onClick={() => handleClickEditCustomer(1)}
+                                                    aria-label="Edit middle name"
+                                                    onClick={() => handleClickEditCustomer(5)}
                                                 >
                                                     <FaRegEdit />
                                                 </IconButton>
                                             </HStack>
                                         </Field>
-                                    </HStack>
-                                </div>
+                                        </>
+                                    )}
+
+                                </Box>
                                 <div className="editInput">
                                     <Field label="Last name" required>
                                         <HStack w={"100%"}>
@@ -166,7 +262,9 @@ const CustomerInfo = ({ selectedCustomer, setCustomerInfoOpen, updateCustomerInS
                                                 value={lastName}
                                                 size="md"
                                                 onChange={(e) => setLastName(e.target.value)}
-                                            />
+                                                bg={{ base: "primaryL", _dark: "primary" }}
+                                                color={{ base: "black", _dark: "white" }}
+                                             />
                                             <IconButton
                                                 aria-label="Edit last name"
                                                 onClick={() => handleClickEditCustomer(2)}
@@ -186,7 +284,9 @@ const CustomerInfo = ({ selectedCustomer, setCustomerInfoOpen, updateCustomerInS
                                                 value={phoneNumber}
                                                 size="md"
                                                 onChange={(e) => setPhoneNumber(e.target.value)}
-                                            />
+                                                bg={{ base: "primaryL", _dark: "primary" }}
+                                                color={{ base: "black", _dark: "white" }}
+                                             />
                                             <IconButton
                                                 aria-label="Edit phone number"
                                                 onClick={() => handleClickEditCustomer(4)}
@@ -207,7 +307,9 @@ const CustomerInfo = ({ selectedCustomer, setCustomerInfoOpen, updateCustomerInS
                                                 placeholder="N/A"
                                                 size="md"
                                                 onChange={(e) => setEmail(e.target.value)}
-                                            />
+                                                bg={{ base: "primaryL", _dark: "primary" }}
+                                                color={{ base: "black", _dark: "white" }}
+                                             />
                                             <IconButton
                                                 aria-label="Edit email"
                                                 onClick={() => handleClickEditCustomer(3)}
@@ -233,16 +335,19 @@ const CustomerInfo = ({ selectedCustomer, setCustomerInfoOpen, updateCustomerInS
                                                 setCustomerComment(e.target.value);
                                                 console.log(selectedCustomer.customerComment);
                                             }}
-                                        />
+                                            bg={{ base: "primaryL", _dark: "primary" }}
+                                            color={{ base: "black", _dark: "white" }}
+                                            
+                                         />
                                       </Field>
                                       
                                     </HStack>
                                 </div>
                                 <Button type="submit" disabled={isSaveDisabled}
                                 w={"100%"}>Save</Button>
-                            </div>
+                            </Box>
                         </form>
-                </div>
+                </Box>
             </Box>
         </div>
     );

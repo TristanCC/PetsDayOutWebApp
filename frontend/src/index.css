@@ -89,17 +89,26 @@ body {
 
 }
 
-.columnHeader {
-  text-align: center;
-}
-
-.tableRow:hover {
+.tableRow {
+  position: relative; /* Ensures ::before is positioned correctly */
   cursor: pointer;
 }
 
-.tableRow {
-  text-align: center;
+.tableRow::after {
+  content: "";
+  position: absolute; /* Makes it cover the row */
+  inset: 0; /* Ensures it stretches across the entire row */
+  background-color: var(--chakra-colors-blue-600,red);
+  opacity: 0;
+  transition: opacity 0.2s ease-in-out;
+  z-index: 100; /* Keeps it behind the row content */
+  pointer-events: none;
 }
+
+.tableRow:hover::after {
+  opacity: 0.25; /* Shows background on hover */
+}
+
 
 .flexCol {
   display: flex;
@@ -132,12 +141,12 @@ body {
 .customerInfo {
   display: flex;
   flex-direction: column;
-  outline: 2px solid rgba(250, 250, 250, 0.1);
+  
   border-radius: 1rem;
   box-shadow: rgba(50, 50, 250, 0.25) 0px 6px 12px -2px, rgba(0, 0, 0, 0.3) 0px 3px 7px -3px;
-  margin: 1rem;
   align-items: center;
-  width: max-content;
+  width: min-content;
+  min-width: 320px;
   max-width: 80%;
   align-self: center;
   position: fixed;

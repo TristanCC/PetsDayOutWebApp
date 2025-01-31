@@ -52,10 +52,10 @@ const MyTable = ({ selectedCustomer, setSelectedCustomer, customers, preferredCo
           }}
         />
       </Table.Cell> */}
-      <Table.Cell className="tableRow"><Text>{customer.firstName} {customer.middleName ? customer.middleName[0] + '.' : ""} {customer.lastName}</Text></Table.Cell>
-      <Table.Cell className="tableRow"><Text>{customer.phoneNumber}</Text></Table.Cell>
-      <Table.Cell className="tableRow email"><Text>{customer.email ?? "N/A"}</Text></Table.Cell>
-      <Table.Cell className="tableRow">
+      <Table.Cell className=""><Text zIndex={200} pos={"relative"}>{customer.firstName} {customer.middleName ? customer.middleName[0] + '.' : ""} {customer.lastName}</Text></Table.Cell>
+      <Table.Cell className=""><Text zIndex={200} pos={"relative"}>{customer.phoneNumber}</Text></Table.Cell>
+      <Table.Cell className="email"><Text zIndex={200} pos={"relative"}>{customer.email ?? "N/A"}</Text></Table.Cell>
+      <Table.Cell className="" zIndex={200}>
         <MenuRoot1 customer={customer} preferredColors={preferredColors} setSelectedCustomer={setSelectedCustomer}
         updateCustomerInState={updateCustomerInState} deleteCustomerInState={deleteCustomerInState} />
       </Table.Cell>
