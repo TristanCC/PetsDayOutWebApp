@@ -18,6 +18,15 @@ const SearchPopup = ({ preferredColors }) => {
         return;
       }
 
+      if (firstName || lastName) {
+        setPhone("")
+      }
+
+      if (phone) {
+        setFirstName("")
+        setLastName("")
+      }
+
       try {
         const response = await fetch(`/db/findCustomer?firstName=${firstName}&lastName=${lastName}&phoneNumber=${phone}`);
         const data = await response.json();
@@ -66,6 +75,9 @@ const SearchPopup = ({ preferredColors }) => {
 
           <div className="flexCol">
             <Input
+              name="xyz123"
+              id="xyz123"
+              autocomplete="xyz123"
               variant="subtle"
               value={firstName}
               onChange={(e) => setFirstName(e.target.value)}
@@ -73,6 +85,9 @@ const SearchPopup = ({ preferredColors }) => {
               size="md"
             />
             <Input
+              name="xyz123"
+              id="xyz123"
+              autocomplete="xyz123"
               variant="subtle"
               value={lastName}
               onChange={(e) => setLastName(e.target.value)}
@@ -80,6 +95,9 @@ const SearchPopup = ({ preferredColors }) => {
               size="md"
             />
             <Input
+              name="xyz123"
+              id="xyz123"
+              autocomplete="xyz123"
               variant="subtle"
               value={phone}
               onChange={(e) => setPhone(e.target.value)}
