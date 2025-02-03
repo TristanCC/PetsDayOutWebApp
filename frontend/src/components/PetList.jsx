@@ -66,7 +66,7 @@ const PetList = ({ customer, preferredColors, handleEditPet, closePetsPanel }) =
             ></Box>
             {loading ? (
                 <Box
-                    bg={{ base: "primarySurfaceL", _dark: "transparent" }}
+                    bg={{ base: "transparent", _dark: "transparent" }}
                     textAlign={"center"}
                     borderRadius={"1rem"}
                     p={"1rem"}

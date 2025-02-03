@@ -8,6 +8,8 @@ function Login({ isLoggedIn, setIsLoggedIn }) {
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [isLoading, setIsLoading] = useState(true);
+  const [isLoggingOut, setIsLoggingOut] = useState(false);
 
   // Check if the user is logged in
   useEffect(() => {
@@ -17,7 +19,7 @@ function Login({ isLoggedIn, setIsLoggedIn }) {
           method: 'GET',
           credentials: 'include',
         });
-    
+  
         if (response.ok) {
           const data = await response.json();
           setIsLoggedIn(data.loggedIn);
@@ -26,7 +28,9 @@ function Login({ isLoggedIn, setIsLoggedIn }) {
         }
       } catch (error) {
         console.error('Error checking login status:', error);
-        setIsLoggedIn(false); // Set state to false in case of error
+        setIsLoggedIn(false);
+      } finally {
+        setIsLoading(false); // Set loading to false after the check
       }
     };
   
@@ -49,9 +53,8 @@ function Login({ isLoggedIn, setIsLoggedIn }) {
       });
     
       if (!response.ok) {
-        const errorData = await response.text();
-        console.error('Error response from server:', errorData);
-        setError(errorData || 'Login failed.');
+        const errorData = await response.json(); // Parse as JSON
+        setError(errorData.error || 'Login failed.');
         return;
       }
     
@@ -64,18 +67,21 @@ function Login({ isLoggedIn, setIsLoggedIn }) {
 };
 
 const handleLogout = async () => {
+  setIsLoggingOut(true);
   try {
     const response = await fetch('/auth/logout', {
       method: 'GET',
-      credentials: 'include',  // Ensure cookies are sent
+      credentials: 'include',
     });
 
     if (response.ok) {
-      setIsLoggedIn(false); // Update login status
-      window.location.href = '/';  // Redirect to home or login page
+      setIsLoggedIn(false);
+      window.location.href = '/';
     }
   } catch (error) {
     console.error('Logout error:', error);
+  } finally {
+    setIsLoggingOut(false);
   }
 };
 
@@ -112,7 +118,7 @@ const handleLogout = async () => {
         </form>
         {error && <p style={{ color: 'red' }}>{error}</p>}
         <p></p>
-        <a href="http://192.168.12.249:5000/auth/google" className="">
+        <a href="/auth/google" className="">
           Sign in with Google
         </a>
         <p></p>
@@ -122,7 +128,9 @@ const handleLogout = async () => {
     : (
       <div className=''>
         <h1>Welcome to the Dashboard!</h1>
-        <Button onClick={handleLogout} >Log Out</Button>
+        <Button onClick={handleLogout} disabled={isLoggingOut}>
+          {isLoggingOut ? 'Logging Out...' : 'Log Out'}
+        </Button>
       </div>
     )}
     </>

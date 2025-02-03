@@ -82,7 +82,7 @@ const MyTable = ({ selectedCustomer, setSelectedCustomer, customers, preferredCo
           m={"1rem"}
           variant={"outline"}
           onClick={() => setOffset((prevOffset) => Math.max(prevOffset - limit, 0))}
-          isDisabled={offset === 0}
+          disabled={offset === 0}
           
         >
           Previous
@@ -91,7 +91,7 @@ const MyTable = ({ selectedCustomer, setSelectedCustomer, customers, preferredCo
           m={"1rem"}
           variant={"outline"}
           onClick={() => setOffset((prevOffset) => prevOffset + limit)}
-          isDisabled={customers.length < limit}
+          disabled={customers.length < limit}
           
         >
           Next

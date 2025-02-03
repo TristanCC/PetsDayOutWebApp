@@ -46,7 +46,11 @@ export const checkStatus = (req, res) => {
 };
 
 export const googleCallback = (req, res) => {
-  res.redirect('http://localhost:5173');
+  if (req.user) {
+    res.redirect('http://localhost:5173'); // Redirect to the frontend
+  } else {
+    res.status(401).json({ error: 'Google authentication failed' });
+  }
 };
 
 export const logout = (req, res) => {

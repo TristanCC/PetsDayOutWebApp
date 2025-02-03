@@ -136,6 +136,7 @@ const CustomerInfo = ({ selectedCustomer, setCustomerInfoOpen, updateCustomerInS
             opacity={"100%"}
             zIndex={-1}
             pointerEvents={"none"}
+            cursor={"default"}
             >
             </Box>
 
