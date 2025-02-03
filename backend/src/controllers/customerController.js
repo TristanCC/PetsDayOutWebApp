@@ -1,15 +1,18 @@
 import Customer from '../models/Customer.js';
+import { Op } from 'sequelize';
 
 export const createCustomer = async (req, res) => {
-  const { firstName, middleName, lastName, email, phoneNumber, customerComment} = req.body
-
+  const { firstName, middleName, lastName, email, phoneNumber, customerComment } = req.body;
+  
   try {
-    await Customer.create({firstName, middleName, lastName, email, phoneNumber, customerComment})
-
-  } catch(error) {
-    console.log(`error creating customer:`, error)
+    const newCustomer = await Customer.create({ firstName, middleName, lastName, email, phoneNumber, customerComment });
+    res.status(201).json(newCustomer); // Respond with the created customer
+  } catch (error) {
+    console.error('Error creating customer:', error);
+    res.status(500).json({ error: 'Failed to create customer.' });
   }
-}
+};
+
 
 export const getCustomers = async (req, res) => {
   const { limit, offset } = req.query
@@ -30,6 +33,106 @@ export const getCustomers = async (req, res) => {
   }
 };
 
+const sanitizeNames = (names) => {
+  return names.map((name) => name.toLowerCase()); // Convert everything to lowercase
+}
+
+
+const searchFirstAndLast = async (firstName, lastName) => {
+  const namesToSanitize = [firstName, lastName]
+  const names = sanitizeNames(namesToSanitize)
+  try {
+    const customer = await Customer.findAll({
+      where: {
+        firstName: { [Op.iLike]: `%${names[0]}%` },
+        lastName: { [Op.iLike]: `%${names[1]}%` }
+      }
+    })
+    return customer
+  } catch (error) {
+    console.error('Error fetching customers:', error);
+  }
+}
+
+const searchFirst = async (firstName) => {
+  const namesToSanitize = [firstName]
+  const names = sanitizeNames(namesToSanitize)
+  try {
+    const customer = await Customer.findAll({
+      where: {
+        firstName: { [Op.iLike]: `%${names[0]}%` }
+      }
+    })
+    return customer
+  } catch (error) {
+    console.error('Error fetching customers:', error);
+  }
+}
+
+const searchLast = async (lastName) => {
+  const namesToSanitize = [lastName]
+  const names = sanitizeNames(namesToSanitize)
+  try {
+    const customer = await Customer.findAll({
+      where: {
+        lastName: { [Op.iLike]: `%${names[0]}%` }
+      }
+    })
+    return customer
+  } catch (error) {
+    console.error('Error fetching customers:', error);
+  }
+}
+
+
+//TODO SANITIZE PHONE
+const searchPhone = async (phone) => {
+  try {
+    const customer = await Customer.findOne({
+      where: {
+        phoneNumber: { [Op.iLike]: `%${phone}%` }
+      }
+    })
+    return customer
+  } catch (error) {
+    console.error('Error fetching customers:', error);
+  }
+}
+
+export const findCustomer = async (req, res) => {
+  const { firstName, lastName, phone } = req.query;
+  try {
+    let customer;
+    if (firstName && lastName) {
+      customer = await searchFirstAndLast(firstName, lastName);
+      if (!customer || customer.length === 0) {
+        customer = await searchFirst(firstName);
+        if (!customer || customer.length === 0) {
+          customer = await searchLast(lastName);
+        }
+      }
+    } else if (firstName) {
+      customer = await searchFirst(firstName);
+    } else if (lastName) {
+      customer = await searchLast(lastName);
+    } else if (phone) {
+      customer = await searchPhone(phone);
+    } else {
+      return res.status(400).json({ error: 'No search parameters provided' });
+    }
+
+    // **Force fresh response**
+    res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate, proxy-revalidate');
+    res.setHeader('Expires', '0');
+    res.setHeader('Pragma', 'no-cache');
+    
+    console.log(customer);
+    res.status(200).json(customer);
+  } catch (error) {
+    console.error('Error fetching customers:', error);
+    res.status(500).json({ error: 'Failed to fetch customer.' });
+  }
+};
 
 
 export const updateCustomer = async (req, res) => {
