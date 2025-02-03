@@ -1,12 +1,9 @@
 import { useState, useEffect } from "react";
 import { FaRegEdit } from "react-icons/fa";
-import { Button, Input, IconButton, HStack, Box, Text } from "@chakra-ui/react";
+import { Button, Input, IconButton, HStack, Box, Text, VStack, useBreakpointValue } from "@chakra-ui/react";
 import { Field } from "@/components/ui/field";
-import { Textarea } from "@chakra-ui/react"
-
+import { Textarea } from "@chakra-ui/react";
 import { LuCircleX } from "react-icons/lu";
-
-// import PetList from './PetList';
 
 const CustomerInfo = ({ selectedCustomer, setCustomerInfoOpen, updateCustomerInState }) => {
     const [firstName, setFirstName] = useState(selectedCustomer.firstName);
@@ -14,89 +11,58 @@ const CustomerInfo = ({ selectedCustomer, setCustomerInfoOpen, updateCustomerInS
     const [lastName, setLastName] = useState(selectedCustomer.lastName);
     const [email, setEmail] = useState(selectedCustomer.email);
     const [phoneNumber, setPhoneNumber] = useState(selectedCustomer.phoneNumber);
-    const [customerComment, setCustomerComment] = useState(selectedCustomer.customerComment);
-    const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
+    const [customerComment, setCustomerComment] = useState(selectedCustomer.customerComment || "");
+    const isMobile = useBreakpointValue({ base: true, md: false });
 
-    const [editFirstName, setEditFirstName] = useState(true);
-    const [editMiddleName, setEditMiddleName] = useState(true);
-    const [edit1, setEdit1] = useState(true);
-    const [edit2, setEdit2] = useState(true);
-    const [edit3, setEdit3] = useState(true);
-    const [edit4, setEdit4] = useState(true);
-
+    const [editFirstName, setEditFirstName] = useState(false);
+    const [editMiddleName, setEditMiddleName] = useState(false);
+    const [editLastName, setEditLastName] = useState(false);
+    const [editEmail, setEditEmail] = useState(false);
+    const [editPhoneNumber, setEditPhoneNumber] = useState(false);
 
     useEffect(() => {
         setFirstName(selectedCustomer.firstName);
-        setMiddleName(selectedCustomer.middleName)
+        setMiddleName(selectedCustomer.middleName);
         setLastName(selectedCustomer.lastName);
         setEmail(selectedCustomer.email);
         setPhoneNumber(selectedCustomer.phoneNumber);
         setCustomerComment(selectedCustomer.customerComment || "");
-
-        const handleResize = () => {
-            setIsMobile(window.innerWidth <= 768);
-        };
-
-        window.addEventListener('resize', handleResize);
-        return () => window.removeEventListener('resize', handleResize);
     }, [selectedCustomer]);
 
-    const handleClickEditCustomer = (num) => {
-        switch (num) {
-            case 1:
-                if (isMobile) {
-                    if (!edit1) {
-                        setFirstName(selectedCustomer.firstName);
-                        setMiddleName(selectedCustomer.middleName);
-                    }
-                    setEdit1(!edit1);
-                } else {
-                    if (!editFirstName) {
-                        setFirstName(selectedCustomer.firstName);
-                    }
-                    setEditFirstName(!editFirstName);
-                }
+    const handleClickEdit = (field) => {
+        switch (field) {
+            case "firstName":
+                setEditFirstName(!editFirstName);
+                if (editFirstName) setFirstName(selectedCustomer.firstName);
                 break;
-            case 2:
-                if (!edit2) {
-                    setLastName(selectedCustomer.lastName);
-                }
-                setEdit2(!edit2);
+            case "middleName":
+                setEditMiddleName(!editMiddleName);
+                if (editMiddleName) setMiddleName(selectedCustomer.middleName);
                 break;
-            case 3:
-                if (!edit3) {
-                    setEmail(selectedCustomer.email);
-                }
-                setEdit3(!edit3);
+            case "lastName":
+                setEditLastName(!editLastName);
+                if (editLastName) setLastName(selectedCustomer.lastName);
                 break;
-            case 4:
-                if (!edit4) {
-                    setPhoneNumber(selectedCustomer.phoneNumber);
-                }
-                setEdit4(!edit4);
+            case "email":
+                setEditEmail(!editEmail);
+                if (editEmail) setEmail(selectedCustomer.email);
                 break;
-            case 5:
-                if (!isMobile) {
-                    if (!editMiddleName) {
-                        setMiddleName(selectedCustomer.middleName);
-                    }
-                    setEditMiddleName(!editMiddleName);
-                }
+            case "phoneNumber":
+                setEditPhoneNumber(!editPhoneNumber);
+                if (editPhoneNumber) setPhoneNumber(selectedCustomer.phoneNumber);
                 break;
             default:
                 break;
-        
         }
     };
 
-    const isSaveDisabled = 
-           selectedCustomer.firstName === firstName
-        && selectedCustomer.middleName === middleName
-        && selectedCustomer.lastName === lastName
-        && selectedCustomer.phoneNumber === phoneNumber
-        && selectedCustomer.email === email
-        && (selectedCustomer.customerComment || "") === customerComment;
-
+    const isSaveDisabled =
+        selectedCustomer.firstName === firstName &&
+        selectedCustomer.middleName === middleName &&
+        selectedCustomer.lastName === lastName &&
+        selectedCustomer.phoneNumber === phoneNumber &&
+        selectedCustomer.email === email &&
+        (selectedCustomer.customerComment || "") === customerComment;
 
     const handleSubmit = (e) => {
         e.preventDefault();
@@ -106,251 +72,195 @@ const CustomerInfo = ({ selectedCustomer, setCustomerInfoOpen, updateCustomerInS
                 "Content-Type": "application/json",
             },
             body: JSON.stringify({
-                firstName: firstName,
-                middleName: middleName,
-                lastName: lastName,
-                email: email,
-                phoneNumber: phoneNumber,
-                customerComment: customerComment,
+                firstName,
+                middleName,
+                lastName,
+                email,
+                phoneNumber,
+                customerComment,
             }),
         })
-        .then(response => response.json())
-        .then(data => {
-            updateCustomerInState(data);
-        })
-        .catch(error => console.error('Error updating customer:', error));
-        setCustomerInfoOpen(false);
-    }
+            .then((response) => response.json())
+            .then((data) => {
+                updateCustomerInState(data);
+                setCustomerInfoOpen(false);
+            })
+            .catch((error) => console.error("Error updating customer:", error));
+    };
 
     return (
-        
-        <div className="customerInfo">
-            <Box className="transparentBackground"
-            pos={"fixed"}
-            w={"100vw"}
-            h={"100vh"}
-            top={"0px"}
-            bottom={"0px"}
-            backgroundColor={"rgba(18, 18, 18, 0.5)"}
-            backdropFilter={"blur(20px)"}
-            opacity={"100%"}
-            zIndex={-1}
-            pointerEvents={"none"}
-            cursor={"default"}
-            >
-            </Box>
-
+        <Box
+            position="fixed"
+            top={0}
+            left={0}
+            w="100vw"
+            h="100vh"
+            bg="rgba(18, 18, 18, 0.5)"
+            backdropFilter="blur(10px)"
+            zIndex={1000}
+            display="flex"
+            alignItems="center"
+            justifyContent="center"
+        >
             <Box
-            bg={{ base: "transparent", _dark: "transparent" }}
-            color={"white"}
-            borderRadius={"1rem"}
-             h={"auto"}
-            cursor={"radio"}
-            display={"flex"}
-            flexDir={"column"}
-            alignItems={"start"}
-            
+                borderRadius="lg"
+                p={6}
+                maxW="600px"
+                w="auto"
+                boxShadow="lg"
+                position="relative"
+                bg={{ base: "white", _dark: "primarySurface" }}
+                color={{ base: "black", _dark: "white" }}
             >
-                <HStack display={"flex"} justifyItems={"start"}>
-                    <IconButton position={"absolute"} 
-                        aria-label="close update customer"  mb={"1rem"} right={0}
-                        size={"lg"} variant={"ghost"} borderRadius={"1rem"} onClick={() => setCustomerInfoOpen(false)}>
-                        <LuCircleX />
-                    </IconButton>
-                            <Text fontSize={"2xl"} fontWeight={"medium"} mb={"1rem"}
-                             position={"relative"} justifySelf={"start"} alignSelf={"center"}
-                             >Customer Info</Text>
-                </HStack>
-                <Box className="customerInfoHeader" alignSelf={"center"}>
-                        <form action="" className="customerInfoForm" onSubmit={handleSubmit}>
-                            <Box className="customerInfoFormInner"
-                            display={"flex"} >
-                                <Box className="editInput">
-                                    {isMobile ? (
-                                        <HStack >
-                                            <Field label="First name" required >
-                                                <HStack>
-                                                    <Input
-                                                        disabled={edit1}
-                                                        variant="subtle"
-                                                        fontSize={"md"}
-                                                        value={firstName}
-                                                        size="md"
-                                                        onChange={(e) => setFirstName(e.target.value)}
-                                                        bg={{ base: "primaryL", _dark: "primary" }}
-                                                        color={{ base: "black", _dark: "white" }}
-                                        
-                                                    />
-                                                </HStack>
-                                            </Field>
-                                            <Field label="Middle" >
-                                                <HStack w={"100%"}>
-                                                    <Input
-                                                        disabled={edit1}
-                                                        variant="subtle"
-                                                        fontSize={"md"}
-                                                        value={middleName? middleName : ""}
-                                                        placeholder="N/A"
-                                                        size="md"
-                                                        onChange={(e) => setMiddleName(e.target.value)}
-                                                        bg={{ base: "primaryL", _dark: "primary" }}
-                                                        color={{ base: "black", _dark: "white" }}
-                                                    />
-                                                    <IconButton
-                                                        aria-label="Edit first name or middle name"
-                                                        onClick={() => handleClickEditCustomer(1)}
-                                                    >
-                                                        <FaRegEdit />
-                                                    </IconButton>
-                                                </HStack>
-                                            </Field>
-                                        </HStack>
-                                    ) : (
-                                        <>
-                                        <Field label="First name" required>
-                                            <HStack w={"100%"}mb={"1rem"}>
-                                                <Input
-                                                    disabled={editFirstName}
-                                                    variant="subtle"
-                                                    fontSize={"md"}
-                                                    value={firstName}
-                                                    size="md"
-                                                    onChange={(e) => setFirstName(e.target.value)}
-                                                    bg={{ base: "primaryL", _dark: "primary" }}
-                                                    color={{ base: "black", _dark: "white" }}
-                                    
-                                                />
-                                                <IconButton
-                                                    aria-label="Edit first name"
-                                                    onClick={() => handleClickEditCustomer(1)}
-                                                    >
-                                                        <FaRegEdit />
-                                                </IconButton>                
-                                            </HStack>
-                                        </Field>
-                                        <Field label="Middle" >
-                                            <HStack w={"100%"}>
-                                                <Input
-                                                    disabled={editMiddleName}
-                                                    variant="subtle"
-                                                    fontSize={"md"}
-                                                    value={middleName? middleName : ""}
-                                                    placeholder="N/A"
-                                                    size="md"
-                                                    onChange={(e) => setMiddleName(e.target.value)}
-                                                    bg={{ base: "primaryL", _dark: "primary" }}
-                                                    color={{ base: "black", _dark: "white" }}
-                                                />
-                                                <IconButton
-                                                    aria-label="Edit middle name"
-                                                    onClick={() => handleClickEditCustomer(5)}
-                                                >
-                                                    <FaRegEdit />
-                                                </IconButton>
-                                            </HStack>
-                                        </Field>
-                                        </>
-                                    )}
-
-                                </Box>
-                                <div className="editInput">
-                                    <Field label="Last name" required>
-                                        <HStack w={"100%"}>
-                                            <Input
-                                                disabled={edit2}
-                                                variant="subtle"
-                                                fontSize={"md"}
-                                                value={lastName}
-                                                size="md"
-                                                onChange={(e) => setLastName(e.target.value)}
-                                                bg={{ base: "primaryL", _dark: "primary" }}
-                                                color={{ base: "black", _dark: "white" }}
-                                             />
-                                            <IconButton
-                                                aria-label="Edit last name"
-                                                onClick={() => handleClickEditCustomer(2)}
-                                            >
-                                                <FaRegEdit />
-                                            </IconButton>
-                                        </HStack>
-                                    </Field>
-                                </div>
-                                <div className="editInput">
-                                    <Field label="Phone number" required>
-                                        <HStack w={"100%"}>
-                                            <Input
-                                                disabled={edit4}
-                                                variant="subtle"
-                                                fontSize={"md"}
-                                                value={phoneNumber}
-                                                size="md"
-                                                onChange={(e) => setPhoneNumber(e.target.value)}
-                                                bg={{ base: "primaryL", _dark: "primary" }}
-                                                color={{ base: "black", _dark: "white" }}
-                                             />
-                                            <IconButton
-                                                aria-label="Edit phone number"
-                                                onClick={() => handleClickEditCustomer(4)}
-                                            >
-                                                <FaRegEdit />
-                                            </IconButton>
-                                        </HStack>
-                                    </Field>
-                                </div>
-                                <div className="editInput">
-                                    <Field label="Email">
-                                        <HStack w={"100%"}>
-                                            <Input
-                                                disabled={edit3}
-                                                variant="subtle"
-                                                fontSize={"md"}
-                                                value={email ? email : ""}
-                                                placeholder="N/A"
-                                                size="md"
-                                                onChange={(e) => setEmail(e.target.value)}
-                                                bg={{ base: "primaryL", _dark: "primary" }}
-                                                color={{ base: "black", _dark: "white" }}
-                                             />
-                                            <IconButton
-                                                aria-label="Edit email"
-                                                onClick={() => handleClickEditCustomer(3)}
-                                            >
-                                                <FaRegEdit />
-                                            </IconButton>
-                                        </HStack>
-                                    </Field>
-                                </div>
-                                <div className="editInput2">
-                                    <HStack gap="10" width="100%" h={"auto"}>
-                                        
-                                      <Field label="Customer Notes">
-                                        
-                                        <Textarea
-                                        fontSize={"md"}
-                                            placeholder="Start typing..."
-                                            variant="outline"
-                                            overflowWrap={"break-word"}
-                                            h={"10rem"}
-                                            value={customerComment}
-                                            onChange={(e) => {
-                                                setCustomerComment(e.target.value);
-                                                console.log(selectedCustomer.customerComment);
-                                            }}
-                                            bg={{ base: "primaryL", _dark: "primary" }}
-                                            color={{ base: "black", _dark: "white" }}
-                                            
-                                         />
-                                      </Field>
-                                      
+                <IconButton
+                    aria-label="Close"
+                    position="absolute"
+                    top={4}
+                    right={4}
+                    size="xl"
+                    variant="ghost"
+                    onClick={() => setCustomerInfoOpen(false)}
+                >
+                    <LuCircleX />
+                </IconButton>
+                <Text fontSize="2xl" fontWeight="bold" mb={6}>
+                    Customer Info
+                </Text>
+                <form onSubmit={handleSubmit}>
+                    <VStack spacing={4} justifySelf={"center"}>
+                        {isMobile ? (
+                            <>
+                                <Field label="First Name" required>
+                                    <HStack>
+                                        <Input
+                                            value={firstName}
+                                            onChange={(e) => setFirstName(e.target.value)}
+                                            isDisabled={!editFirstName}
+                                            placeholder="First Name"
+                                        />
+                                        <IconButton
+                                            aria-label="Edit First Name"
+                                            icon={<FaRegEdit />}
+                                            onClick={() => handleClickEdit("firstName")}
+                                        />
                                     </HStack>
-                                </div>
-                                <Button type="submit" disabled={isSaveDisabled}
-                                w={"100%"}>Save</Button>
-                            </Box>
-                        </form>
-                </Box>
+                                </Field>
+                                <Field label="Middle Name">
+                                    <HStack>
+                                        <Input
+                                            value={middleName || ""}
+                                            onChange={(e) => setMiddleName(e.target.value)}
+                                            isDisabled={!editMiddleName}
+                                            placeholder="Middle Name"
+                                        />
+                                        <IconButton
+                                            aria-label="Edit Middle Name"
+                                            icon={<FaRegEdit />}
+                                            onClick={() => handleClickEdit("middleName")}
+                                        />
+                                    </HStack>
+                                </Field>
+                            </>
+                        ) : (
+                            <>
+                                <Field label="First Name" required>
+                                    <HStack>
+                                        <Input
+                                            value={firstName}
+                                            onChange={(e) => setFirstName(e.target.value)}
+                                            isDisabled={!editFirstName}
+                                            placeholder="First Name"
+                                        />
+                                        <IconButton
+                                            aria-label="Edit First Name"
+                                            icon={<FaRegEdit />}
+                                            onClick={() => handleClickEdit("firstName")}
+                                        />
+                                    </HStack>
+                                </Field>
+                                <Field label="Middle Name">
+                                    <HStack>
+                                        <Input
+                                            value={middleName || ""}
+                                            onChange={(e) => setMiddleName(e.target.value)}
+                                            isDisabled={!editMiddleName}
+                                            placeholder="Middle Name"
+                                        />
+                                        <IconButton
+                                            aria-label="Edit Middle Name"
+                                            icon={<FaRegEdit />}
+                                            onClick={() => handleClickEdit("middleName")}
+                                        />
+                                    </HStack>
+                                </Field>
+                            </>
+                        )}
+                        <Field label="Last Name" required>
+                            <HStack>
+                                <Input
+                                    value={lastName}
+                                    onChange={(e) => setLastName(e.target.value)}
+                                    isDisabled={!editLastName}
+                                    placeholder="Last Name"
+                                />
+                                <IconButton
+                                    aria-label="Edit Last Name"
+                                    icon={<FaRegEdit />}
+                                    onClick={() => handleClickEdit("lastName")}
+                                />
+                            </HStack>
+                        </Field>
+                        <Field label="Phone Number" required>
+                            <HStack>
+                                <Input
+                                    value={phoneNumber}
+                                    onChange={(e) => setPhoneNumber(e.target.value)}
+                                    isDisabled={!editPhoneNumber}
+                                    placeholder="Phone Number"
+                                />
+                                <IconButton
+                                    aria-label="Edit Phone Number"
+                                    icon={<FaRegEdit />}
+                                    onClick={() => handleClickEdit("phoneNumber")}
+                                />
+                            </HStack>
+                        </Field>
+                        <Field label="Email">
+                            <HStack>
+                                <Input
+                                    value={email || ""}
+                                    onChange={(e) => setEmail(e.target.value)}
+                                    isDisabled={!editEmail}
+                                    placeholder="Email"
+                                />
+                                <IconButton
+                                    aria-label="Edit Email"
+                                    icon={<FaRegEdit />}
+                                    onClick={() => handleClickEdit("email")}
+                                />
+                            </HStack>
+                        </Field>
+                        <Field label="Customer Notes">
+                            <Textarea
+                                value={customerComment}
+                                onChange={(e) => setCustomerComment(e.target.value)}
+                                placeholder="Start typing..."
+                                resize="vertical"
+                            />
+                        </Field>
+                        <Button
+                            type="submit"
+                            isDisabled={isSaveDisabled}
+                            colorScheme="blue"
+                            width="100%"
+                            mt={4}
+                        >
+                            Save Changes
+                        </Button>
+                    </VStack>
+                </form>
             </Box>
-        </div>
+        </Box>
     );
 };
 

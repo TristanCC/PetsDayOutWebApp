@@ -71,7 +71,7 @@ function App() {
         alignItems={"center"}
       >
         <div className='outerWrapper'>
-          <div className='wrapperLeft'>
+          <Box className='wrapperLeft' position={"absolute"} w="100%">
             <Navbar
               isLoggedIn={isLoggedIn}
               setIsLoggedIn={setIsLoggedIn}
@@ -122,7 +122,7 @@ function App() {
                 </Routes>
               </BrowserRouter>
             </div>
-          </div>
+          </Box>
         </div>
         <ColorModeButton position={"fixed"} bottom={"0"} left={"0"} />
       </Box>

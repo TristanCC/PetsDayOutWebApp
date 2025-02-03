@@ -28,6 +28,28 @@ function Navbar({
   const [lastNameSearch, setlastNameSearch] = useState("");
   const [phoneNumberSearch, setPhoneNumberSearch] = useState("");
 
+  const [windowWidth, setWindowWidth] = useState(window.innerWidth);
+
+  // Debounced window resize handler
+  useEffect(() => {
+    const handleResize = () => {
+      // Update the window width only after a delay
+      const debounceTimeout = setTimeout(() => {
+        setWindowWidth(window.innerWidth);
+      }, 200); // 200ms debounce time
+
+      // Clean up the previous timeout if it exists
+      return () => clearTimeout(debounceTimeout);
+    };
+
+    window.addEventListener("resize", handleResize);
+
+    // Clean up the event listener on component unmount
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
+
   useEffect(() => {
     if (firstNameSearch || lastNameSearch) {
       setPhoneNumberSearch('');
@@ -41,15 +63,16 @@ function Navbar({
 
   return (
     <>
-      <Box colorPalette={preferredColors} zIndex="1000" bg={{ base: "primarySurfaceL", _dark: "primarySurface" }} borderRadius={"1rem"}>
+      <Box colorPalette={preferredColors} zIndex="1000" bg={{ base: "primarySurfaceL", _dark: "primarySurface" }} borderRadius={"1rem"}
+        position="relative" top={windowWidth > 800 ? "10%" : 0}>
         <Tabs.Root value={value} onValueChange={(e) => setValue(e.value)} size="sm" variant="line">
           {isLoggedIn && (
             <Tabs.List className="tabs">
               <div className="tabs">
-                <Tabs.Trigger fontSize={window.innerWidth > 500 ? "2xl" : "xl"} letterSpacing="wider" value="first">
+                <Tabs.Trigger fontSize={windowWidth > 500 ? "2xl" : "xl"} letterSpacing="wider" value="first">
                   <Text>Customers</Text>
                 </Tabs.Trigger>
-                <Tabs.Trigger fontSize={window.innerWidth > 500 ? "2xl" : "xl"} letterSpacing="wider" value="second">
+                <Tabs.Trigger fontSize={windowWidth > 500 ? "2xl" : "xl"} letterSpacing="wider" value="second">
                   <Text>Present</Text>
                 </Tabs.Trigger>
               </div>
