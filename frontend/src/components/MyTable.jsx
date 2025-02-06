@@ -21,15 +21,50 @@ import { useState, useEffect } from "react"
 import MenuRoot1 from "./MenuRoot1"
 import CreateCustomer from "./CreateCustomer"
 
-const MyTable = ({ selectedCustomer, setSelectedCustomer, customers, preferredColors, updateCustomerInState, deleteCustomerInState, limit, offset, setOffset }) => {
+const MyTable = ({ selectedCustomer, setSelectedCustomer, customers, preferredColors, updateCustomerInState,
+   deleteCustomerInState, limit, offset, setOffset, searchResults }) => {
   const [selection, setSelection] = useState([])
 
   const hasSelection = selection.length > 0
   const indeterminate = hasSelection && selection.length < customers.length
 
-  
+  // Ensure searchResults is an array
+  const validSearchResults = Array.isArray(searchResults) ? searchResults : [];
 
   const rows = customers.map((customer) => (
+    <Table.Row
+      key={customer.id}
+      data-selected={selection.includes(customer.id) ? "" : undefined}
+      className="tableRow"
+      bg={{ base: "white", _dark: "primary" }}
+      w={"100%"}
+      
+    >
+      {/* <Table.Cell>
+        <Checkbox className="checkbox"
+        variant="subtle"
+          aria-label="Select row"
+          checked={selection.includes(customer.id)}
+          onCheckedChange={(changes) => {
+            setSelection((prev) =>
+              changes.checked
+                ? [...prev, customer.id]
+                : selection.filter((id) => id !== customer.id)
+            )
+          }}
+        />
+      </Table.Cell> */}
+      <Table.Cell className=""><Text zIndex={200} pos={"relative"}>{customer.firstName} {customer.middleName ? customer.middleName[0] + '.' : ""} {customer.lastName}</Text></Table.Cell>
+      <Table.Cell className=""><Text zIndex={200} pos={"relative"}>{customer.phoneNumber}</Text></Table.Cell>
+      <Table.Cell className="email"><Text zIndex={200} pos={"relative"}>{customer.email ?? "N/A"}</Text></Table.Cell>
+      <Table.Cell className="" zIndex={200}>
+        <MenuRoot1 customer={customer} preferredColors={preferredColors} setSelectedCustomer={setSelectedCustomer}
+        updateCustomerInState={updateCustomerInState} deleteCustomerInState={deleteCustomerInState} />
+      </Table.Cell>
+    </Table.Row>
+  ))
+
+  const searchRows = validSearchResults.map((customer) => (
     <Table.Row
       key={customer.id}
       data-selected={selection.includes(customer.id) ? "" : undefined}
@@ -74,7 +109,7 @@ const MyTable = ({ selectedCustomer, setSelectedCustomer, customers, preferredCo
           </Table.Row>
         </Table.Header>
         <Table.Body >
-          {rows}
+          {validSearchResults.length > 0 ? searchRows : rows}
         </Table.Body>
       </Table.Root>
       <Box display={"flex"} justifyContent={"space-between"}>

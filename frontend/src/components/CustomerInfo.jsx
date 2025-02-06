@@ -93,14 +93,18 @@ const CustomerInfo = ({ selectedCustomer, setCustomerInfoOpen, updateCustomerInS
             position="fixed"
             top={0}
             left={0}
+            bottom={0}
             w="100vw"
             h="100vh"
             bg="rgba(18, 18, 18, 0.5)"
-            backdropFilter="blur(10px)"
+            backdropFilter="blur(1px)"
             zIndex={1000}
             display="flex"
             alignItems="center"
             justifyContent="center"
+            margin={"auto"}
+            
+            
         >
             <Box
                 borderRadius="lg"
@@ -108,17 +112,19 @@ const CustomerInfo = ({ selectedCustomer, setCustomerInfoOpen, updateCustomerInS
                 maxW="600px"
                 w="auto"
                 boxShadow="lg"
-                position="relative"
+                position="fixed"
                 bg={{ base: "white", _dark: "primarySurface" }}
                 color={{ base: "black", _dark: "white" }}
             >
                 <IconButton
                     aria-label="Close"
                     position="absolute"
-                    top={4}
+                    top={3}
                     right={4}
                     size="xl"
                     variant="ghost"
+                    rounded={"1rem"}
+                    padding={0}
                     onClick={() => setCustomerInfoOpen(false)}
                 >
                     <LuCircleX />
@@ -135,14 +141,17 @@ const CustomerInfo = ({ selectedCustomer, setCustomerInfoOpen, updateCustomerInS
                                         <Input
                                             value={firstName}
                                             onChange={(e) => setFirstName(e.target.value)}
-                                            isDisabled={!editFirstName}
+                                            disabled={!editFirstName}
                                             placeholder="First Name"
                                         />
                                         <IconButton
                                             aria-label="Edit First Name"
-                                            icon={<FaRegEdit />}
+                                            size="sm"
+                                            variant="ghost"
                                             onClick={() => handleClickEdit("firstName")}
-                                        />
+                                        >
+                                            <FaRegEdit />
+                                        </IconButton>
                                     </HStack>
                                 </Field>
                                 <Field label="Middle Name">
@@ -150,14 +159,17 @@ const CustomerInfo = ({ selectedCustomer, setCustomerInfoOpen, updateCustomerInS
                                         <Input
                                             value={middleName || ""}
                                             onChange={(e) => setMiddleName(e.target.value)}
-                                            isDisabled={!editMiddleName}
+                                            disabled={!editMiddleName}
                                             placeholder="Middle Name"
                                         />
                                         <IconButton
                                             aria-label="Edit Middle Name"
-                                            icon={<FaRegEdit />}
+                                            size="sm"
+                                            variant="ghost"
                                             onClick={() => handleClickEdit("middleName")}
-                                        />
+                                        >
+                                            <FaRegEdit />
+                                        </IconButton>
                                     </HStack>
                                 </Field>
                             </>
@@ -168,14 +180,17 @@ const CustomerInfo = ({ selectedCustomer, setCustomerInfoOpen, updateCustomerInS
                                         <Input
                                             value={firstName}
                                             onChange={(e) => setFirstName(e.target.value)}
-                                            isDisabled={!editFirstName}
+                                            disabled={!editFirstName}
                                             placeholder="First Name"
                                         />
                                         <IconButton
                                             aria-label="Edit First Name"
-                                            icon={<FaRegEdit />}
+                                            size="sm"
+                                            variant="ghost"
                                             onClick={() => handleClickEdit("firstName")}
-                                        />
+                                        >
+                                            <FaRegEdit />
+                                        </IconButton>
                                     </HStack>
                                 </Field>
                                 <Field label="Middle Name">
@@ -183,14 +198,17 @@ const CustomerInfo = ({ selectedCustomer, setCustomerInfoOpen, updateCustomerInS
                                         <Input
                                             value={middleName || ""}
                                             onChange={(e) => setMiddleName(e.target.value)}
-                                            isDisabled={!editMiddleName}
+                                            disabled={!editMiddleName}
                                             placeholder="Middle Name"
                                         />
                                         <IconButton
                                             aria-label="Edit Middle Name"
-                                            icon={<FaRegEdit />}
+                                            size="sm"
+                                            variant="ghost"
                                             onClick={() => handleClickEdit("middleName")}
-                                        />
+                                        >
+                                            <FaRegEdit />
+                                        </IconButton>
                                     </HStack>
                                 </Field>
                             </>
@@ -200,14 +218,17 @@ const CustomerInfo = ({ selectedCustomer, setCustomerInfoOpen, updateCustomerInS
                                 <Input
                                     value={lastName}
                                     onChange={(e) => setLastName(e.target.value)}
-                                    isDisabled={!editLastName}
+                                    disabled={!editLastName}
                                     placeholder="Last Name"
                                 />
                                 <IconButton
                                     aria-label="Edit Last Name"
-                                    icon={<FaRegEdit />}
+                                    size="sm"
+                                    variant="ghost"
                                     onClick={() => handleClickEdit("lastName")}
-                                />
+                                >
+                                    <FaRegEdit />
+                                </IconButton>
                             </HStack>
                         </Field>
                         <Field label="Phone Number" required>
@@ -215,14 +236,17 @@ const CustomerInfo = ({ selectedCustomer, setCustomerInfoOpen, updateCustomerInS
                                 <Input
                                     value={phoneNumber}
                                     onChange={(e) => setPhoneNumber(e.target.value)}
-                                    isDisabled={!editPhoneNumber}
+                                    disabled={!editPhoneNumber}
                                     placeholder="Phone Number"
                                 />
                                 <IconButton
                                     aria-label="Edit Phone Number"
-                                    icon={<FaRegEdit />}
+                                    size="sm"
+                                    variant="ghost"
                                     onClick={() => handleClickEdit("phoneNumber")}
-                                />
+                                >
+                                    <FaRegEdit />
+                                </IconButton>
                             </HStack>
                         </Field>
                         <Field label="Email">
@@ -230,14 +254,17 @@ const CustomerInfo = ({ selectedCustomer, setCustomerInfoOpen, updateCustomerInS
                                 <Input
                                     value={email || ""}
                                     onChange={(e) => setEmail(e.target.value)}
-                                    isDisabled={!editEmail}
+                                    disabled={!editEmail}
                                     placeholder="Email"
                                 />
                                 <IconButton
                                     aria-label="Edit Email"
-                                    icon={<FaRegEdit />}
+                                    size="sm"
+                                    variant="ghost"
                                     onClick={() => handleClickEdit("email")}
-                                />
+                                >
+                                    <FaRegEdit />
+                                </IconButton>
                             </HStack>
                         </Field>
                         <Field label="Customer Notes">
@@ -250,7 +277,7 @@ const CustomerInfo = ({ selectedCustomer, setCustomerInfoOpen, updateCustomerInS
                         </Field>
                         <Button
                             type="submit"
-                            isDisabled={isSaveDisabled}
+                            disabled={isSaveDisabled}
                             colorScheme="blue"
                             width="100%"
                             mt={4}

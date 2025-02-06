@@ -61,7 +61,6 @@ const CreateCustomer = ({ setCustomerInfoOpen }) => {
         zIndex={-1}
         pointerEvents={"none"}
         flex={1}
-        flexWrap={1}
       ></Box>
 
       {/* Modal content */}

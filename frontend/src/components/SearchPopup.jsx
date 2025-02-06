@@ -4,31 +4,28 @@ import { IconButton, HStack, Box } from '@chakra-ui/react';
 import { LuSearch } from 'react-icons/lu';
 import { Input, Button, Text } from '@chakra-ui/react';
 
-const SearchPopup = ({ preferredColors }) => {
-  const [firstName, setFirstName] = useState("");
-  const [lastName, setLastName] = useState("");
-  const [phone, setPhone] = useState("");
-  const [searchResults, setSearchResults] = useState([]);
+const SearchPopup = ({ preferredColors, setSearchResults, 
+  firstNameSearch, setFirstNameSearch, lastNameSearch, setLastNameSearch, phoneSearch, setPhoneSearch }) => {
 
   // Debounced search handler
   useEffect(() => {
     const handleDebouncedSearch = async () => {
-      if (!firstName && !lastName && !phone) {
+      if (!firstNameSearch && !lastNameSearch && !phoneSearch) {
         setSearchResults([]);
         return;
       }
 
-      if (firstName || lastName) {
-        setPhone("")
+      if (firstNameSearch || lastNameSearch) {
+        setPhoneSearch("")
       }
 
-      if (phone) {
-        setFirstName("")
-        setLastName("")
+      if (phoneSearch) {
+        setFirstNameSearch("")
+        setLastNameSearch("")
       }
 
       try {
-        const response = await fetch(`/db/findCustomer?firstName=${firstName}&lastName=${lastName}&phoneNumber=${phone}`);
+        const response = await fetch(`/db/findCustomer?firstName=${firstNameSearch}&lastName=${lastNameSearch}&phoneNumber=${phoneSearch}`);
         const data = await response.json();
         setSearchResults(data);
       } catch (error) {
@@ -38,23 +35,15 @@ const SearchPopup = ({ preferredColors }) => {
 
     const debounceTimer = setTimeout(handleDebouncedSearch, 300);
     return () => clearTimeout(debounceTimer);
-  }, [firstName, lastName, phone]);
+  }, [firstNameSearch, lastNameSearch, phoneSearch]);
 
   const clearSearch = () => {
-    setFirstName("");
-    setLastName("");
-    setPhone("");
+    setFirstNameSearch("");
+    setLastNameSearch("");
+    setPhoneSearch("");
   };
 
-  const rows = searchResults.map((customer) => (
-    <Box
-      key={customer.id}
-      bg={{ base: "white", _dark: "primary" }}
-      w={"100%"}
-    >
-      <h1>{customer.firstName}</h1>
-    </Box>
-  ));
+
 
   return (
     <PopoverRoot>
@@ -62,7 +51,6 @@ const SearchPopup = ({ preferredColors }) => {
         <IconButton
           aria-label="Search database"
           rounded="xl"
-          onClick={clearSearch}
         >
           <LuSearch />
         </IconButton>
@@ -79,8 +67,8 @@ const SearchPopup = ({ preferredColors }) => {
               id="xyz123"
               autocomplete="xyz123"
               variant="subtle"
-              value={firstName}
-              onChange={(e) => setFirstName(e.target.value)}
+              value={firstNameSearch}
+              onChange={(e) => setFirstNameSearch(e.target.value)}
               placeholder="First name"
               size="md"
             />
@@ -89,8 +77,8 @@ const SearchPopup = ({ preferredColors }) => {
               id="xyz123"
               autocomplete="xyz123"
               variant="subtle"
-              value={lastName}
-              onChange={(e) => setLastName(e.target.value)}
+              value={lastNameSearch}
+              onChange={(e) => setLastNameSearch(e.target.value)}
               placeholder="Last name"
               size="md"
             />
@@ -99,18 +87,17 @@ const SearchPopup = ({ preferredColors }) => {
               id="xyz123"
               autocomplete="xyz123"
               variant="subtle"
-              value={phone}
-              onChange={(e) => setPhone(e.target.value)}
+              value={phoneSearch}
+              onChange={(e) => setPhoneSearch(e.target.value)}
               placeholder="Phone number"
               size="md"
-              disabled={firstName || lastName}
+              disabled={firstNameSearch || lastNameSearch}
             />
 
             <HStack>
-              <Button type="button" variant={"outline"} onClick={clearSearch} disabled={!firstName && !lastName && !phone}>Clear</Button>
+              <Button type="button" variant={"outline"} onClick={clearSearch} disabled={!firstNameSearch && !lastNameSearch && !phoneSearch}>Clear</Button>
             </HStack>
           </div>
-          {rows}
         </PopoverBody>
       </PopoverContent>
     </PopoverRoot>

@@ -1,8 +1,9 @@
-import { Tabs } from "@chakra-ui/react";
-import { useState, useEffect } from "react";
+import { Tabs, VStack } from "@chakra-ui/react";
+import { useState, useEffect, createContext } from "react";
 import { Box, Text } from "@chakra-ui/react";
 import MyTable from '../components/MyTable';
 import SearchPopup from './SearchPopup';
+import Login from '../pages/Login'
 
 function Navbar({
   isLoggedIn,
@@ -25,10 +26,11 @@ function Navbar({
   const [filtered, setFiltered] = useState([]);
 
   const [firstNameSearch, setFirstNameSearch] = useState("");
-  const [lastNameSearch, setlastNameSearch] = useState("");
-  const [phoneNumberSearch, setPhoneNumberSearch] = useState("");
+  const [lastNameSearch, setLastNameSearch] = useState("");
+  const [phoneSearch, setPhoneSearch] = useState("");
 
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
+  const [searchResults, setSearchResults] = useState([]);
 
   // Debounced window resize handler
   useEffect(() => {
@@ -52,13 +54,13 @@ function Navbar({
 
   useEffect(() => {
     if (firstNameSearch || lastNameSearch) {
-      setPhoneNumberSearch('');
+      setPhoneSearch('');
     }
   }, [firstNameSearch, lastNameSearch]);
 
   const handleSearch = async (e) => {
     e.preventDefault(); // Prevent form submit behavior
-    await fetch(`/db/findCustomer?firstName=${firstNameSearch}&lastName=${lastNameSearch}&phoneNumber=${phoneNumberSearch}`);
+    await fetch(`/db/findCustomer?firstName=${firstNameSearch}&lastName=${lastNameSearch}&phoneNumber=${phoneSearch}`);
   };
 
   return (
@@ -77,7 +79,9 @@ function Navbar({
                 </Tabs.Trigger>
               </div>
               <div className="tabs">
-                <SearchPopup preferredColors={preferredColors} onSearch={() => {}} />
+                <SearchPopup preferredColors={preferredColors} setSearchResults={setSearchResults}
+                firstNameSearch={firstNameSearch} setFirstNameSearch={setFirstNameSearch}
+                lastNameSearch={lastNameSearch} setLastNameSearch={setLastNameSearch} phoneSearch={phoneSearch} setPhoneSearch={setPhoneSearch}  />
               </div>
             </Tabs.List>
           )}
@@ -103,9 +107,14 @@ function Navbar({
                 limit={limit}
                 offset={offset}
                 setOffset={setOffset}
+                searchResults={searchResults}
+
               />
             ) : (
-              <Text>Please log in</Text>
+              <VStack>
+                            <Text>Please log in</Text>
+                            <Login></Login>
+              </VStack>
             )}
           </Tabs.Content>
           <Tabs.Content
