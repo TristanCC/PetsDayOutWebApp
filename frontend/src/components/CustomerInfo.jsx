@@ -109,8 +109,8 @@ const CustomerInfo = ({ selectedCustomer, setCustomerInfoOpen, updateCustomerInS
             <Box
                 borderRadius="lg"
                 p={6}
-                maxW="600px"
-                w="auto"
+                maxW="400px"
+                w="90%"
                 boxShadow="lg"
                 position="fixed"
                 bg={{ base: "white", _dark: "primarySurface" }}
@@ -139,10 +139,12 @@ const CustomerInfo = ({ selectedCustomer, setCustomerInfoOpen, updateCustomerInS
                                 <Field label="First Name" required>
                                     <HStack>
                                         <Input
+                                            size={"lg"}
                                             value={firstName}
                                             onChange={(e) => setFirstName(e.target.value)}
                                             disabled={!editFirstName}
                                             placeholder="First Name"
+                                            
                                         />
                                         <IconButton
                                             aria-label="Edit First Name"
@@ -157,6 +159,7 @@ const CustomerInfo = ({ selectedCustomer, setCustomerInfoOpen, updateCustomerInS
                                 <Field label="Middle Name">
                                     <HStack>
                                         <Input
+                                            size={"lg"}
                                             value={middleName || ""}
                                             onChange={(e) => setMiddleName(e.target.value)}
                                             disabled={!editMiddleName}
@@ -178,6 +181,7 @@ const CustomerInfo = ({ selectedCustomer, setCustomerInfoOpen, updateCustomerInS
                                 <Field label="First Name" required>
                                     <HStack>
                                         <Input
+                                            size={"lg"}
                                             value={firstName}
                                             onChange={(e) => setFirstName(e.target.value)}
                                             disabled={!editFirstName}
@@ -196,6 +200,7 @@ const CustomerInfo = ({ selectedCustomer, setCustomerInfoOpen, updateCustomerInS
                                 <Field label="Middle Name">
                                     <HStack>
                                         <Input
+                                            size={"lg"}
                                             value={middleName || ""}
                                             onChange={(e) => setMiddleName(e.target.value)}
                                             disabled={!editMiddleName}
@@ -216,6 +221,7 @@ const CustomerInfo = ({ selectedCustomer, setCustomerInfoOpen, updateCustomerInS
                         <Field label="Last Name" required>
                             <HStack>
                                 <Input
+                                    size={"lg"}
                                     value={lastName}
                                     onChange={(e) => setLastName(e.target.value)}
                                     disabled={!editLastName}
@@ -234,6 +240,7 @@ const CustomerInfo = ({ selectedCustomer, setCustomerInfoOpen, updateCustomerInS
                         <Field label="Phone Number" required>
                             <HStack>
                                 <Input
+                                    size={"lg"}
                                     value={phoneNumber}
                                     onChange={(e) => setPhoneNumber(e.target.value)}
                                     disabled={!editPhoneNumber}
@@ -252,6 +259,7 @@ const CustomerInfo = ({ selectedCustomer, setCustomerInfoOpen, updateCustomerInS
                         <Field label="Email">
                             <HStack>
                                 <Input
+                                    size={"lg"}
                                     value={email || ""}
                                     onChange={(e) => setEmail(e.target.value)}
                                     disabled={!editEmail}

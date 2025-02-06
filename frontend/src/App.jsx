@@ -26,7 +26,7 @@ function App() {
   });
   const [selectedCustomer, setSelectedCustomer] = useState(null);
 
-  const limit = window.innerHeight > 900 ? 11 : window.innerHeight > 500 ? 6 : 3;
+  const [limit, setLimit] = useState(10); // Default limit
 
   const [offset, setOffset] = useState(0)
 
@@ -70,8 +70,8 @@ function App() {
         alignSelf={"center"}
         alignItems={"center"}
       >
-        <div className='outerWrapper'>
-          <Box className='wrapperLeft' position={"absolute"} w="100%">
+        <Box className='outerWrapper'>
+          <Box className='wrapperLeft' w="100%">
             <Navbar
               isLoggedIn={isLoggedIn}
               setIsLoggedIn={setIsLoggedIn}
@@ -83,10 +83,11 @@ function App() {
               updateCustomerInState={updateCustomerInState}
               deleteCustomerInState={deleteCustomerInState}
               limit={limit}
+              setLimit={setLimit}
               offset={offset}
               setOffset={setOffset}
             />
-            <div className='wrapperInner'>
+            <Box className='wrapperInner'>
               <BrowserRouter>
                 <Routes>
                   <Route
@@ -103,6 +104,7 @@ function App() {
                         updateCustomerInState={updateCustomerInState}
                         deleteCustomerInState={deleteCustomerInState}
                         limit={limit}
+                        setLimit={setLimit}
                         offset={offset}
                         setOffset={setOffset}
                       />
@@ -121,10 +123,10 @@ function App() {
                   />
                 </Routes>
               </BrowserRouter>
-            </div>
+            </Box>
           </Box>
-        </div>
-        <ColorModeButton position={"fixed"} bottom={"0"} left={"0"} />
+        </Box>
+        <ColorModeButton position={"absolute"} bottom={"0"} left={"0"} />
       </Box>
     </>
   );
