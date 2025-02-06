@@ -26,7 +26,7 @@ function App() {
   });
   const [selectedCustomer, setSelectedCustomer] = useState(null);
 
-  const [limit, setLimit] = useState(10); // Default limit
+  const limit = window.innerHeight > 900 ? 15 : window.innerHeight > 700 ? 8 : window.innerHeight > 500 ? 6 : 3;
 
   const [offset, setOffset] = useState(0)
 
@@ -83,7 +83,6 @@ function App() {
               updateCustomerInState={updateCustomerInState}
               deleteCustomerInState={deleteCustomerInState}
               limit={limit}
-              setLimit={setLimit}
               offset={offset}
               setOffset={setOffset}
             />
@@ -104,7 +103,6 @@ function App() {
                         updateCustomerInState={updateCustomerInState}
                         deleteCustomerInState={deleteCustomerInState}
                         limit={limit}
-                        setLimit={setLimit}
                         offset={offset}
                         setOffset={setOffset}
                       />

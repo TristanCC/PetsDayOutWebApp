@@ -15,42 +15,21 @@ import {
   MenuTrigger,
 } from "@/components/ui/menu"
 
+
 import { Checkbox } from "@/components/ui/checkbox"
-import { useState, useEffect, useRef } from "react"
+import { useState, useEffect } from "react"
 import MenuRoot1 from "./MenuRoot1"
 import CreateCustomer from "./CreateCustomer"
 
 const MyTable = ({ selectedCustomer, setSelectedCustomer, customers, preferredColors, updateCustomerInState,
-   deleteCustomerInState, limit, offset, setOffset, searchResults, setLimit }) => {
+   deleteCustomerInState, limit, offset, setOffset, searchResults }) => {
   const [selection, setSelection] = useState([])
-  const tableContainerRef = useRef(null);
 
   const hasSelection = selection.length > 0
   const indeterminate = hasSelection && selection.length < customers.length
 
   // Ensure searchResults is an array
   const validSearchResults = Array.isArray(searchResults) ? searchResults : [];
-
-  useEffect(() => {
-    const handleResize = () => {
-      if (tableContainerRef.current) {
-        const containerHeight = tableContainerRef.current.clientHeight;
-        const rowHeight = 50; // Adjust this value based on your row height
-        const newLimit = Math.floor(containerHeight / rowHeight);
-        const currentPage = Math.floor(offset / limit);
-        const newOffset = currentPage * newLimit;
-        setOffset(newOffset); // Adjust offset based on new limit
-        setLimit(newLimit);
-      }
-    };
-
-    window.addEventListener("resize", handleResize);
-    handleResize(); // Initial call
-
-    return () => {
-      window.removeEventListener("resize", handleResize);
-    };
-  }, [limit, offset, setLimit, setOffset]);
 
   const rows = customers.map((customer) => (
     <Table.Row
@@ -119,7 +98,7 @@ const MyTable = ({ selectedCustomer, setSelectedCustomer, customers, preferredCo
   ))
 
   return (
-    <div className="table" ref={tableContainerRef}>
+    <div className="table">
       <Table.Root interactive stickyHeader striped scrollBehavior={"smooth"} overflow={"hidden"} >
         <Table.Header bg={{ base: "white", _dark: "primary" }}>
           <Table.Row alignItems={"center"} bg={{ base: "white", _dark: "primaryMidpoint" }}>

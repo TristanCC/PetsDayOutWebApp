@@ -139,6 +139,7 @@ const CustomerInfo = ({ selectedCustomer, setCustomerInfoOpen, updateCustomerInS
                                 <Field label="First Name" required>
                                     <HStack>
                                         <Input
+                                            variant={"outline"}
                                             size={"lg"}
                                             value={firstName}
                                             onChange={(e) => setFirstName(e.target.value)}
@@ -159,6 +160,7 @@ const CustomerInfo = ({ selectedCustomer, setCustomerInfoOpen, updateCustomerInS
                                 <Field label="Middle Name">
                                     <HStack>
                                         <Input
+                                            variant={"outline"}
                                             size={"lg"}
                                             value={middleName || ""}
                                             onChange={(e) => setMiddleName(e.target.value)}
@@ -181,6 +183,7 @@ const CustomerInfo = ({ selectedCustomer, setCustomerInfoOpen, updateCustomerInS
                                 <Field label="First Name" required>
                                     <HStack>
                                         <Input
+                                            variant={"outline"}
                                             size={"lg"}
                                             value={firstName}
                                             onChange={(e) => setFirstName(e.target.value)}
@@ -200,6 +203,7 @@ const CustomerInfo = ({ selectedCustomer, setCustomerInfoOpen, updateCustomerInS
                                 <Field label="Middle Name">
                                     <HStack>
                                         <Input
+                                            variant={"outline"}
                                             size={"lg"}
                                             value={middleName || ""}
                                             onChange={(e) => setMiddleName(e.target.value)}
@@ -221,6 +225,7 @@ const CustomerInfo = ({ selectedCustomer, setCustomerInfoOpen, updateCustomerInS
                         <Field label="Last Name" required>
                             <HStack>
                                 <Input
+                                    variant={"outline"}
                                     size={"lg"}
                                     value={lastName}
                                     onChange={(e) => setLastName(e.target.value)}
@@ -240,6 +245,7 @@ const CustomerInfo = ({ selectedCustomer, setCustomerInfoOpen, updateCustomerInS
                         <Field label="Phone Number" required>
                             <HStack>
                                 <Input
+                                    variant={"outline"}
                                     size={"lg"}
                                     value={phoneNumber}
                                     onChange={(e) => setPhoneNumber(e.target.value)}
@@ -259,6 +265,7 @@ const CustomerInfo = ({ selectedCustomer, setCustomerInfoOpen, updateCustomerInS
                         <Field label="Email">
                             <HStack>
                                 <Input
+                                    variant={"outline"}
                                     size={"lg"}
                                     value={email || ""}
                                     onChange={(e) => setEmail(e.target.value)}

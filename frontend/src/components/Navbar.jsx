@@ -18,7 +18,6 @@ function Navbar({
   updateCustomerInState,
   deleteCustomerInState,
   limit,
-  setLimit,
   offset,
   setOffset,
 }) {
@@ -83,7 +82,7 @@ function Navbar({
             </Tabs.List>
 
             {/* Ensure tab content has a fixed or min-height */}
-            <Tabs.Content
+<Tabs.Content
   value="first"
   display={"flex"}
   justifyContent={"center"}
@@ -105,7 +104,6 @@ function Navbar({
     offset={offset}
     setOffset={setOffset}
     searchResults={searchResults}
-    setLimit={setLimit}
   />
 </Tabs.Content>
 
