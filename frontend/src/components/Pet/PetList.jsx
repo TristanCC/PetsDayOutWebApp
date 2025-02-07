@@ -15,7 +15,7 @@ import {
   AccordionRoot,
 } from "@/components/ui/accordion"
 
-import { Group } from "@chakra-ui/react"
+import { Group, HStack } from "@chakra-ui/react"
 import { EmptyState } from "@/components/ui/empty-state"
 import { GiSniffingDog } from "react-icons/gi";
 
@@ -91,8 +91,8 @@ const PetList = ({ customer, preferredColors, handleEditPet, closePetsPanel }) =
                 >
                     <IconButton
                         position={"absolute"}
-                        top={"0"}
-                        right={"0"}
+                        top={"5"}
+                        right={"5"}
                         aria-label="close update customer"
                         size={"lg"}
                         variant={"ghost"}
@@ -115,7 +115,7 @@ const PetList = ({ customer, preferredColors, handleEditPet, closePetsPanel }) =
                             <Button onClick={()=>setCreatePetPressed(true)}>Create Pet</Button>
                         </Group>
                     </EmptyState>
-                    ) : (<CreatePet/>)}
+                    ) : (<CreatePet customer={customer}/>)}
                 </Box>
             ) : (
                 <Box
@@ -159,9 +159,12 @@ const PetList = ({ customer, preferredColors, handleEditPet, closePetsPanel }) =
                                     <AccordionItem key={index} value={item.name}>
                                         <AccordionItemTrigger>{item.name}</AccordionItemTrigger>
                                         <AccordionItemContent>{item.breed}</AccordionItemContent>
+                                        <AccordionItemContent>{item.size}</AccordionItemContent>
                                     </AccordionItem>
                                 ))}
                             </AccordionRoot>
+                            <Button>Link Customers</Button>
+                            <Button>Add Pet</Button>
                         </Box>
                     </div>
                 </Box>
@@ -171,5 +174,3 @@ const PetList = ({ customer, preferredColors, handleEditPet, closePetsPanel }) =
 };
 
 export default PetList;
-
-// ...existing code...

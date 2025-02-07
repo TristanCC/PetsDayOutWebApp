@@ -14,9 +14,11 @@ const customConfig = defineConfig({
         primary: { value: "#121212 " },
         primaryMidpoint: {value: "#0F0F0F"},
         primarySurface: { value: "#0E0E0E"},
-        primaryL: { value: "#EDEDED" },         
-        primaryMidpointL: { value: "#F2F2F2" }, 
-        primarySurfaceL: { value: "#F5F5F5" }   
+        primaryDarkL: { value: "#D9D9D9"}, 
+        primaryL: { value: "#EDEDED" },          // background darker white
+        primaryMidpointL: { value: "#F2F2F2" },  // 
+        primarySurfaceL: { value: "#F5F5F5" }   // foreground lighter white
+                                              
         
       },
       fonts: {

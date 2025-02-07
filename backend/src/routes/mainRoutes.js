@@ -23,6 +23,7 @@ router.put('/db/updateCustomer/:id', customerController.updateCustomer)
 */ 
 
 router.get('/db/getPets/:id', petController.getPets)
+router.post('/db/createPet', petController.createPet)
 
 
 

@@ -119,8 +119,8 @@ const CustomerInfo = ({ selectedCustomer, setCustomerInfoOpen, updateCustomerInS
                 <IconButton
                     aria-label="Close"
                     position="absolute"
-                    top={3}
-                    right={4}
+                    top={6}
+                    right={6}
                     size="xl"
                     variant="ghost"
                     rounded={"1rem"}
@@ -129,9 +129,11 @@ const CustomerInfo = ({ selectedCustomer, setCustomerInfoOpen, updateCustomerInS
                 >
                     <LuCircleX />
                 </IconButton>
-                <Text fontSize="2xl" fontWeight="bold" mb={6}>
-                    Customer Info
-                </Text>
+                <Box bg={{ base: "primaryL", _dark: "primary" }} w="100%" borderRadius={"lg"} p={4} mb={6}>
+                    <Text fontSize="2xl" fontWeight="bold" color={{ base: "primary", _dark: "primaryL" }}>
+                        {selectedCustomer.firstName} {selectedCustomer.lastName}{selectedCustomer.lastName[selectedCustomer.lastName.length-1] !== "s" ? "'s" : "'"} Info
+                    </Text>
+                </Box>
                 <form onSubmit={handleSubmit}>
                     <VStack spacing={4} justifySelf={"center"}>
                         {isMobile ? (

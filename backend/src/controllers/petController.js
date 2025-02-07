@@ -1,4 +1,5 @@
 import CustomerPet from '../models/CustomerPet.js'
+import Customer from '../models/Customer.js'
 import Pet from '../models/Pet.js'
 
 // create
@@ -34,8 +35,9 @@ export const getPets = async (req, res) => {
     try {
         const pets = await Pet.findAll({
             include: [{
-                model: CustomerPet,
-                where: { ownerID: id } // Get pets linked to the customer
+                model: Customer,
+                where: { id }, // Fetch pets linked to this customer
+                through: { attributes: [] } // Exclude CustomerPet join table attributes
             }]
         });
 
@@ -49,3 +51,4 @@ export const getPets = async (req, res) => {
         return res.status(500).json({ message: 'Internal server error' });
     }
 };
+
