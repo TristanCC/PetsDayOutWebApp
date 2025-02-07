@@ -1,6 +1,8 @@
 // backend/src/controllers/authController.js
 export const login = (req, res, next, passport) => {
+  req.isLoading = true;
   passport.authenticate('local', (err, user, info) => {
+    req.isLoading = false;
     if (err) {
       console.error('Authentication error:', err);
       return res.status(500).json({ error: 'Internal server error' });

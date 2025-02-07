@@ -3,7 +3,7 @@ import { useState, useEffect, createContext } from "react";
 import { Box, Text, IconButton } from "@chakra-ui/react";
 import MyTable from '../components/MyTable';
 import SearchPopup from './SearchPopup';
-import Login from '../pages/Login'
+import Login from '../pages/Login';
 
 function Navbar({
   isLoggedIn,
@@ -32,21 +32,17 @@ function Navbar({
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
   const [searchResults, setSearchResults] = useState([]);
 
-  // Debounced window resize handler
   useEffect(() => {
     const handleResize = () => {
-      // Update the window width only after a delay
       const debounceTimeout = setTimeout(() => {
         setWindowWidth(window.innerWidth);
-      }, 200); // 200ms debounce time
+      }, 200);
 
-      // Clean up the previous timeout if it exists
       return () => clearTimeout(debounceTimeout);
     };
 
     window.addEventListener("resize", handleResize);
 
-    // Clean up the event listener on component unmount
     return () => {
       window.removeEventListener("resize", handleResize);
     };
@@ -57,7 +53,6 @@ function Navbar({
       setPhoneSearch('');
     }
   }, [firstNameSearch, lastNameSearch]);
-
 
   return (
     <>
@@ -81,45 +76,44 @@ function Navbar({
               </Box>
             </Tabs.List>
 
-            {/* Ensure tab content has a fixed or min-height */}
-<Tabs.Content
-  value="first"
-  display={"flex"}
-  justifyContent={"center"}
-  pt={"0"}
-  w={"100%"}
-  h={"70vh"} // Fixed height for both tabs
-  maxH={"70vh"}
-  minH={"70vh"}
-  overflowY={"auto"} // Enable scrolling for content that exceeds height
->
-  <MyTable
-    selectedCustomer={selectedCustomer}
-    setSelectedCustomer={setSelectedCustomer}
-    customers={customers}
-    preferredColors={preferredColors}
-    updateCustomerInState={updateCustomerInState}
-    deleteCustomerInState={deleteCustomerInState}
-    limit={limit}
-    offset={offset}
-    setOffset={setOffset}
-    searchResults={searchResults}
-  />
-</Tabs.Content>
+            <Tabs.Content
+              value="first"
+              display={"flex"}
+              justifyContent={"center"}
+              pt={"0"}
+              w={"100%"}
+              h={"70vh"}
+              maxH={"70vh"}
+              minH={"70vh"}
+              overflowY={"auto"}
+            >
+              <MyTable
+                selectedCustomer={selectedCustomer}
+                setSelectedCustomer={setSelectedCustomer}
+                customers={customers}
+                preferredColors={preferredColors}
+                updateCustomerInState={updateCustomerInState}
+                deleteCustomerInState={deleteCustomerInState}
+                limit={limit}
+                offset={offset}
+                setOffset={setOffset}
+                searchResults={searchResults}
+              />
+            </Tabs.Content>
 
-<Tabs.Content
-  value="second"
-  display={"flex"}
-  justifyContent={"center"}
-  pt={"0"}
-  w={"100%"}
-  h={"70vh"} // Fixed height for both tabs
-  maxH={"70vh"}
-  minH={"70vh"}
-  overflowY={"auto"} // Enable scrolling for content that exceeds height
->
-  <Text>Second panel</Text>
-</Tabs.Content>
+            <Tabs.Content
+              value="second"
+              display={"flex"}
+              justifyContent={"center"}
+              pt={"0"}
+              w={"100%"}
+              h={"70vh"}
+              maxH={"70vh"}
+              minH={"70vh"}
+              overflowY={"auto"}
+            >
+              <Text>Second panel</Text>
+            </Tabs.Content>
           </Tabs.Root>
         </Box>
       ) : (

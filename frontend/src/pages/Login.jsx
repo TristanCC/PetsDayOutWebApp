@@ -1,15 +1,14 @@
 import { useState, useEffect } from 'react';
-import { Button, Input, Box, VStack, Text } from "@chakra-ui/react";
+import { Button, Input, Box, VStack, Text, Spinner } from "@chakra-ui/react";
 import { Field } from "@/components/ui/field";
 
 function Login({ isLoggedIn, setIsLoggedIn }) {
-  const [error, setError] = useState(null); // For handling login errors
+  const [error, setError] = useState(null);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [isLoading, setIsLoading] = useState(true);
   const [isLoggingOut, setIsLoggingOut] = useState(false);
 
-  // Check if the user is logged in
   useEffect(() => {
     const checkLoginStatus = async () => {
       try {
@@ -28,7 +27,7 @@ function Login({ isLoggedIn, setIsLoggedIn }) {
         console.error('Error checking login status:', error);
         setIsLoggedIn(false);
       } finally {
-        setIsLoading(false); // Set loading to false after the check
+        setIsLoading(false);
       }
     };
 
@@ -37,6 +36,7 @@ function Login({ isLoggedIn, setIsLoggedIn }) {
 
   const handleLogin = async (e) => {
     e.preventDefault();
+    setIsLoading(true);
     const credentials = { email, password };
 
     try {
@@ -48,7 +48,7 @@ function Login({ isLoggedIn, setIsLoggedIn }) {
       });
 
       if (!response.ok) {
-        const errorData = await response.json(); // Parse as JSON
+        const errorData = await response.json();
         setError(errorData.error || 'Login failed.');
         return;
       }
@@ -58,6 +58,8 @@ function Login({ isLoggedIn, setIsLoggedIn }) {
     } catch (error) {
       console.error('Error during login:', error);
       setError('An error occurred during login.');
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -79,6 +81,14 @@ function Login({ isLoggedIn, setIsLoggedIn }) {
       setIsLoggingOut(false);
     }
   };
+
+  if (isLoading) {
+    return (
+      <Box display="flex" alignItems="center" justifyContent="center" height="100vh">
+        <Spinner size="xl" />
+      </Box>
+    );
+  }
 
   return (
     <>
@@ -133,6 +143,7 @@ function Login({ isLoggedIn, setIsLoggedIn }) {
                   colorScheme="blue"
                   width="100%"
                   mt={4}
+                  isLoading={isLoading}
                 >
                   Submit
                 </Button>

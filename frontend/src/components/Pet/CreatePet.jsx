@@ -41,8 +41,6 @@ const CreatePetSize = ({ customer, onPetCreated }) => {
         {name: "Star", breed: "Lab"},
         {name: "Mason", breed: "Mutt"},
         {name: "Dayton", breed: "Mutt"},
-        {name: "Cory", breed: "Mutt"},
-        {name: "Nicole", breed: "Mutt"},
     ]
 
     const [randomChoice, setRandomChoice] = useState(placeholders[Math.floor(Math.random() * placeholders.length)])

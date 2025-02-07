@@ -17,8 +17,8 @@ import Home from './pages/Home';
 import Login from './pages/Login';
 
 function App() {
-  const [isLoggedIn, setIsLoggedIn] = useState(false); // State to track login status
-  const [checked, setChecked] = useState(true); // Switch state, true for light, false for dark
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [checked, setChecked] = useState(true);
   const [preferredColors, setPreferredColors] = useState('blue');
   const [customers, setCustomers] = useState(() => {
     const cachedData = localStorage.getItem('customers');
