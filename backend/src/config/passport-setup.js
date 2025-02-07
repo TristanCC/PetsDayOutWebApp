@@ -66,19 +66,23 @@ passport.serializeUser((user, done) => {
   done(null, user.id);
 });
 
+
+
 // Deserialize user from the session
 passport.deserializeUser(async (id, done) => {
-    try {
-      const user = await User.findByPk(id);
-      if (!user) {
-        // If no user is found, it's likely that the session has been cleared
-        return done(null, false);
-      }
-      done(null, user);
-    } catch (error) {
-      done(error, false);
+  try {
+    const user = await User.findByPk(id);
+    if (!user) {
+      console.log(`User with ID ${id} not found in database.`);
+      return done(null, false);
     }
-  });
+    return done(null, user);
+  } catch (error) {
+    console.error('Error deserializing user:', error);
+    return done(error, false);
+  }
+});
+
   
 
 export default passport;

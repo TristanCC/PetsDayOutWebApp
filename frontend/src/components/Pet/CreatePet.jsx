@@ -15,8 +15,9 @@ import {
 import { InputGroup } from "@/components/ui/input-group"
 import DogAnimation from "../../assets/Dog.gif"
 import DogResting from "../../assets/DogResting.png"
+import { FaCamera } from "react-icons/fa6";
 
-const CreatePetSize = ({customer}) => {
+const CreatePetSize = ({ customer, onPetCreated }) => {
     const [sizeButton, setSizeButton] = useState(null);
     const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
     const [smallImageSrc, setSmallImageSrc] = useState(DogResting);
@@ -38,6 +39,10 @@ const CreatePetSize = ({customer}) => {
         {name: "Shug", breed: "Bulldog"},
         {name: "Dixie", breed: "Lab"},
         {name: "Star", breed: "Lab"},
+        {name: "Mason", breed: "Mutt"},
+        {name: "Dayton", breed: "Mutt"},
+        {name: "Cory", breed: "Mutt"},
+        {name: "Nicole", breed: "Mutt"},
     ]
 
     const [randomChoice, setRandomChoice] = useState(placeholders[Math.floor(Math.random() * placeholders.length)])
@@ -59,8 +64,8 @@ const CreatePetSize = ({customer}) => {
     }, [sizeButton]);
 
     const buttonStyles = {
-        height: !isMobile ? "100px" : "50px",
-        width: !isMobile ? "100px" : "50px",
+        height: !isMobile ? "100px" : "80px",
+        width: !isMobile ? "100px" : "70px",
         minWidth: 0,
         minHeight: 0,
         padding: !isMobile ? "1rem" : ".25rem",
@@ -90,6 +95,11 @@ const CreatePetSize = ({customer}) => {
         if (size === "large") setLargeImageSrc(DogAnimation);
     };
 
+    const handleFileChange = (e) => {
+        setImage(e.target.files[0]);
+    };
+
+
     const handleSubmit = async (e) => {
         e.preventDefault()
         try {
@@ -109,6 +119,7 @@ const CreatePetSize = ({customer}) => {
             if (!response.ok) {
                 throw new Error('Network response was not ok')
             }
+            onPetCreated();
         } catch (error) {
             console.error("Error creating pet:", error);
         }
@@ -120,7 +131,7 @@ const CreatePetSize = ({customer}) => {
          alignSelf={"center"} justifySelf={"center"} p={4} mb={6}
          >
             <Text fontSize="2xl" fontWeight="bold" color={{ base: "primary", _dark: "primaryL" }}>
-                Create {customer.firstName}{customer.firstName[customer.firstName.length-1] !== "s" ? "'s" : "'"} Pet
+                Track {customer.firstName}{customer.firstName[customer.firstName.length-1] !== "s" ? "'s" : "'"} Pet
             </Text>
         </Box>
         <form onSubmit={handleSubmit}>
@@ -133,13 +144,15 @@ const CreatePetSize = ({customer}) => {
                     <Input variant={"outline"} bg={{ base: "primaryL", _dark: "primary" }} value={breed} onChange={(e) => setBreed(e.target.value)} 
                     placeholder={randomChoice.breed}/>
                 </Field>
-                <Box alignSelf={"start"}>
-                    <FileUploadRoot gap="1" maxWidth="300px">
+               
+                    <FileUploadRoot gap="1">
                         <FileUploadLabel>Upload picture (optional)</FileUploadLabel>
                         <InputGroup
                           _hover= {{backgroundColor: "primaryL", _dark: {backgroundColor: "primary"}, cursor: "pointer"}}
                           w="full"
-                          startElement={<FaDog />}
+                          startElement={<FaCamera />}
+                          overflow="hidden"
+                          color={{ base: "primary", _dark: "primaryDarkL" }}
                           endElement={
                             <FileUploadClearTrigger asChild>
                               <CloseButton
@@ -149,14 +162,15 @@ const CreatePetSize = ({customer}) => {
                                 focusVisibleRing="inside"
                                 focusRingWidth="2px"
                                 pointerEvents="auto"
-                                color="fg.subtle"
+                                color="white"
+                                bg={{ base: "blue.600", _dark: "blue.600" }}
                               />
                             </FileUploadClearTrigger>
                           }>
-                            <FileInput />
+                            <FileInput onChange={handleFileChange} />
                         </InputGroup>
                     </FileUploadRoot>
-                </Box>
+             
                 <Field label="Size" required>
                     
                 </Field>

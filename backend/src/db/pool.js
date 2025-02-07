@@ -15,7 +15,7 @@ const sequelize = new Sequelize(
     host: process.env.DB_HOST,
     port: process.env.DB_PORT || 5432,
     dialect: 'postgres',
-    logging: console.log,
+    logging: false,
     dialectOptions: {
       ssl: false  // Explicitly disable SSL
     },
