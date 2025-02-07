@@ -10,7 +10,7 @@ import { ColorModeButton } from "@/components/ui/color-mode";
 import Navbar from './components/Navbar';
 import MyTable from './components/MyTable';
 import CustomerInfo from './components/CustomerInfo';
-import PetList from './components/PetList';
+import PetList from './components/Pet/PetList';
 import MenuRoot1 from './components/MenuRoot1';
 
 import Home from './pages/Home';

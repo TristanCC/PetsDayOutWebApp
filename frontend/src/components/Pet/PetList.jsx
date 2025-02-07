@@ -21,9 +21,13 @@ import { GiSniffingDog } from "react-icons/gi";
 
 import { LuCircleX } from "react-icons/lu";
 
+import CreatePet from "./CreatePet"
+
 const PetList = ({ customer, preferredColors, handleEditPet, closePetsPanel }) => {
     const [pets, setPets] = useState([]);
     const [loading, setLoading] = useState(true)
+
+    const [createPetPressed, setCreatePetPressed] = useState(false)
 
     useEffect(() => {
         const fetchPets = async () => {
@@ -94,18 +98,24 @@ const PetList = ({ customer, preferredColors, handleEditPet, closePetsPanel }) =
                         variant={"ghost"}
                         borderRadius={"1rem"}
                         onClick={() => closePetsPanel()}
+                        zIndex={100000}
                     >
                         <LuCircleX />
                     </IconButton>
+                    {!createPetPressed ? (
                     <EmptyState
                         icon={<Box fontSize={"3.5rem"}><GiSniffingDog/></Box>}
                         title={`Start tracking pets!`}
-                        description={`No pets are being tracked for ${customer.firstName} yet.`}
-                    >
+                        description={`No pets are being tracked for ${customer.firstName} yet.
+                        You can either create a new pet or link customers together (for pets already in the system).`}
+                        >
+                                        
                         <Group>
-                            <Button>Create Pet</Button>
+                            <Button>Link Customers</Button>
+                            <Button onClick={()=>setCreatePetPressed(true)}>Create Pet</Button>
                         </Group>
                     </EmptyState>
+                    ) : (<CreatePet/>)}
                 </Box>
             ) : (
                 <Box
@@ -125,6 +135,7 @@ const PetList = ({ customer, preferredColors, handleEditPet, closePetsPanel }) =
                         variant={"ghost"}
                         borderRadius={"1rem"}
                         onClick={() => closePetsPanel()}
+                        zIndex={100000}
                     >
                         <LuCircleX />
                     </IconButton>

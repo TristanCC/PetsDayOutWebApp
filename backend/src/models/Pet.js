@@ -8,10 +8,6 @@ const Pet = sequelize.define('Pet', {
     defaultValue: DataTypes.UUIDV4,
     primaryKey: true
   },
-  ownerID: {
-    type: DataTypes.UUID,
-    allowNull: false,
-  },
   name: {
     type: DataTypes.STRING,
     allowNull: false
@@ -31,9 +27,10 @@ const Pet = sequelize.define('Pet', {
     type: DataTypes.STRING,
     allowNull: true,
     validate: {
-      isUrl: true, // Ensure it's a valid URL
+      isUrl: true,
     }
   }
 });
 
-export default Pet;
+
+export default Pet

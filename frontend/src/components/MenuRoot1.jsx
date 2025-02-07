@@ -16,7 +16,7 @@ import { LuCircleUser } from "react-icons/lu";
 import { LuArchive } from "react-icons/lu";
 
 import CustomerInfo from './CustomerInfo';
-import PetList from './PetList';
+import PetList from './Pet/PetList';
 
 const MenuRoot1 = ({ customer, preferredColors, setSelectedCustomer, updateCustomerInState, deleteCustomerInState }) => {
   const [customerInfoOpen, setCustomerInfoOpen] = useState(false);

@@ -1,6 +1,24 @@
 import CustomerPet from '../models/CustomerPet.js'
 import Pet from '../models/Pet.js'
 
+// create
+
+export const createPet = async (req, res) => {
+    const {name, breed, size, photoUrl} = req.body
+
+    try {
+        const newPet = await Pet.create( {
+            name, breed, size, photoUrl
+        })
+        res.status(201).json(newPet)
+
+    } catch (error) {
+        console.error('Error creating pet:', error)
+        res.status(500).json({error: 'Failed to create pet.'})
+    }
+}
+
+
 // GET
 
 export const getPets = async (req, res) => {
