@@ -2,6 +2,18 @@ import { HStack, VStack, Button, Text, Input } from "@chakra-ui/react";
 import { useState, useEffect } from "react";
 import { FaDog } from "react-icons/fa6";
 import { Field } from "@/components/ui/field";
+import { CloseButton } from "@/components/ui/close-button"
+import { Image } from "@chakra-ui/react"
+import {
+    FileUploadList,
+    FileUploadRoot,
+    FileInput,
+    FileUploadTrigger,
+    FileUploadClearTrigger,
+    FileUploadLabel,
+  } from "@/components/ui/file-upload"
+import { InputGroup } from "@/components/ui/input-group"
+import DogAnimation from "../../assets/Dog.gif"
 
 const CreatePetSize = () => {
     const [sizeButton, setSizeButton] = useState(null);
@@ -26,16 +38,16 @@ const CreatePetSize = () => {
         height: !isMobile ? "100px" : "50px",
         minWidth: 0,
         minHeight: 0,
-        padding: !isMobile ? "1rem" : ".5rem",
+        padding: !isMobile ? "1rem" : ".25rem",
         flex: 1,
         display: "flex",
         alignItems: "end",
         justifyContent: "center"
     };
 
-    const iconStyles = (heightPercentage) => ({
+    const animationStyles = (heightPercentage) => ({
         height: heightPercentage,
-        width: "100%",
+        width: "auto",
         display: "flex",
         alignItems: "center",
         justifyContent: "center"
@@ -53,6 +65,27 @@ const CreatePetSize = () => {
             <Field label="Breed" required>
                 <Input variant={"outline"} placeholder="Breed"/>
             </Field>
+            <FileUploadRoot gap="1" maxWidth="300px">
+                <FileUploadLabel>Upload picture (optional)</FileUploadLabel>
+                <InputGroup
+                  w="full"
+                  startElement={<FaDog />}
+                  endElement={
+                    <FileUploadClearTrigger asChild>
+                      <CloseButton
+                        me="-1"
+                        size="xs"
+                        variant="plain"
+                        focusVisibleRing="inside"
+                        focusRingWidth="2px"
+                        pointerEvents="auto"
+                        color="fg.subtle"
+                      />
+                    </FileUploadClearTrigger>
+                  }>
+                    <FileInput />
+                </InputGroup>
+            </FileUploadRoot>
         </VStack>
         <HStack gap={0} alignItems={"end"}
          justify={"center"} bg={{ base: "primaryL", _dark: "primary" }} rounded={"lg"}
@@ -64,14 +97,14 @@ const CreatePetSize = () => {
                 style={buttonStyles}
                
             >
-                <FaDog style={iconStyles("40%")} />
+                <Image src={DogAnimation} style={animationStyles("50%")} />
             </Button>
             <Button
                 variant={sizeButton === "medium" ? "solid" : "ghost"}
                 onClick={() => setSizeButton("medium")}
                 style={buttonStyles}
             >
-                <FaDog style={iconStyles("60%")} />
+                <Image src={DogAnimation} style={animationStyles("65%")} />
             </Button>
             <Button
                 size={"2xl"}
@@ -79,7 +112,7 @@ const CreatePetSize = () => {
                 onClick={() => setSizeButton("large")}
                 style={buttonStyles}
             >
-                <FaDog style={iconStyles("80%")} />
+                <Image src={DogAnimation} style={animationStyles("80%")} />
             </Button>
         </HStack>
         <Button w={"100%"} variant={"solid"}>
