@@ -15,6 +15,7 @@ const createEditableField = (label, value, setValue, edit, setEdit, isMobile, re
                 onChange={(e) => setValue(e.target.value)}
                 disabled={!edit}
                 placeholder={label}
+                backgroundColor={{ base: "primaryL", _dark: "primary" }}
             />
             <IconButton
                 aria-label={`Edit ${label}`}
@@ -128,32 +129,44 @@ const CustomerInfo = ({ selectedCustomer, setCustomerInfoOpen, updateCustomerInS
             margin={"auto"}
         >
             <Box
+
+                data-state="open"
+                _open={{
+                animationName: "fade-in, scale-in",
+                animationDuration: "300ms",
+                }}
+                _closed={{
+                animationName: "fade-out, scale-out",
+                animationDuration: "120ms",
+                }}
+              
                 borderRadius="lg"
+                display={"flex"}
+                flexDir={"column"}
+                justifyContent={"center"}
+                alignContent={"center"}
+                alignItems={"center"}
                 p={6}
-                maxW="400px"
-                w="90%"
                 boxShadow="lg"
                 position="fixed"
                 bg={{ base: "white", _dark: "primarySurface" }}
-                color={{ base: "black", _dark: "white" }}
+                color={{ base: "primary", _dark: "primaryL" }}
             >
-                <IconButton
+                <Box minW={"259px"} maxW={"400px"}  w="100%" borderRadius={"lg"} p={2}  display={"flex"} gap={"3"} lineHeight={"2rem"}
+                 justifyContent={"space-between"} alignItems={"center"}>
+                    <Text fontSize="2xl" fontWeight="bold" color={{ base: "primary", _dark: "primaryL" }}>
+                        {selectedCustomer.firstName} {selectedCustomer.lastName}{selectedCustomer.lastName[selectedCustomer.lastName.length-1] !== "s" ? "'s" : "'"} Info
+                    </Text>
+                    <IconButton
                     aria-label="Close"
-                    position="absolute"
-                    top={6}
-                    right={6}
                     size="xl"
                     variant="ghost"
-                    rounded={"1rem"}
+                    rounded={"1"}
                     padding={0}
                     onClick={() => setCustomerInfoOpen(false)}
                 >
                     <LuCircleX />
                 </IconButton>
-                <Box bg={{ base: "primaryL", _dark: "primary" }} w="100%" borderRadius={"lg"} p={4} mb={6}>
-                    <Text fontSize="2xl" fontWeight="bold" color={{ base: "primary", _dark: "primaryL" }}>
-                        {selectedCustomer.firstName} {selectedCustomer.lastName}{selectedCustomer.lastName[selectedCustomer.lastName.length-1] !== "s" ? "'s" : "'"} Info
-                    </Text>
                 </Box>
                 <form onSubmit={handleSubmit}>
                     <VStack spacing={4} justifySelf={"center"}>

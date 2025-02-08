@@ -1,27 +1,10 @@
 import { useState, useEffect } from "react";
-import { FaRegEdit, FaTrash } from "react-icons/fa";
 import { 
-  Table,
-  Button,
-  IconButton,
-  Text,
   Box,
-  Flex,
 } from "@chakra-ui/react";
-import {
-  AccordionItem,
-  AccordionItemContent,
-  AccordionItemTrigger,
-  AccordionRoot,
-} from "@/components/ui/accordion"
-
-import { Group, HStack } from "@chakra-ui/react"
-import { EmptyState } from "@/components/ui/empty-state"
-import { GiSniffingDog } from "react-icons/gi";
-
-import { LuCircleX } from "react-icons/lu";
-
-import CreatePet from "./CreatePet"
+import LoadingState from "./LoadingState";
+import EmptyStateComponent from "./EmptyStateComponent";
+import PetListDisplay from "./PetListDisplay";
 
 const PetList = ({ customer, preferredColors, handleEditPet, closePetsPanel }) => {
     const [pets, setPets] = useState([]);
@@ -92,107 +75,27 @@ const PetList = ({ customer, preferredColors, handleEditPet, closePetsPanel }) =
                 pointerEvents={"none"}
             ></Box>
             {loading ? (
-                <Box
-                    bg={{ base: "primarySurfaceL", _dark: "primarySurface" }}
-                    textAlign={"center"}
-                    borderRadius={"1rem"}
-                    p={"1rem"}
-                    w={"100%"}
-                    h={"auto"}
-                    cursor={"radio"}
-                >
-                    <Text>Fetching pets...</Text>
-                </Box>
+                <LoadingState loadingText={"Fetching pets..."} />
             ) : pets.length === 0 && showEmptyState ? (
-                <Box
-                    bg={{ base: "primarySurfaceL", _dark: "primarySurface" }}
-                    borderRadius={"1rem"}
-                    p={"1rem"}
-                    w={"100%"}
-                    h={"auto"}
-                    cursor={"radio"}
-                >
-                    <IconButton
-                        position={"absolute"}
-                        top={"5"}
-                        right={"5"}
-                        aria-label="close update customer"
-                        size={"lg"}
-                        variant={"ghost"}
-                        borderRadius={"1rem"}
-                        onClick={() => closePetsPanel()}
-                        zIndex={100000}
-                    >
-                        <LuCircleX />
-                    </IconButton>
-                    {!createPetPressed ? (
-                    <EmptyState
-                        icon={<Box fontSize={"3.5rem"}><GiSniffingDog/></Box>}
-                        title={`Start tracking pets!`}
-                        description={`No pets are being tracked for ${customer.firstName} yet.
-                        You can either create a new pet or link customers together (for pets already in the system).`}
-                        >
-                                        
-                        <Group>
-                            <Button>Link Customers</Button>
-                            <Button onClick={()=>{setCreatePetPressed(true); setShowEmptyState(false);}}>Create Pet</Button>
-                        </Group>
-                    </EmptyState>
-                    ) : (<CreatePet customer={customer} onPetCreated={() => { setCreatePetPressed(false); reloadPets(); }} setCreatePetPressed={handleBack} />)}
-                </Box>
+                <EmptyStateComponent 
+                    createPetPressed={createPetPressed} 
+                    setCreatePetPressed={setCreatePetPressed} 
+                    setShowEmptyState={setShowEmptyState} 
+                    closePetsPanel={closePetsPanel} 
+                    customer={customer} 
+                    handleBack={handleBack} 
+                    reloadPets={reloadPets} 
+                />
             ) : (
-                <Box
-                    bg={{ base: "primarySurfaceL", _dark: "primarySurface" }}
-                    borderRadius={"1rem"}
-                    p={"2rem"}
-                    w={"100%"}
-                    h={"auto"}
-                    cursor={"radio"}
-                >
-                    <IconButton
-                        position={"absolute"}
-                        top={"0"}
-                        right={"0"}
-                        aria-label="close update customer"
-                        size={"lg"}
-                        variant={"ghost"}
-                        borderRadius={"1rem"}
-                        onClick={() => closePetsPanel()}
-                        zIndex={100000}
-                    >
-                        <LuCircleX />
-                    </IconButton>
-                    {!createPetPressed ? ( 
-                    <div className="customerInfoHeader">
-                        <Box display={"flex"} flexDir={"column"} gap={"1rem"}>
-                            <Text
-                                fontSize={"2xl"}
-                                fontWeight={"medium"}
-                                position={"relative"}
-                                justifySelf={"center"}
-                            >
-                                {customer.firstName} {customer.lastName}
-                                {customer.lastName.charAt(customer.lastName.length - 1) === "s"
-                                    ? "'"
-                                    : "'s"}{" "}
-                                Pets
-                            </Text>
-                            <AccordionRoot multiple variant={"enclosed"}>
-                                {pets.map((item, index) => (
-                                    <AccordionItem key={index} value={item.name}>
-                                        <AccordionItemTrigger>{item.name}</AccordionItemTrigger>
-                                        <AccordionItemContent>{item.breed}</AccordionItemContent>
-                                        <AccordionItemContent>{item.size}</AccordionItemContent>
-                                    </AccordionItem>
-                                ))}
-                            </AccordionRoot>
-                            <Button>Link Customers</Button>
-                            <Button onClick={()=>setCreatePetPressed(true)}>Add Pet</Button>
-                        </Box>
-                    </div>
-                    ) : (<CreatePet customer={customer} setCreatePetPressed={handleBack}
-                    onPetCreated={() => { setCreatePetPressed(false); reloadPets(); }} />)}
-                </Box>
+                <PetListDisplay 
+                    pets={pets} 
+                    createPetPressed={createPetPressed} 
+                    setCreatePetPressed={setCreatePetPressed} 
+                    closePetsPanel={closePetsPanel} 
+                    customer={customer} 
+                    handleBack={handleBack} 
+                    reloadPets={reloadPets} 
+                />
             )}
         </Box>
     );
