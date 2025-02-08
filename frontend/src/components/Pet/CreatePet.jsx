@@ -129,19 +129,19 @@ const CreatePet = ({ customer, setCreatePetPressed, onPetCreated }) => {
   return (
     <>
       <MotionBox
-        bg={{ base: "primaryL", _dark: "primary" }}
+
         w="100%"
         borderRadius={"lg"}
         alignSelf={"center"}
         justifySelf={"center"}
-        p={4}
+        p={2}
         mb={6}
         initial={{ opacity: 0, scale: 0.95, y: -20 }}
         animate={{ opacity: 1, scale: 1, y: 0 }}
         exit={{ opacity: 0, scale: 0.95, y: -20 }}
         transition={{ duration: 0.3, ease: "easeInOut" }}
       >
-        <Text fontSize="2xl" fontWeight="bold" color={{ base: "primary", _dark: "primaryL" }}>
+        <Text fontSize="2xl" fontWeight="medium">
           Track {customer.firstName}
           {customer.firstName[customer.firstName.length - 1] !== "s" ? "'s" : "'"} Pet
         </Text>
@@ -189,7 +189,6 @@ const CreatePet = ({ customer, setCreatePetPressed, onPetCreated }) => {
                 w="full"
                 startElement={<FaCamera />}
                 overflow="hidden"
-                color={{ base: "primary", _dark: "primaryDarkL" }}
                 endElement={
                   <FileUploadClearTrigger asChild>
                     <CloseButton
@@ -199,7 +198,7 @@ const CreatePet = ({ customer, setCreatePetPressed, onPetCreated }) => {
                       focusVisibleRing="inside"
                       focusRingWidth="2px"
                       pointerEvents="auto"
-                      color="white"
+                      color={{ base: "primary", _dark: "primaryL" }}
                       bg={{ base: "blue.600", _dark: "blue.600" }}
                     />
                   </FileUploadClearTrigger>

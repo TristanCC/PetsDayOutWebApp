@@ -1,11 +1,11 @@
-import { Box, Button, IconButton, Text } from "@chakra-ui/react";
+import { Box, Button, IconButton, Text, HStack } from "@chakra-ui/react";
 import { LuCircleX } from "react-icons/lu";
 import { AccordionItem, AccordionItemContent, AccordionItemTrigger, AccordionRoot } from "@/components/ui/accordion";
 import CreatePet from "./CreatePet";
 
 const PetListDisplay = ({ pets, createPetPressed, setCreatePetPressed, closePetsPanel, customer, handleBack, reloadPets }) => (
     <Box
-        bg={{ base: "primaryDarkL", _dark: "primarySurface" }}
+        bg={{ base: "primarySurfaceL", _dark: "primarySurface" }}
         borderRadius={"1rem"}
         p={"2rem"}
         w={"100%"}
@@ -26,7 +26,7 @@ const PetListDisplay = ({ pets, createPetPressed, setCreatePetPressed, closePets
             <LuCircleX />
         </IconButton>
         {!createPetPressed ? (
-            <div className="customerInfoHeader">
+            <Box className="customerInfoHeader" boxShadow={"xl"}>
                 <Box display={"flex"} flexDir={"column"} gap={"1rem"}
                     data-state="open"
                     _open={{
@@ -39,10 +39,9 @@ const PetListDisplay = ({ pets, createPetPressed, setCreatePetPressed, closePets
                     }}
                 >
                     <Text
-                        fontSize={"2xl"}
+                        fontSize={"xl"}
                         fontWeight={"medium"}
                         position={"relative"}
-                        justifySelf={"center"}
                     >
                         {customer.firstName} {customer.lastName}
                         {customer.lastName.charAt(customer.lastName.length - 1) === "s"
@@ -50,7 +49,7 @@ const PetListDisplay = ({ pets, createPetPressed, setCreatePetPressed, closePets
                             : "'s"}{" "}
                         Pets
                     </Text>
-                    <AccordionRoot multiple variant={"enclosed"} bg={{ base: "primaryDarkL", _dark: "primarySurface" }}>
+                    <AccordionRoot multiple variant={"enclosed"}>
                         {pets.map((item, index) => (
                             <AccordionItem key={index} value={item.name}>
                                 <AccordionItemTrigger>{item.name}</AccordionItemTrigger>
@@ -59,10 +58,12 @@ const PetListDisplay = ({ pets, createPetPressed, setCreatePetPressed, closePets
                             </AccordionItem>
                         ))}
                     </AccordionRoot>
-                    <Button>Link Customers</Button>
-                    <Button onClick={() => setCreatePetPressed(true)}>Add Pet</Button>
+                    <HStack justify={"space-between"}>
+                        <Button>Link Customers</Button>
+                        <Button onClick={() => setCreatePetPressed(true)}>Add Pet</Button>
+                    </HStack>
                 </Box>
-            </div>
+            </Box>
         ) : (
             <CreatePet customer={customer} setCreatePetPressed={handleBack} onPetCreated={() => { setCreatePetPressed(false); reloadPets(); }} />
         )}

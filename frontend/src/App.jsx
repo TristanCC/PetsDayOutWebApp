@@ -1,20 +1,25 @@
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import { useState, useEffect } from 'react';
-import { Theme } from '@chakra-ui/react';
-import { Switch } from "@/components/ui/switch";
-import { Icon } from "@chakra-ui/react";
-import { FaMoon, FaSun } from "react-icons/fa";
-import { Box } from "@chakra-ui/react";
+import { Box, chakra, IconButton } from "@chakra-ui/react";
 import { ColorModeButton } from "@/components/ui/color-mode";
+import { LuPaintbrushVertical } from "react-icons/lu";
+import {
+  PopoverBody,
+  PopoverContent,
+  PopoverRoot,
+  PopoverTrigger,
+} from "@/components/ui/popover"
 
 import Navbar from './components/Navbar';
-import MyTable from './components/MyTable';
-import CustomerInfo from './components/CustomerInfo';
-import PetList from './components/Pet/PetList';
-import MenuRoot1 from './components/MenuRoot1';
-
 import Home from './pages/Home';
 import Login from './pages/Login';
+
+function colorSwatch(color) {
+  return (
+    <Box
+    ></Box>
+  )
+}
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -58,10 +63,30 @@ function App() {
     );
   };
 
+  const handleColorModeChange = (colorMode) => {
+    setPreferredColors(colorMode)
+  }
+
+  const colors = ['red', 'orange', 'yellow', 'green', 'teal', 'blue', 'cyan', 'purple', 'pink'].map((color) => (
+    <Box
+      display={"inline-block"}
+      key={color}
+      onClick={() => handleColorModeChange(color)}
+      cursor="pointer"
+      borderWidth="1px"
+      borderRadius="md"
+      w={10}
+      p={2}
+      m={1}
+      bg={`${color}.600`}
+    />
+  ));
+
   return (
     <>
       <Box
         colorPalette={preferredColors}
+        color={{ base: "primary", _dark: "primaryL"}}
         bg={{ base: "primaryL", _dark: "primary" }}
         w={"100%"}
         display={"flex"}
@@ -125,9 +150,41 @@ function App() {
           </Box>
         </Box>
         <ColorModeButton position={"absolute"} bottom={"0"} left={"0"} />
+        <PopoverRoot positioning={{ offset: { crossAxis: 0, mainAxis: 0 } }}>
+          <PopoverTrigger asChild>
+            <IconButton size="md" variant="ghost" position={"absolute"} bottom={0} right={0}>
+              <LuPaintbrushVertical></LuPaintbrushVertical>
+            </IconButton>
+          </PopoverTrigger>
+          <PopoverContent>
+            <PopoverBody>
+              {colors}
+            </PopoverBody>
+          </PopoverContent>
+        </PopoverRoot>
       </Box>
     </>
   );
 }
 
 export default App;
+
+// | "transparent"
+// | "current"
+// | "black"
+// | "white"
+// | "whiteAlpha"
+// | "blackAlpha"
+// | "gray"
+// | "red"
+// | "orange"
+// | "yellow"
+// | "green"
+// | "teal"
+// | "blue"
+// | "cyan"
+// | "purple"
+// | "pink"
+// | "bg"
+// | "fg"
+// | "border"

@@ -23,7 +23,7 @@ const customConfig = defineConfig({
         
       },
       fonts: {
-        body: { value: "system-ui, sans-serif" },
+        body: { value: "system-ui, calibri" },
       },
     },
   },

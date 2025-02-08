@@ -24,7 +24,8 @@ export const createPet = async (req, res) => {
 };
 
 export const linkCustomers = async (req, res) => {
-    
+    // take in searched for ownerID, current ownerID, array of current petIDs
+    //
 }
 
 // GET

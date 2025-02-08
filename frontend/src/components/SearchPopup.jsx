@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { PopoverRoot, PopoverTrigger, PopoverContent, PopoverArrow, PopoverBody, PopoverTitle } from '@/components/ui/popover';
 import { IconButton, HStack, Box } from '@chakra-ui/react';
 import { LuSearch } from 'react-icons/lu';
@@ -7,43 +7,49 @@ import { Input, Button, Text } from '@chakra-ui/react';
 const SearchPopup = ({ preferredColors, setSearchResults, 
   firstNameSearch, setFirstNameSearch, lastNameSearch, setLastNameSearch, phoneSearch, setPhoneSearch }) => {
 
-  // Debounced search handler
-  useEffect(() => {
-    const handleDebouncedSearch = async () => {
-      if (!firstNameSearch && !lastNameSearch && !phoneSearch) {
-        setSearchResults([]);
-        return;
-      }
-
-      if (firstNameSearch || lastNameSearch) {
-        setPhoneSearch("")
-      }
-
-      if (phoneSearch) {
-        setFirstNameSearch("")
-        setLastNameSearch("")
-      }
-
-      try {
-        const response = await fetch(`/db/findCustomer?firstName=${firstNameSearch}&lastName=${lastNameSearch}&phoneNumber=${phoneSearch}`);
-        const data = await response.json();
-        setSearchResults(data);
-      } catch (error) {
-        console.error('Search failed:', error);
-      }
+  const debounce = (func, wait) => {
+    let timeout;
+    return (...args) => {
+      clearTimeout(timeout);
+      timeout = setTimeout(() => func.apply(this, args), wait);
     };
+  };
 
-    const debounceTimer = setTimeout(handleDebouncedSearch, 300);
-    return () => clearTimeout(debounceTimer);
-  }, [firstNameSearch, lastNameSearch, phoneSearch]);
+  const handleSearch = useCallback(async () => {
+    if (!firstNameSearch && !lastNameSearch && !phoneSearch) {
+      setSearchResults([]);
+      return;
+    }
+
+    if (firstNameSearch || lastNameSearch) {
+      setPhoneSearch("");
+    }
+
+    if (phoneSearch) {
+      setFirstNameSearch("");
+      setLastNameSearch("");
+    }
+
+    try {
+      const response = await fetch(`/db/findCustomer?firstName=${firstNameSearch}&lastName=${lastNameSearch}&phoneNumber=${phoneSearch}`);
+      const data = await response.json();
+      setSearchResults(data);
+    } catch (error) {
+      console.error('Search failed:', error);
+    }
+  }, [firstNameSearch, lastNameSearch, phoneSearch, setSearchResults]);
+
+  const debouncedSearch = useCallback(debounce(handleSearch, 500), [handleSearch]);
+
+  useEffect(() => {
+    debouncedSearch();
+  }, [firstNameSearch, lastNameSearch, phoneSearch, debouncedSearch]);
 
   const clearSearch = () => {
     setFirstNameSearch("");
     setLastNameSearch("");
     setPhoneSearch("");
   };
-
-
 
   return (
     <PopoverRoot>
@@ -58,14 +64,14 @@ const SearchPopup = ({ preferredColors, setSearchResults,
 
       <PopoverContent>
         <PopoverArrow />
-        <PopoverBody colorPalette={preferredColors} color="blue.600">
-          <PopoverTitle fontSize={"xl"} pb={"1rem"}>Find a customer</PopoverTitle>
+        <PopoverBody colorPalette={preferredColors}>
+          <PopoverTitle fontSize={"xl"} pb={"1rem"} color={{base: "primary", _dark: "primaryL"}}>Find a customer</PopoverTitle>
 
           <div className="flexCol">
             <Input
               name="xyz123"
               id="xyz123"
-              autocomplete="xyz123"
+              autoComplete="xyz123"
               variant="subtle"
               value={firstNameSearch}
               onChange={(e) => setFirstNameSearch(e.target.value)}
@@ -75,7 +81,7 @@ const SearchPopup = ({ preferredColors, setSearchResults,
             <Input
               name="xyz123"
               id="xyz123"
-              autocomplete="xyz123"
+              autoComplete="xyz123"
               variant="subtle"
               value={lastNameSearch}
               onChange={(e) => setLastNameSearch(e.target.value)}
@@ -85,7 +91,7 @@ const SearchPopup = ({ preferredColors, setSearchResults,
             <Input
               name="xyz123"
               id="xyz123"
-              autocomplete="xyz123"
+              autoComplete="xyz123"
               variant="subtle"
               value={phoneSearch}
               onChange={(e) => setPhoneSearch(e.target.value)}

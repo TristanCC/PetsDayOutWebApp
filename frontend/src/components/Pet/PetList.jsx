@@ -33,19 +33,18 @@ const PetList = ({ customer, preferredColors, handleEditPet, closePetsPanel }) =
     useEffect(() => {
         const fetchPets = async () => {
             try {
-                setLoading(true)
+                setLoading(true);
                 const response = await fetch(`db/getPets/${customer.id}`);
                 if (!response.ok) {
                     throw new Error('Network response was not ok');
                 }
                 const data = await response.json();
                 setPets(Array.isArray(data) ? data : []);
-                setLoading(false)
+                setLoading(false);
             } catch (error) {
                 console.error('Error fetching pets:', error);
                 setPets([]);
-                setLoading(false)
-                
+                setLoading(false);
             }
         };
 
