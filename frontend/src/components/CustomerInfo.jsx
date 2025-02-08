@@ -5,6 +5,29 @@ import { Field } from "@/components/ui/field";
 import { Textarea } from "@chakra-ui/react";
 import { LuCircleX } from "react-icons/lu";
 
+const createEditableField = (label, value, setValue, edit, setEdit, isMobile, required) => (
+    <Field label={label} required={required}>
+        <HStack>
+            <Input
+                variant={"outline"}
+                size={"lg"}
+                value={value}
+                onChange={(e) => setValue(e.target.value)}
+                disabled={!edit}
+                placeholder={label}
+            />
+            <IconButton
+                aria-label={`Edit ${label}`}
+                size="sm"
+                variant="ghost"
+                onClick={() => setEdit(!edit)}
+            >
+                <FaRegEdit />
+            </IconButton>
+        </HStack>
+    </Field>
+);
+
 const CustomerInfo = ({ selectedCustomer, setCustomerInfoOpen, updateCustomerInState }) => {
     const [firstName, setFirstName] = useState(selectedCustomer.firstName);
     const [middleName, setMiddleName] = useState(selectedCustomer.middleName);
@@ -103,8 +126,6 @@ const CustomerInfo = ({ selectedCustomer, setCustomerInfoOpen, updateCustomerInS
             alignItems="center"
             justifyContent="center"
             margin={"auto"}
-            
-            
         >
             <Box
                 borderRadius="lg"
@@ -136,154 +157,11 @@ const CustomerInfo = ({ selectedCustomer, setCustomerInfoOpen, updateCustomerInS
                 </Box>
                 <form onSubmit={handleSubmit}>
                     <VStack spacing={4} justifySelf={"center"}>
-                        {isMobile ? (
-                            <>
-                                <Field label="First Name" required>
-                                    <HStack>
-                                        <Input
-                                            variant={"outline"}
-                                            size={"lg"}
-                                            value={firstName}
-                                            onChange={(e) => setFirstName(e.target.value)}
-                                            disabled={!editFirstName}
-                                            placeholder="First Name"
-                                            
-                                        />
-                                        <IconButton
-                                            aria-label="Edit First Name"
-                                            size="sm"
-                                            variant="ghost"
-                                            onClick={() => handleClickEdit("firstName")}
-                                        >
-                                            <FaRegEdit />
-                                        </IconButton>
-                                    </HStack>
-                                </Field>
-                                <Field label="Middle Name">
-                                    <HStack>
-                                        <Input
-                                            variant={"outline"}
-                                            size={"lg"}
-                                            value={middleName || ""}
-                                            onChange={(e) => setMiddleName(e.target.value)}
-                                            disabled={!editMiddleName}
-                                            placeholder="Middle Name"
-                                        />
-                                        <IconButton
-                                            aria-label="Edit Middle Name"
-                                            size="sm"
-                                            variant="ghost"
-                                            onClick={() => handleClickEdit("middleName")}
-                                        >
-                                            <FaRegEdit />
-                                        </IconButton>
-                                    </HStack>
-                                </Field>
-                            </>
-                        ) : (
-                            <>
-                                <Field label="First Name" required>
-                                    <HStack>
-                                        <Input
-                                            variant={"outline"}
-                                            size={"lg"}
-                                            value={firstName}
-                                            onChange={(e) => setFirstName(e.target.value)}
-                                            disabled={!editFirstName}
-                                            placeholder="First Name"
-                                        />
-                                        <IconButton
-                                            aria-label="Edit First Name"
-                                            size="sm"
-                                            variant="ghost"
-                                            onClick={() => handleClickEdit("firstName")}
-                                        >
-                                            <FaRegEdit />
-                                        </IconButton>
-                                    </HStack>
-                                </Field>
-                                <Field label="Middle Name">
-                                    <HStack>
-                                        <Input
-                                            variant={"outline"}
-                                            size={"lg"}
-                                            value={middleName || ""}
-                                            onChange={(e) => setMiddleName(e.target.value)}
-                                            disabled={!editMiddleName}
-                                            placeholder="Middle Name"
-                                        />
-                                        <IconButton
-                                            aria-label="Edit Middle Name"
-                                            size="sm"
-                                            variant="ghost"
-                                            onClick={() => handleClickEdit("middleName")}
-                                        >
-                                            <FaRegEdit />
-                                        </IconButton>
-                                    </HStack>
-                                </Field>
-                            </>
-                        )}
-                        <Field label="Last Name" required>
-                            <HStack>
-                                <Input
-                                    variant={"outline"}
-                                    size={"lg"}
-                                    value={lastName}
-                                    onChange={(e) => setLastName(e.target.value)}
-                                    disabled={!editLastName}
-                                    placeholder="Last Name"
-                                />
-                                <IconButton
-                                    aria-label="Edit Last Name"
-                                    size="sm"
-                                    variant="ghost"
-                                    onClick={() => handleClickEdit("lastName")}
-                                >
-                                    <FaRegEdit />
-                                </IconButton>
-                            </HStack>
-                        </Field>
-                        <Field label="Phone Number" required>
-                            <HStack>
-                                <Input
-                                    variant={"outline"}
-                                    size={"lg"}
-                                    value={phoneNumber}
-                                    onChange={(e) => setPhoneNumber(e.target.value)}
-                                    disabled={!editPhoneNumber}
-                                    placeholder="Phone Number"
-                                />
-                                <IconButton
-                                    aria-label="Edit Phone Number"
-                                    size="sm"
-                                    variant="ghost"
-                                    onClick={() => handleClickEdit("phoneNumber")}
-                                >
-                                    <FaRegEdit />
-                                </IconButton>
-                            </HStack>
-                        </Field>
-                        <Field label="Email">
-                            <HStack>
-                                <Input
-                                    variant={"outline"}
-                                    size={"lg"}
-                                    value={email || ""}
-                                    onChange={(e) => setEmail(e.target.value)}
-                                    disabled={!editEmail}
-                                    placeholder="Email"
-                                />
-                                <IconButton
-                                    aria-label="Edit Email"
-                                    size="sm"
-                                    variant="ghost"
-                                    onClick={() => handleClickEdit("email")}
-                                >
-                                    <FaRegEdit />
-                                </IconButton>
-                            </HStack>
-                        </Field>
+                        {createEditableField("First Name", firstName, setFirstName, editFirstName, setEditFirstName, isMobile, true)}
+                        {createEditableField("Middle Name", middleName, setMiddleName, editMiddleName, setEditMiddleName, isMobile, false)}
+                        {createEditableField("Last Name", lastName, setLastName, editLastName, setEditLastName, isMobile, true)}
+                        {createEditableField("Phone Number", phoneNumber, setPhoneNumber, editPhoneNumber, setEditPhoneNumber, isMobile, true)}
+                        {createEditableField("Email", email, setEmail, editEmail, setEditEmail, isMobile, false)}
                         <Field label="Customer Notes">
                             <Textarea
                                 value={customerComment}

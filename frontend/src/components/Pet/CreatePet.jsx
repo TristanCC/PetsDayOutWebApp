@@ -17,7 +17,7 @@ import DogAnimation from "../../assets/Dog.gif"
 import DogResting from "../../assets/DogResting.png"
 import { FaCamera } from "react-icons/fa6";
 
-const CreatePetSize = ({ customer, onPetCreated }) => {
+const CreatePet = ({ customer, setCreatePetPressed, onPetCreated }) => {
     const [sizeButton, setSizeButton] = useState(null);
     const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
     const [smallImageSrc, setSmallImageSrc] = useState(DogResting);
@@ -204,9 +204,17 @@ const CreatePetSize = ({ customer, onPetCreated }) => {
             disabled={name === "" || breed === "" || sizeButton === null}>
                 Submit
             </Button>
+            <Button
+                mt={4}
+                w={"100%"}
+                variant={"outline"}
+                onClick={() => setCreatePetPressed(false)}
+            >
+                Back
+            </Button>
         </form>
         </>
     );
 };
 
-export default CreatePetSize;
+export default CreatePet;

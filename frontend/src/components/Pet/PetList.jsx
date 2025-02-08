@@ -28,6 +28,7 @@ const PetList = ({ customer, preferredColors, handleEditPet, closePetsPanel }) =
     const [loading, setLoading] = useState(true)
 
     const [createPetPressed, setCreatePetPressed] = useState(false)
+    const [showEmptyState, setShowEmptyState] = useState(true)
 
     const reloadPets = async () => {
         try {
@@ -70,8 +71,13 @@ const PetList = ({ customer, preferredColors, handleEditPet, closePetsPanel }) =
         }
     }, [customer]);
 
+    const handleBack = () => {
+        setCreatePetPressed(false);
+        setShowEmptyState(pets.length === 0);
+    };
+
     return (
-        <div className="customerInfo">
+        <Box className="emptyState">
             <Box
                 className="transparentBackground"
                 pos={"fixed"}
@@ -80,7 +86,7 @@ const PetList = ({ customer, preferredColors, handleEditPet, closePetsPanel }) =
                 top={"0px"}
                 bottom={"0px"}
                 backgroundColor={"rgba(18, 18, 18, 0.5)"}
-                backdropFilter="blur(5px)"
+                backdropFilter="blur(1px)"
                 opacity={"100%"}
                 zIndex={-1}
                 pointerEvents={"none"}
@@ -97,7 +103,7 @@ const PetList = ({ customer, preferredColors, handleEditPet, closePetsPanel }) =
                 >
                     <Text>Fetching pets...</Text>
                 </Box>
-            ) : pets.length === 0 ? (
+            ) : pets.length === 0 && showEmptyState ? (
                 <Box
                     bg={{ base: "primarySurfaceL", _dark: "primarySurface" }}
                     borderRadius={"1rem"}
@@ -129,10 +135,10 @@ const PetList = ({ customer, preferredColors, handleEditPet, closePetsPanel }) =
                                         
                         <Group>
                             <Button>Link Customers</Button>
-                            <Button onClick={()=>setCreatePetPressed(true)}>Create Pet</Button>
+                            <Button onClick={()=>{setCreatePetPressed(true); setShowEmptyState(false);}}>Create Pet</Button>
                         </Group>
                     </EmptyState>
-                    ) : (<CreatePet customer={customer} onPetCreated={() => { setCreatePetPressed(false); reloadPets(); }} />)}
+                    ) : (<CreatePet customer={customer} onPetCreated={() => { setCreatePetPressed(false); reloadPets(); }} setCreatePetPressed={handleBack} />)}
                 </Box>
             ) : (
                 <Box
@@ -156,7 +162,7 @@ const PetList = ({ customer, preferredColors, handleEditPet, closePetsPanel }) =
                     >
                         <LuCircleX />
                     </IconButton>
-
+                    {!createPetPressed ? ( 
                     <div className="customerInfoHeader">
                         <Box display={"flex"} flexDir={"column"} gap={"1rem"}>
                             <Text
@@ -181,12 +187,14 @@ const PetList = ({ customer, preferredColors, handleEditPet, closePetsPanel }) =
                                 ))}
                             </AccordionRoot>
                             <Button>Link Customers</Button>
-                            <Button>Add Pet</Button>
+                            <Button onClick={()=>setCreatePetPressed(true)}>Add Pet</Button>
                         </Box>
                     </div>
+                    ) : (<CreatePet customer={customer} setCreatePetPressed={handleBack}
+                    onPetCreated={() => { setCreatePetPressed(false); reloadPets(); }} />)}
                 </Box>
             )}
-        </div>
+        </Box>
     );
 };
 
