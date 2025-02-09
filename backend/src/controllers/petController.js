@@ -54,3 +54,25 @@ export const getPets = async (req, res) => {
     }
 };
 
+export const updatePet = async (req, res) => {
+    const { id, name, breed, size, photoUrl, notes } = req.body;
+    console.log("Received update request for pet:", { id, name, breed, size, photoUrl, notes });
+
+    try {
+        const pet = await Pet.findByPk(id); // Find pet by primary key
+        console.log("Pet found:", pet);
+
+        if (!pet) {
+            console.log("Pet not found with id:", id);
+            return res.status(404).json({ message: 'Pet not found' });
+        }
+
+        await pet.update({ name, breed, size, photoUrl, notes });
+        console.log("Pet updated successfully:", pet);
+
+        res.status(200).json({ message: 'Pet updated successfully', pet });
+    } catch (error) {
+        console.error('Error updating pet:', error);
+        res.status(500).json({ error: 'Failed to update pet.' });
+    }
+};

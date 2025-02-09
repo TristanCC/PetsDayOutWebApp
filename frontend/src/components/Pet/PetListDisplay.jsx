@@ -5,12 +5,13 @@ import CreatePet from "./CreatePet2";
 import { Separator } from "@chakra-ui/react";
 
 const PetListDisplay = ({ pets, createPetPressed, setCreatePetPressed, closePetsPanel, customer, handleBack, reloadPets }) => {
-  return (
+    const [petToEdit, setPetToEdit] = useState({})
+    return (
     <Box
       bg={{ base: "primarySurfaceL", _dark: "primaryMidpoint" }}
       borderRadius={"1rem"}
       p={"2rem"}
-      w={"70vw"}
+      w={createPetPressed ? "25" : "50vw"}
       minW={"350px"}
       maxW={"1200px"}
       maxH={"90vh"}
@@ -48,22 +49,23 @@ const PetListDisplay = ({ pets, createPetPressed, setCreatePetPressed, closePets
             animationDuration: "120ms",
           }}
         >
-          <Text
-            fontSize={"2xl"}
-            fontWeight={"medium"}
-            position={"relative"}
-          >
-            {customer.firstName} {customer.lastName}
-            {customer.lastName.charAt(customer.lastName.length - 1) === "s"
-              ? "'"
-              : "'s"}{" "}
-            Pets
-          </Text>
-          <Separator />
+          <Box display={!createPetPressed ? "flex" : "none"} >
+              <Text
+                fontSize={"2xl"}
+                fontWeight={"medium"}
+                position={"relative"}
+              >
+                {customer.firstName} {customer.lastName}
+                {customer.lastName.charAt(customer.lastName.length - 1) === "s"
+                  ? "'"
+                  : "'s"}{" "}
+                Pets
+              </Text>
+          </Box>
           {!createPetPressed ? (
             <>
               <Box w={"100%"} p={2} bg={{ base: "primarySurfaceL", _dark: "transparent" }} rounded={"lg"}>
-                <VStack spacing={4} w="100%" flexDir={"row"} flexWrap={"wrap"} justify={"center"}>
+                <VStack gap={4} w="100%" flexDir={"row"} flexWrap={"wrap"} justify={"center"}>
                   {pets.map((item, index) => (
                     <Card.Root key={index} w="350px" variant="outline">
                       <Card.Body>
@@ -72,26 +74,28 @@ const PetListDisplay = ({ pets, createPetPressed, setCreatePetPressed, closePets
                             <Text>Size: {item.size}</Text>
                             <Textarea
                               readOnly
-                              autoresize
+                              resize={"none"}
                               placeholder="Preferred services and cut:&#10;Behavioral notes, special handling instructions:&#10;Payment history:"
                               minH={"8lh"}
                               maxH={"15lh"}
                               value={item.notes}
                             />
-                            <Button w={"100%"} variant={"outline"} mt={2}>Edit Pet</Button>
+                            <Button w={"100%"} variant={"outline"} mt={2} 
+                            onClick={() => {setCreatePetPressed(true); setPetToEdit(item)}}>Edit Pet</Button>
                         </VStack>
                       </Card.Body>
                     </Card.Root>
                   ))}
                 </VStack>
               </Box>
-              <HStack justify={"space-between"} w="100%">
+              <HStack justify={"center"}  w="100%">
                 <Button variant={"surface"}>Link Customers</Button>
                 <Button onClick={() => setCreatePetPressed(true)} variant={"surface"}>Add Pet</Button>
               </HStack>
             </>
           ) : (
-            <CreatePet customer={customer} setCreatePetPressed={handleBack} onPetCreated={() => { setCreatePetPressed(false); reloadPets(); }} />
+            <CreatePet customer={customer} setCreatePetPressed={handleBack} onPetCreated={() => { setCreatePetPressed(false); reloadPets(); }}
+             petToEdit={petToEdit} setPetToEdit={setPetToEdit}/>
           )}
         </Box>
       </Box>

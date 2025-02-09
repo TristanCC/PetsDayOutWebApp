@@ -74,6 +74,7 @@ const PetList = ({ customer, preferredColors, handleEditPet, closePetsPanel }) =
                 opacity={"100%"}
                 zIndex={-1}
                 pointerEvents={"none"}
+                overflowY={"scroll"}
             ></Box>
             {loading ? (
                 <LoadingState loadingText={"Fetching pets..."} />

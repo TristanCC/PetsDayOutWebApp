@@ -22,8 +22,9 @@ router.put('/db/updateCustomer/:id', customerController.updateCustomer)
     PETS
 */ 
 
-router.get('/db/getPets/:id', petController.getPets)
 router.post('/db/createPet', petController.createPet)
+router.get('/db/getPets/:id', petController.getPets)
+router.put('/db/updatePet', petController.updatePet)
 
 
 

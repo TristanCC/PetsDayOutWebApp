@@ -20,17 +20,17 @@ import { motion } from "framer-motion";
 const MotionBox = motion(Box);
 const MotionButton = motion(Button);
 
-const CreatePet2 = ({ customer, setCreatePetPressed, onPetCreated }) => {
-  const [sizeButton, setSizeButton] = useState(null);
+const CreatePet2 = ({ customer, setCreatePetPressed, onPetCreated, petToEdit, setPetToEdit }) => {
+  const [sizeButton, setSizeButton] = useState(petToEdit ? petToEdit.size : null);
   const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
   const [smallImageSrc, setSmallImageSrc] = useState(DogResting);
   const [mediumImageSrc, setMediumImageSrc] = useState(DogResting);
   const [largeImageSrc, setLargeImageSrc] = useState(DogResting);
 
-  const [name, setName] = useState("");
-  const [breed, setBreed] = useState("");
-  const [image, setImage] = useState(null);
-  const [notes, setNotes] = useState("");
+  const [name, setName] = useState(petToEdit ? petToEdit.name : "");
+  const [breed, setBreed] = useState(petToEdit ? petToEdit.breed : "");
+  const [image, setImage] = useState(petToEdit ? petToEdit.photoUrl : null);
+  const [notes, setNotes] = useState(petToEdit ? petToEdit.notes : "");
 
   const placeholders = [
     { name: "Damon", breed: "Dachshund" },
@@ -104,29 +104,40 @@ const CreatePet2 = ({ customer, setCreatePetPressed, onPetCreated }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    const endpoint = petToEdit.id ? "/db/updatePet" : "/db/createPet";
+    const method = petToEdit.id ? "PUT" : "POST";
+
+    const petData = {
+        id: petToEdit.id,
+        name: name,
+        breed: breed,
+        size: sizeButton,
+        photoUrl: image,
+        ownerID: customer.id,
+        notes: notes
+    };
+
+    console.log("Submitting pet data:", petData);
+
     try {
-      const response = await fetch("/db/createPet", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          name: name,
-          breed: breed,
-          size: sizeButton,
-          photoURL: image,
-          ownerID: customer.id,
-          notes: notes
-        }),
-      });
-      if (!response.ok) {
-        throw new Error("Network response was not ok");
-      }
-      onPetCreated();
+        const response = await fetch(endpoint, {
+            method: method,
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(petData),
+        });
+
+        if (!response.ok) {
+            throw new Error("Network response was not ok");
+        }
+
+        onPetCreated();
     } catch (error) {
-      console.error("Error creating pet:", error);
+        console.error("Error creating/updating pet:", error);
     }
-  };
+};
+
 
   return (
     <>
@@ -269,6 +280,9 @@ const CreatePet2 = ({ customer, setCreatePetPressed, onPetCreated }) => {
             disabled={name === "" || breed === "" || sizeButton === null}
           >
             Save
+          </Button>
+          <Button mt={4} w={"100%"} variant={"outline"} onClick={() => setCreatePetPressed(false)}>
+            Back
           </Button>
         </form>
       </MotionBox>
