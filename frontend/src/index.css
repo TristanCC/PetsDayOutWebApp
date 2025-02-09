@@ -56,15 +56,6 @@ body {
   flex-direction: column;
 }
 
-.tabs {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: .7rem;
-  background-color: inherit; /* Add this line */
-  z-index: 1000; /* Add this line */
-}
-
 .tabs-content {
   min-height: 50vh; /* Add this line */
 }

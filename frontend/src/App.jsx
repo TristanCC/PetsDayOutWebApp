@@ -35,6 +35,7 @@ function App() {
 
   const [offset, setOffset] = useState(0)
 
+
   useEffect(() => {
     const fetchCustomers = async () => {
       try {

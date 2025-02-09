@@ -22,19 +22,32 @@ const PetListDisplay = ({ pets, createPetPressed, setCreatePetPressed, closePets
       justifyItems={"center"}
       alignItems={"start"}
     >
-      <IconButton
-        position={"absolute"}
-        top={0}
-        right={0}
-        aria-label="close update customer"
-        size={"lg"}
-        variant={"ghost"}
-        borderRadius={"1rem"}
-        onClick={() => closePetsPanel()}
-        zIndex={100000}
-      >
-        <LuCircleX />
-      </IconButton>
+      <HStack w={"100%"} top={0} zIndex={9999} justify={"space-between"}>
+        <Box display={!createPetPressed ? "flex" : "none"} >
+          <Text
+            fontSize={"2xl"}
+            fontWeight={"medium"}
+            position={"relative"}
+          >
+            {customer.firstName} {customer.lastName}
+            {customer.lastName.charAt(customer.lastName.length - 1) === "s"
+              ? "'"
+              : "'s"}{" "}
+            Pets
+          </Text>
+        </Box>
+        <IconButton
+          aria-label="close update customer"
+          size={"lg"}
+          variant={"ghost"}
+          borderRadius={"1rem"}
+          display={createPetPressed ? "none" : "flex"}
+          onClick={() => closePetsPanel()}
+          zIndex={100000}
+        >
+          <LuCircleX />
+        </IconButton>
+      </HStack>
       <Box className="customerInfoHeader" flex={1} w="100%">
         <Box display={"flex"} flexDir={"column"} gap={"1rem"}
           justifyItems={"start"} alignItems={"start"}
@@ -49,19 +62,6 @@ const PetListDisplay = ({ pets, createPetPressed, setCreatePetPressed, closePets
             animationDuration: "120ms",
           }}
         >
-          <Box display={!createPetPressed ? "flex" : "none"} >
-              <Text
-                fontSize={"2xl"}
-                fontWeight={"medium"}
-                position={"relative"}
-              >
-                {customer.firstName} {customer.lastName}
-                {customer.lastName.charAt(customer.lastName.length - 1) === "s"
-                  ? "'"
-                  : "'s"}{" "}
-                Pets
-              </Text>
-          </Box>
           {!createPetPressed ? (
             <>
               <Box w={"100%"} p={2} bg={{ base: "primarySurfaceL", _dark: "transparent" }} rounded={"lg"}>

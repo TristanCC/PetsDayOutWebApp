@@ -71,19 +71,21 @@ function Navbar({
           }}
           >
           <Tabs.Root value={value} onValueChange={(e) => setValue(e.value)} size="sm" variant="line">
-            <Tabs.List className="tabs">
-              <Box className="tabs">
-                <Tabs.Trigger fontSize={windowWidth > 500 ? "2xl" : "xl"} letterSpacing="wider" value="first">
-                  <Text>Customers</Text>
-                </Tabs.Trigger>
-                <Tabs.Trigger fontSize={windowWidth > 500 ? "2xl" : "xl"} letterSpacing="wider" value="second">
-                  <Text>Present</Text>
-                </Tabs.Trigger>
-              </Box>
-              <Box className="tabs">
-                <SearchPopup preferredColors={preferredColors} setSearchResults={setSearchResults}
-                  firstNameSearch={firstNameSearch} setFirstNameSearch={setFirstNameSearch}
-                  lastNameSearch={lastNameSearch} setLastNameSearch={setLastNameSearch} phoneSearch={phoneSearch} setPhoneSearch={setPhoneSearch} />
+            <Tabs.List>
+              <Box display={"flex"} justifyContent={"space-between"} w={"100%"} alignContent={"center"} p={4}>
+                <Box className="tabs" display={"flex"}>
+                  <Tabs.Trigger fontSize={windowWidth > 500 ? "2xl" : "xl"} letterSpacing="wider" value="first">
+                    <Text>Customers</Text>
+                  </Tabs.Trigger>
+                  <Tabs.Trigger fontSize={windowWidth > 500 ? "2xl" : "xl"} letterSpacing="wider" value="second">
+                    <Text>Present</Text>
+                  </Tabs.Trigger>
+                </Box>
+                <Box>
+                  <SearchPopup preferredColors={preferredColors} setSearchResults={setSearchResults}
+                    firstNameSearch={firstNameSearch} setFirstNameSearch={setFirstNameSearch}
+                    lastNameSearch={lastNameSearch} setLastNameSearch={setLastNameSearch} phoneSearch={phoneSearch} setPhoneSearch={setPhoneSearch} />
+                </Box>
               </Box>
             </Tabs.List>
 
