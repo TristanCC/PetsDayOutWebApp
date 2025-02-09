@@ -6,12 +6,14 @@ import LoadingState from "./LoadingState";
 import EmptyStateComponent from "./EmptyStateComponent";
 import PetListDisplay from "./PetListDisplay";
 
+
 const PetList = ({ customer, preferredColors, handleEditPet, closePetsPanel }) => {
     const [pets, setPets] = useState([]);
     const [loading, setLoading] = useState(true)
 
     const [createPetPressed, setCreatePetPressed] = useState(false)
     const [showEmptyState, setShowEmptyState] = useState(true)
+
 
     const reloadPets = async () => {
         try {

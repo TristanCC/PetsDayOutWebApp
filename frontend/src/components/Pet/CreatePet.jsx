@@ -141,9 +141,8 @@ const CreatePet = ({ customer, setCreatePetPressed, onPetCreated }) => {
         exit={{ opacity: 0, scale: 0.95, y: -20 }}
         transition={{ duration: 0.3, ease: "easeInOut" }}
       >
-        <Text fontSize="2xl" fontWeight="medium">
-          Track {customer.firstName}
-          {customer.firstName[customer.firstName.length - 1] !== "s" ? "'s" : "'"} Pet
+        <Text fontSize="xl" fontWeight="medium">
+          Track a new pet
         </Text>
       </MotionBox>
       <MotionBox

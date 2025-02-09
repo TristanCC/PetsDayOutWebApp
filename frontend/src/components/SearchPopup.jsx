@@ -67,7 +67,7 @@ const SearchPopup = ({ preferredColors, setSearchResults,
         <PopoverBody colorPalette={preferredColors}>
           <PopoverTitle fontSize={"xl"} pb={"1rem"} color={{base: "primary", _dark: "primaryL"}}>Find a customer</PopoverTitle>
 
-          <div className="flexCol">
+          <Box className="flexCol">
             <Input
               name="xyz123"
               id="xyz123"
@@ -103,7 +103,7 @@ const SearchPopup = ({ preferredColors, setSearchResults,
             <HStack>
               <Button type="button" variant={"outline"} onClick={clearSearch} disabled={!firstNameSearch && !lastNameSearch && !phoneSearch}>Clear</Button>
             </HStack>
-          </div>
+          </Box>
         </PopoverBody>
       </PopoverContent>
     </PopoverRoot>

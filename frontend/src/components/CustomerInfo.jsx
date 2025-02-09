@@ -149,7 +149,7 @@ const CustomerInfo = ({ selectedCustomer, setCustomerInfoOpen, updateCustomerInS
                 p={6}
                 boxShadow="lg"
                 position="fixed"
-                bg={{ base: "primarySurfaceL", _dark: "primarySurface" }}
+                bg={{ base: "primarySurfaceL", _dark: "primaryMidpoint" }}
             >
                 <Box minW={"259px"} maxW={"400px"}  w="100%" borderRadius={"lg"} p={2}  display={"flex"} gap={"3"} lineHeight={"2rem"}
                  justifyContent={"space-between"} alignItems={"center"}>

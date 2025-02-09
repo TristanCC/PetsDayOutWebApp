@@ -1,10 +1,25 @@
 import { useEffect, useState } from "react";
-import { Button, Input, IconButton, HStack, Box, Text, useMediaQuery } from "@chakra-ui/react";
+import { Button, Input, IconButton, HStack, Box, Text, VStack } from "@chakra-ui/react";
 import { Field } from "@/components/ui/field";
 import { Textarea } from "@chakra-ui/react";
 import { LuCircleX } from "react-icons/lu";
+import CustomerCreationPet from './CustomerCreationPet';
+import { Checkbox } from "@/components/ui/checkbox"
 
-import CustomerCreationPet from './CustomerCreationPet'
+const createEditableField = (label, value, setValue, required) => (
+  <Field label={label} required={required} mb={"1rem"}>
+    <HStack>
+      <Input
+        variant={"outline"}
+        size={"lg"}
+        value={value}
+        onChange={(e) => setValue(e.target.value)}
+        placeholder={label}
+        backgroundColor={{ base: "primaryL", _dark: "primary" }}
+      />
+    </HStack>
+  </Field>
+);
 
 const CreateCustomer = ({ setCustomerInfoOpen }) => {
   // State variables for form fields
@@ -14,19 +29,7 @@ const CreateCustomer = ({ setCustomerInfoOpen }) => {
   const [email, setEmail] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");
   const [step, setStep] = useState(1);
-  const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
-
-  // Effect to handle window resize events
-  useEffect(() => {
-    const handleResize = () => {
-      setIsMobile(window.innerWidth <= 768);
-    };
-
-    window.addEventListener("resize", handleResize);
-    return () => {
-      window.removeEventListener("resize", handleResize);
-    };
-  }, []);
+  const [addPetChecked, setAddPetChecked] = useState(false);
 
   // Handle form submission
   const handleSubmit = (e) => {
@@ -46,7 +49,7 @@ const CreateCustomer = ({ setCustomerInfoOpen }) => {
   };
 
   return (
-    <div className="customerInfo">
+    <Box className="customerInfo" p={4} bg={{ base: "primaryL", _dark: "primaryMidpoint" }} borderRadius="md" boxShadow="md">
       {/* Modal background */}
       <Box
         className="transparentBackground"
@@ -65,14 +68,23 @@ const CreateCustomer = ({ setCustomerInfoOpen }) => {
 
       {/* Modal content */}
       <Box
-        bg={{ base: "primarySurfaceL", _dark: "primarySurface" }}
+        bg={{ base: "primaryL", _dark: "primaryMidpoint" }}
         borderRadius={"1rem"}
         p={"2rem"}
         w={"100%"}
         h={"auto"}
         cursor={"radio"}
         flex={1}
-        flexDir={"row"}
+        flexDir={"column"}
+        data-state="open"
+        _open={{
+          animationName: "fade-in, scale-in",
+          animationDuration: "300ms",
+        }}
+        _closed={{
+          animationName: "fade-out, scale-out",
+          animationDuration: "120ms",
+        }}
       >
         {/* Close button */}
         <IconButton
@@ -89,133 +101,57 @@ const CreateCustomer = ({ setCustomerInfoOpen }) => {
         </IconButton>
 
         {/* Modal title */}
-        <Text fontSize={"2xl"} fontWeight={"medium"} mb={"1rem"}
-         position={"relative"} justifySelf={"center"}
-         bottom={"0.75rem"}
-         >Create Customer</Text>
+        <Text fontSize={"2xl"} fontWeight={"medium"} mb={2} position={"relative"} justifySelf={"start"} bottom={"0.75rem"}>
+          Create Customer
+        </Text>
 
-        <div className="customerInfoHeader">
+        <Box className="customerInfoHeader" h={"100%"}>
           <form onSubmit={handleSubmit} className="customerInfoForm">
-            <div className="formWrapper">
-              {/* Form fields for step 1 */}
-              <div className="customerInfoFormInner">
-                {(!isMobile || step === 1) && (
+            <VStack spacing={4} align="stretch">
+              <Box>
+                {/* Form fields for step 1 */}
+                {step === 1 && (
                   <>
-                    <div className="editInput">
-                      <Field label="First name" required>
-                        <HStack w={"100%"}>
-                          <Input
-                            variant="subtle"
-                            fontSize={"md"}
-                            value={firstName}
-                            size="md"
-                            onChange={(e) => setFirstName(e.target.value)}
-                          />
-                        </HStack>
-                      </Field>
-                    </div>
-                    <div className="editInput">
-                      <Field label="Middle name">
-                        <HStack w={"100%"}>
-                          <Input
-                            variant="subtle"
-                            fontSize={"md"}
-                            value={middleName}
-                            size="md"
-                            onChange={(e) => setMiddleName(e.target.value)}
-                          />
-                        </HStack>
-                      </Field>
-                    </div>
-                    <div className="editInput">
-                      <Field label="Last name" required>
-                        <HStack w={"100%"}>
-                          <Input
-                            variant="subtle"
-                            fontSize={"md"}
-                            value={lastName}
-                            size="md"
-                            onChange={(e) => setLastName(e.target.value)}
-                          />
-                        </HStack>
-                      </Field>
-                    </div>
-                    <div className="editInput">
-                      <Field label="Phone number" required>
-                        <HStack w={"100%"}>
-                          <Input
-                            variant="subtle"
-                            fontSize={"md"}
-                            value={phoneNumber}
-                            size="md"
-                            onChange={(e) => setPhoneNumber(e.target.value)}
-                          />
-                        </HStack>
-                      </Field>
-                    </div>
-                    <div className="editInput">
-                      <Field label="Email">
-                        <HStack w={"100%"}>
-                          <Input
-                            variant="subtle"
-                            fontSize={"md"}
-                            value={email}
-                            placeholder="N/A"
-                            size="md"
-                            onChange={(e) => setEmail(e.target.value)}
-                          />
-                        </HStack>
-                      </Field>
-                    </div>
+                    {createEditableField("First Name", firstName, setFirstName, true)}
+                    {createEditableField("Middle Name", middleName, setMiddleName, false)}
+                    {createEditableField("Last Name", lastName, setLastName, true)}
+                    {createEditableField("Phone Number", phoneNumber, setPhoneNumber, true)}
+                    {createEditableField("Email", email, setEmail, false)}
+                    <Box mt={"1rem"}>
+                      <Checkbox checked={addPetChecked} onCheckedChange={(e) => setAddPetChecked(!addPetChecked)}>
+                        Add pets now?
+                      </Checkbox>
+                    </Box>
                   </>
                 )}
-
                 {/* Form fields for step 2 */}
-                {(isMobile && step === 2) && (
-                  <>
-                    <h1>this is step 2</h1>
-                    <CustomerCreationPet/>
-                  </>
+                {step === 2 && (
+                  <CustomerCreationPet />
                 )}
-
-                {/* Navigation buttons for mobile view */}
-                {isMobile && (
-                  <HStack w={"100%"} mt={"1rem"}>
-                   
-                    <Button onClick={handlePrevStep} w={"50%"} disabled={step === 1}>
+                {/* Navigation buttons */}
+                <HStack w={"100%"} mt={"1rem"}>
+                  {addPetChecked && step === 1 && (
+                    <Button onClick={handleNextStep} w={"100%"}>
+                      Next
+                    </Button>
+                  )}
+                  {addPetChecked && step === 2 && (
+                    <Button onClick={handlePrevStep} w={"50%"}>
                       Back
                     </Button>
-                    
-                    {step < 2 && (
-                      <Button onClick={handleNextStep} w={"50%"}>
-                        Next
-                      </Button>
-                    )}
-                    {step === 2 && (
-                      <Button type="submit" w={"50%"}>
-                        Submit
-                      </Button>
-                    )}
-                  </HStack>
-                )}
-
-                {/* Submit button for desktop view */}
-                {!isMobile && (
-                  <Button type="submit" w={"100%"} mt={"1rem"}>
-                    Submit
-                  </Button>
-                )}
-              </div>
-
-              {/* Additional form fields for desktop view */}
-              {!isMobile &&
-                <CustomerCreationPet/>
-              }
-            </div>
+                  )}
+                  {(step === 2 || !addPetChecked) && (
+                    <Button type="submit" w={step === 2 ? "50%" : "100%"}>
+                      Submit
+                    </Button>
+                  )}
+                </HStack>
+              </Box>
+            </VStack>
           </form>
-        </div>
+        </Box>
       </Box>
-    </div>
+    </Box>
   );
 };
 

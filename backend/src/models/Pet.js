@@ -29,7 +29,11 @@ const Pet = sequelize.define('Pet', {
     validate: {
       isUrl: true,
     }
-  }
+  },
+  notes: {
+    type: DataTypes.TEXT,
+    allowNull: true
+  },
 });
 
 

@@ -58,7 +58,18 @@ function Navbar({
     <>
       {isLoggedIn ? (
         <Box colorPalette={preferredColors} zIndex="1000" bg={{ base: "primarySurfaceL", _dark: "primarySurface" }} borderRadius={"1rem"}
-          position="relative" top={windowWidth > 800 ? "10%" : 0}>
+          position="relative" top={windowWidth > 800 ? "10%" : 0}
+          
+          data-state="open"
+          _open={{
+          animationName: "fade-in, scale-in",
+          animationDuration: "300ms",
+          }}
+          _closed={{
+          animationName: "fade-out, scale-out",
+          animationDuration: "120ms",
+          }}
+          >
           <Tabs.Root value={value} onValueChange={(e) => setValue(e.value)} size="sm" variant="line">
             <Tabs.List className="tabs">
               <Box className="tabs">

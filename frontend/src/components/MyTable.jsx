@@ -38,7 +38,16 @@ const MyTable = ({ selectedCustomer, setSelectedCustomer, customers, preferredCo
       className="tableRow"
       bg={{ base: "white", _dark: "primary" }}
       w={"100%"}
-      
+
+      data-state="open"
+      _open={{
+      animationName: "fade-in, scale-in",
+      animationDuration: "300ms",
+      }}
+      _closed={{
+      animationName: "fade-out, scale-out",
+      animationDuration: "120ms",
+      }}
     >
       {/* <Table.Cell>
         <Checkbox className="checkbox"
@@ -98,7 +107,7 @@ const MyTable = ({ selectedCustomer, setSelectedCustomer, customers, preferredCo
   ))
 
   return (
-    <div className="table">
+    <Box className="table">
       <Table.Root interactive stickyHeader striped scrollBehavior={"smooth"} overflow={"hidden"} >
         <Table.Header bg={{ base: "white", _dark: "primary" }}>
           <Table.Row alignItems={"center"} bg={{ base: "white", _dark: "primaryMidpoint" }}>
@@ -132,7 +141,7 @@ const MyTable = ({ selectedCustomer, setSelectedCustomer, customers, preferredCo
           Next
         </Button>
       </Box>
-    </div>
+    </Box>
   )
 }
 
