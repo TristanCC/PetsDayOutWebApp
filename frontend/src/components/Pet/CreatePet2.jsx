@@ -1,4 +1,4 @@
-import { HStack, VStack, Button, Text, Input, Box } from "@chakra-ui/react";
+import { HStack, VStack, Button, Text, Input, Box, Textarea } from "@chakra-ui/react";
 import { useState, useEffect } from "react";
 import { Field } from "@/components/ui/field";
 import { CloseButton } from "@/components/ui/close-button";
@@ -20,7 +20,7 @@ import { motion } from "framer-motion";
 const MotionBox = motion(Box);
 const MotionButton = motion(Button);
 
-const CreatePet = ({ customer, setCreatePetPressed, onPetCreated }) => {
+const CreatePet2 = ({ customer, setCreatePetPressed, onPetCreated }) => {
   const [sizeButton, setSizeButton] = useState(null);
   const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
   const [smallImageSrc, setSmallImageSrc] = useState(DogResting);
@@ -30,6 +30,7 @@ const CreatePet = ({ customer, setCreatePetPressed, onPetCreated }) => {
   const [name, setName] = useState("");
   const [breed, setBreed] = useState("");
   const [image, setImage] = useState(null);
+  const [notes, setNotes] = useState("");
 
   const placeholders = [
     { name: "Damon", breed: "Dachshund" },
@@ -115,6 +116,7 @@ const CreatePet = ({ customer, setCreatePetPressed, onPetCreated }) => {
           size: sizeButton,
           photoURL: image,
           ownerID: customer.id,
+          notes: notes
         }),
       });
       if (!response.ok) {
@@ -134,7 +136,7 @@ const CreatePet = ({ customer, setCreatePetPressed, onPetCreated }) => {
         borderRadius={"lg"}
         alignSelf={"center"}
         justifySelf={"center"}
-        p={2}
+        p={0}
         mb={2}
         initial={{ opacity: 0, scale: 0.95, y: -20 }}
         animate={{ opacity: 1, scale: 1, y: 0 }}
@@ -146,6 +148,7 @@ const CreatePet = ({ customer, setCreatePetPressed, onPetCreated }) => {
         </Text>
       </MotionBox>
       <MotionBox
+      w={"100%"}
         initial={{ opacity: 0, scale: 0.95, y: 20 }}
         animate={{ opacity: 1, scale: 1, y: 0 }}
         exit={{ opacity: 0, scale: 0.95, y: 20 }}
@@ -214,7 +217,7 @@ const CreatePet = ({ customer, setCreatePetPressed, onPetCreated }) => {
             justify={"center"}
             bg={{ base: "primaryDarkL", _dark: "primary" }}
             rounded={"lg"}
-            mb={"1.5rem"}
+            mb={".5rem"}
             initial={{ opacity: 0, scale: 0.95 }}
             animate={{ opacity: 1, scale: 1 }}
             exit={{ opacity: 0, scale: 0.95 }}
@@ -247,16 +250,25 @@ const CreatePet = ({ customer, setCreatePetPressed, onPetCreated }) => {
               <Image src={largeImageSrc} style={animationStyles("80%")} />
             </MotionButton>
           </HStack>
+          <Field label="Notes" mb={".5rem"}>
+              <Box w={"100%"}  bg={{ base: "primaryL", _dark: "primary"}} borderRadius={"sm"}>
+                  <Textarea
+                    variant={"flushed"}
+                    placeholder="Preferred services and cut:&#10;&#10;Behavioral notes, special handling instructions:"
+                    minH="5lh" maxW={"100%"} wordWrap={"break-word"}
+                    value={notes}
+                    onChange={(e) => setNotes(e.target.value)}
+                    p={2}
+                  />
+              </Box>
+          </Field>
           <Button
             type="submit"
             w={"100%"}
-            variant={"solid"}
+            variant={"outline"}
             disabled={name === "" || breed === "" || sizeButton === null}
           >
-            Submit
-          </Button>
-          <Button mt={4} w={"100%"} variant={"outline"} onClick={() => setCreatePetPressed(false)}>
-            Back
+            Save
           </Button>
         </form>
       </MotionBox>
@@ -264,4 +276,4 @@ const CreatePet = ({ customer, setCreatePetPressed, onPetCreated }) => {
   );
 };
 
-export default CreatePet;
+export default CreatePet2;

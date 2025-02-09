@@ -4,6 +4,7 @@ import { Button, Input, IconButton, HStack, Box, Text, VStack, useBreakpointValu
 import { Field } from "@/components/ui/field";
 import { Textarea } from "@chakra-ui/react";
 import { LuCircleX } from "react-icons/lu";
+import { Separator } from "@chakra-ui/react"
 
 const createEditableField = (label, value, setValue, edit, setEdit, isMobile, required) => (
     <Field label={label} required={required}>
@@ -151,7 +152,7 @@ const CustomerInfo = ({ selectedCustomer, setCustomerInfoOpen, updateCustomerInS
                 position="fixed"
                 bg={{ base: "primarySurfaceL", _dark: "primaryMidpoint" }}
             >
-                <Box minW={"259px"} maxW={"400px"}  w="100%" borderRadius={"lg"} p={2}  display={"flex"} gap={"3"} lineHeight={"2rem"}
+                <Box minW={"259px"} maxW={"400px"}  w="100%" borderRadius={"lg"} p={2} py={0}  display={"flex"} gap={"3"} lineHeight={"2rem"}
                  justifyContent={"space-between"} alignItems={"center"}>
                     <Text fontSize="2xl" fontWeight="medium">
                         {selectedCustomer.firstName} {selectedCustomer.lastName}{selectedCustomer.lastName[selectedCustomer.lastName.length-1] !== "s" ? "'s" : "'"} Info
@@ -167,6 +168,8 @@ const CustomerInfo = ({ selectedCustomer, setCustomerInfoOpen, updateCustomerInS
                     <LuCircleX />
                 </IconButton>
                 </Box>
+                <Separator mb={4} w={"80%"} alignSelf={"start"}></Separator>
+        
                 <form onSubmit={handleSubmit}>
                     <VStack spacing={4} justifySelf={"center"}>
                         {createEditableField("First Name", firstName, setFirstName, editFirstName, setEditFirstName, isMobile, true)}

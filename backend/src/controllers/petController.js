@@ -5,11 +5,11 @@ import Pet from '../models/Pet.js'
 // create
 
 export const createPet = async (req, res) => {
-    const { name, breed, size, photoUrl, ownerID } = req.body;
+    const { name, breed, size, photoUrl, ownerID, notes } = req.body;
 
     try {
         // Step 1: Create the pet
-        const newPet = await Pet.create({ name, breed, size, photoUrl });
+        const newPet = await Pet.create({ name, breed, size, photoUrl, notes });
 
         // Step 2: If a ownerID is provided, link the pet to the customer
         if (ownerID) {
@@ -25,7 +25,8 @@ export const createPet = async (req, res) => {
 
 export const linkCustomers = async (req, res) => {
     // take in searched for ownerID, current ownerID, array of current petIDs
-    //
+    // 
+    // 
 }
 
 // GET

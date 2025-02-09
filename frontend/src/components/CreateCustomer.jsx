@@ -6,20 +6,8 @@ import { LuCircleX } from "react-icons/lu";
 import CustomerCreationPet from './CustomerCreationPet';
 import { Checkbox } from "@/components/ui/checkbox"
 
-const createEditableField = (label, value, setValue, required) => (
-  <Field label={label} required={required} mb={"1rem"}>
-    <HStack>
-      <Input
-        variant={"outline"}
-        size={"lg"}
-        value={value}
-        onChange={(e) => setValue(e.target.value)}
-        placeholder={label}
-        backgroundColor={{ base: "primaryL", _dark: "primary" }}
-      />
-    </HStack>
-  </Field>
-);
+import CreatePet from "./Pet/CreatePet2";
+
 
 const CreateCustomer = ({ setCustomerInfoOpen }) => {
   // State variables for form fields
@@ -30,6 +18,35 @@ const CreateCustomer = ({ setCustomerInfoOpen }) => {
   const [phoneNumber, setPhoneNumber] = useState("");
   const [step, setStep] = useState(1);
   const [addPetChecked, setAddPetChecked] = useState(false);
+
+
+  const createEditableField = (label, value, setValue, required) => (
+    <Field label={label} required={required} mb={".5rem"}>
+      <HStack w={"100%"}>
+        <Input
+          variant={"outline"}
+          size={"lg"}
+          value={value}
+          onChange={(e) => setValue(e.target.value)}
+          placeholder={label}
+          backgroundColor={{ base: "primaryL", _dark: "primary" }}
+        />
+      </HStack>
+    </Field>
+  );
+
+
+
+  // pet form
+
+  const [petName, setPetName] = useState("")
+  const [petBreed, setPetBreed] = useState("")
+  const [petSize, setPetSize] = useState("")
+  const [petNotes, setPetNotes] = useState("")
+
+  const [customer, setCustomer] = useState({})
+  const [petList, setPetList] = useState([])
+
 
   // Handle form submission
   const handleSubmit = (e) => {
@@ -49,7 +66,9 @@ const CreateCustomer = ({ setCustomerInfoOpen }) => {
   };
 
   return (
-    <Box className="customerInfo" p={4} bg={{ base: "primaryL", _dark: "primaryMidpoint" }} borderRadius="md" boxShadow="md">
+    <Box className="customerInfo" p={4}
+     bg={{ base: "primaryL", _dark: "primaryMidpoint" }} borderRadius="md" boxShadow="md"
+     minW={"259px"} maxW={"400px"}  w="100%">
       {/* Modal background */}
       <Box
         className="transparentBackground"
@@ -68,7 +87,7 @@ const CreateCustomer = ({ setCustomerInfoOpen }) => {
 
       {/* Modal content */}
       <Box
-        bg={{ base: "primaryL", _dark: "primaryMidpoint" }}
+        bg={{ base: "primarySurfaceL", _dark: "primaryMidpoint" }}
         borderRadius={"1rem"}
         p={"2rem"}
         w={"100%"}
@@ -89,8 +108,8 @@ const CreateCustomer = ({ setCustomerInfoOpen }) => {
         {/* Close button */}
         <IconButton
           position={"absolute"}
-          top={"0"}
-          right={"0"}
+          top={"8"}
+          right={"6"}
           aria-label="close create customer"
           size={"lg"}
           variant={"ghost"}
@@ -101,11 +120,12 @@ const CreateCustomer = ({ setCustomerInfoOpen }) => {
         </IconButton>
 
         {/* Modal title */}
-        <Text fontSize={"2xl"} fontWeight={"medium"} mb={2} position={"relative"} justifySelf={"start"} bottom={"0.75rem"}>
+        { step == 1 && (<Text fontSize={"2xl"} fontWeight={"medium"} mb={2} position={"relative"} justifySelf={"start"} bottom={"0.75rem"}>
           Create Customer
         </Text>
+        )}
 
-        <Box className="customerInfoHeader" h={"100%"}>
+        <Box className="customerInfoHeader" h={"100%"} >
           <form onSubmit={handleSubmit} className="customerInfoForm">
             <VStack spacing={4} align="stretch">
               <Box>
@@ -126,22 +146,29 @@ const CreateCustomer = ({ setCustomerInfoOpen }) => {
                 )}
                 {/* Form fields for step 2 */}
                 {step === 2 && (
-                  <CustomerCreationPet />
+                  <CreatePet 
+                    petName={petName} setPetName={setPetName}
+                    petBreed={petBreed} setPetBreed={setPetBreed}
+                    petSize={petSize} setPetSize={setPetSize}
+                    petNotes={petNotes} setPetNotes={setPetNotes}
+                    petList={petList}
+                    />
                 )}
                 {/* Navigation buttons */}
                 <HStack w={"100%"} mt={"1rem"}>
                   {addPetChecked && step === 1 && (
-                    <Button onClick={handleNextStep} w={"100%"}>
+                    <Button variant={"outline"}
+                     onClick={handleNextStep} w={"100%"} disabled={!firstName || !lastName || !phoneNumber}>
                       Next
                     </Button>
                   )}
                   {addPetChecked && step === 2 && (
-                    <Button onClick={handlePrevStep} w={"50%"}>
+                    <Button onClick={handlePrevStep} w={"50%"} variant={"outline"}>
                       Back
                     </Button>
                   )}
                   {(step === 2 || !addPetChecked) && (
-                    <Button type="submit" w={step === 2 ? "50%" : "100%"}>
+                    <Button type="submit" w={step === 2 ? "50%" : "100%"} disabled={!firstName || !lastName || !phoneNumber || (step==2 && !petList.length)}>
                       Submit
                     </Button>
                   )}
