@@ -11,7 +11,7 @@ export const createCustomer = async (req, res) => {
     const newCustomer = await Customer.create({ firstName, middleName, lastName, email, phoneNumber, customerComment });
     
     console.log('Customer created successfully:', newCustomer); // Log the created customer data
-    res.status(201).json({ id: newCustomer.id }); // Respond with the created customer ID
+    res.status(201).json({newCustomer}); // Respond with the created customer ID
   } catch (error) {
     console.error('Error creating customer:', error);
     console.error('Request body:', req.body); // Log the request body in case of error
@@ -94,7 +94,7 @@ const searchLast = async (lastName) => {
 //TODO SANITIZE PHONE
 const searchPhone = async (phone) => {
   try {
-    const customer = await Customer.findOne({
+    const customer = await Customer.findAll({
       where: {
         phoneNumber: { [Op.iLike]: `%${phone}%` }
       }

@@ -63,73 +63,81 @@ const CreateCustomer = ({ setCustomerInfoOpen }) => {
     e.preventDefault();
     let response;
     let customerId;
-
+  
     // Create customer
     try {
-        console.log('Submitting customer data:', {
-            firstName: firstName,
-            middleName: middleName,
-            lastName: lastName,
-            email: email,
-            phoneNumber: phoneNumber,
-        });
-
-        response = await fetch('/db/createCustomer', {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify({
-                firstName: firstName,
-                middleName: middleName,
-                lastName: lastName,
-                email: email,
-                phoneNumber: phoneNumber,
-            })
-        });
-
-        if (!response.ok) {
-            throw new Error("Network response was not ok");
-        }
-
-        const customerData = await response.json();
-        customerId = customerData.id;
+      console.log('Submitting customer data:', {
+        firstName: firstName,
+        middleName: middleName,
+        lastName: lastName,
+        email: email || null,
+        phoneNumber: phoneNumber,
+      });
+  
+      response = await fetch('/db/createCustomer', {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          firstName: firstName,
+          middleName: middleName,
+          lastName: lastName,
+          email: email || null,
+          phoneNumber: phoneNumber,
+        })
+      });
+  
+      if (!response.ok) {
+        throw new Error("Network response was not ok");
+      }
+  
+      const customerData = await response.json();
+      customerId = customerData.newCustomer.id; // Extract the customer ID
+      console.log("Customer ID:", customerId);
+      console.log("Customer Data:", customerData);
+  
+      // Update the customer state with the new ID
+      setCustomer((prevCustomer) => ({
+        ...prevCustomer,
+        id: customerId,
+      }));
     } catch (error) {
-        console.error("Error creating customer:", error);
-        return;
+      console.error("Error creating customer:", error);
+      return;
     }
-
+  
     // Create pets if checkbox is checked and petList is not empty
     if (addPetChecked && petList.length > 0) {
-        try {
-            for (const pet of petList) {
-                response = await fetch('/db/createPet', {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/json"
-                    },
-                    body: JSON.stringify({
-                        name: pet.name,
-                        breed: pet.breed,
-                        size: pet.size,
-                        photoUrl: pet.photoUrl,
-                        ownerID: customerId,
-                        notes: pet.notes
-                    })
-                });
-
-                if (!response.ok) {
-                    throw new Error("Network response was not ok");
-                }
-            }
-        } catch (error) {
-            console.error("Error creating pets:", error);
-            return;
+      try {
+        for (const pet of petList) {
+          response = await fetch('/db/createPet', {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+              name: pet.name,
+              breed: pet.breed,
+              size: pet.size,
+              photoUrl: pet.photoUrl,
+              ownerID: customerId, // Use the customerId from the response
+              notes: pet.notes
+            })
+          });
+  
+          if (!response.ok) {
+            throw new Error("Network response was not ok");
+          }
         }
+      } catch (error) {
+        console.error("Error creating pets:", error);
+        return;
+      }
     }
-
+  
     setCustomerInfoOpen(false);
-};
+  };
 
   // Handle next step in form
   const handleNextStep = () => {
@@ -145,6 +153,10 @@ const CreateCustomer = ({ setCustomerInfoOpen }) => {
     // close 
 
   }
+
+  useEffect(() => {
+    console.log("FROM INSIDE CREATECUSTOMER PETLIST", petList)
+  },[petList])
 
   return (
     <Box className="customerInfo" p={4}
@@ -256,7 +268,7 @@ const CreateCustomer = ({ setCustomerInfoOpen }) => {
                     </Button>
                   )}
                   {(step === 2 || !addPetChecked) && (
-                    <Button onClick={handleSubmit} w={step === 2 ? "50%" : "100%"} disabled={!firstName || !lastName || !phoneNumber || (step === 2 && petList.length === 0)}>
+                    <Button onClick={handleSubmit} w={step === 2 ? "50%" : "100%"} disabled={!firstName || !lastName || !phoneNumber || (addPetChecked && petList.length === 0)}>
                       Submit
                     </Button>
                   )}

@@ -101,7 +101,7 @@ const CreatePet2 = ({ customer, setCreatePetPressed, onPetCreated, petToEdit, se
 
 
   const deletePetFromList = (key) => {
-    setPetList(petList.filter((pet) => {
+    return setPetList(petList.filter((pet) => {
       return pet.name !== key;
     }));
   };
@@ -122,49 +122,57 @@ const CreatePet2 = ({ customer, setCreatePetPressed, onPetCreated, petToEdit, se
 
   const handleSubmit = async (e) => {
     e.preventDefault(); // Prevent the default form submission behavior
-    const endpoint = petToEdit && petToEdit.id ? "/db/updatePet" : "/db/createPet";
-    const method = petToEdit && petToEdit.id ? "PUT" : "POST";
-
+  
     const petData = {
-        id: petToEdit && petToEdit.id ? petToEdit.id : undefined,
-        name: name,
-        breed: breed,
-        size: sizeButton,
-        photoUrl: image,
-        ownerID: customer.id,
-        notes: notes
+      id: petToEdit && petToEdit.id ? petToEdit.id : undefined,
+      name: name,
+      breed: breed,
+      size: sizeButton,
+      photoUrl: image,
+      ownerID: customer.id,
+      notes: notes,
     };
-
+  
     console.log("Submitting pet data:", petData);
+  
+    // Update petList immutably
+    if(petList) {
+      setPetList([...petList, petData]);
+    }
 
     if (!isCreatingCustomer) {
-        try {
-            const response = await fetch(endpoint, {
-                method: method,
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify(petData)
-            });
-
-            if (!response.ok) {
-                throw new Error("Network response was not ok");
-            }
-
-            onPetCreated();
-        } catch (error) {
-            console.error("Error creating/updating pet:", error);
-        }
-    } else {
-        petList.push(petData);
-        toaster.create({
-            title: `Pet added to ${customer.firstName}`,
-            description: "Pet has been successfully added."
+      // Handle non-customer creation logic
+      try {
+        const endpoint = petToEdit && petToEdit.id ? "/db/updatePet" : "/db/createPet";
+        const method = petToEdit && petToEdit.id ? "PUT" : "POST";
+  
+        const response = await fetch(endpoint, {
+          method: method,
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(petData),
         });
-        clearPets();
-        console.log(petList);
+  
+        if (!response.ok) {
+          throw new Error("Network response was not ok");
+        }
+  
+        onPetCreated();
+      } catch (error) {
+        console.error("Error creating/updating pet:", error);
+      }
+    } else {
+      // Handle customer creation logic
+
+      toaster.create({
+        title: `Pet added to ${customer.firstName}`,
+        description: "Pet has been successfully added.",
+      });
+      clearPets();
+      console.log("Updated petList:", petList);
     }
-};
+  };
 
   return (
     <>
@@ -302,7 +310,7 @@ const CreatePet2 = ({ customer, setCreatePetPressed, onPetCreated, petToEdit, se
               />
             </Box>
           </Field>
-          {petList.length > 0 &&(<HStack flexWrap={"wrap"}>
+          {(petList && petList.length > 0) &&(<HStack flexWrap={"wrap"}>
           {petList.map((pet,index) => {
             return (
               <HStack mb={2} key={index}>

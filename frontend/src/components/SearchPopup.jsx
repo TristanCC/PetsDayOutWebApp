@@ -31,7 +31,7 @@ const SearchPopup = ({ preferredColors, setSearchResults,
     }
 
     try {
-      const response = await fetch(`/db/findCustomer?firstName=${firstNameSearch}&lastName=${lastNameSearch}&phoneNumber=${phoneSearch}`);
+      const response = await fetch(`/db/findCustomer?firstName=${firstNameSearch}&lastName=${lastNameSearch}&phone=${phoneSearch}`);
       const data = await response.json();
       setSearchResults(data);
     } catch (error) {
