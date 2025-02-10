@@ -142,7 +142,6 @@ const CreatePet2 = ({ customer, setCreatePetPressed, onPetCreated, petToEdit, se
   return (
     <>
       <MotionBox
-
         w="100%"
         borderRadius={"lg"}
         alignSelf={"center"}
@@ -281,7 +280,7 @@ const CreatePet2 = ({ customer, setCreatePetPressed, onPetCreated, petToEdit, se
           >
             Save
           </Button>
-          <Button mt={4} w={"100%"} variant={"outline"} onClick={() => setCreatePetPressed(false)}>
+          <Button mt={4} w={"100%"} variant={"outline"} onClick={() => {setCreatePetPressed(false); setPetToEdit({})}}>
             Back
           </Button>
         </form>

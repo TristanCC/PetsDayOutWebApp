@@ -8,7 +8,7 @@ const PetListDisplay = ({ pets, createPetPressed, setCreatePetPressed, closePets
     const [petToEdit, setPetToEdit] = useState({})
     return (
     <Box
-      bg={{ base: "primarySurfaceL", _dark: "primaryMidpoint" }}
+      bg={{ base: "primarySurfaceL", _dark: "primarySurface" }}
       borderRadius={"1rem"}
       p={"2rem"}
       w={createPetPressed ? "25" : "50vw"}
@@ -76,12 +76,12 @@ const PetListDisplay = ({ pets, createPetPressed, setCreatePetPressed, closePets
                               readOnly
                               resize={"none"}
                               placeholder="Preferred services and cut:&#10;Behavioral notes, special handling instructions:&#10;Payment history:"
-                              minH={"8lh"}
+                              minH={"5lh"}
                               maxH={"15lh"}
                               value={item.notes}
                             />
                             <Button w={"100%"} variant={"outline"} mt={2} 
-                            onClick={() => {setCreatePetPressed(true); setPetToEdit(item)}}>Edit Pet</Button>
+                            onClick={() => {setCreatePetPressed(true); setPetToEdit(item)}}>Edit</Button>
                         </VStack>
                       </Card.Body>
                     </Card.Root>
