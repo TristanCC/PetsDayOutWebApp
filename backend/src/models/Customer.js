@@ -31,7 +31,7 @@ const Customer = sequelize.define('Customer', {
     type: DataTypes.STRING,
     allowNull: false,
     validate: {
-      is: /^(\+\d{1,2}\s)?\(?\d{3}\)?[\s.-]\d{3}[\s.-]\d{4}$/
+      is: /^[0-9]{10}$/
     }
   },
 

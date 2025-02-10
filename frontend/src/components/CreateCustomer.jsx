@@ -5,6 +5,7 @@ import { Textarea } from "@chakra-ui/react";
 import { LuCircleX } from "react-icons/lu";
 import CustomerCreationPet from './CustomerCreationPet';
 import { Checkbox } from "@/components/ui/checkbox"
+import { Toaster, toaster } from "@/components/ui/toaster"
 
 import CreatePet from "./Pet/CreatePet2";
 
@@ -35,25 +36,100 @@ const CreateCustomer = ({ setCustomerInfoOpen }) => {
     </Field>
   );
 
+  useEffect(() => {
+    customer.firstName = firstName
+    customer.middleName = middleName
+    customer.lastName = lastName
+    customer.phoneNumber = phoneNumber
+    customer.email = email
+
+  },[firstName, middleName, lastName, email, phoneNumber])
 
 
   // pet form
-
   const [petName, setPetName] = useState("")
   const [petBreed, setPetBreed] = useState("")
   const [petSize, setPetSize] = useState("")
   const [petNotes, setPetNotes] = useState("")
+  const [petPhotoUrl, setPetPhotoUrl] = useState("")
 
   const [customer, setCustomer] = useState({})
   const [petList, setPetList] = useState([])
 
+  const [isCreatingCustomer, setIsCreatingCustomer] = useState(true)
 
   // Handle form submission
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // Add logic to create a new customer
+    let response;
+    let customerId;
+
+    // Create customer
+    try {
+        console.log('Submitting customer data:', {
+            firstName: firstName,
+            middleName: middleName,
+            lastName: lastName,
+            email: email,
+            phoneNumber: phoneNumber,
+        });
+
+        response = await fetch('/db/createCustomer', {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                firstName: firstName,
+                middleName: middleName,
+                lastName: lastName,
+                email: email,
+                phoneNumber: phoneNumber,
+            })
+        });
+
+        if (!response.ok) {
+            throw new Error("Network response was not ok");
+        }
+
+        const customerData = await response.json();
+        customerId = customerData.id;
+    } catch (error) {
+        console.error("Error creating customer:", error);
+        return;
+    }
+
+    // Create pets if checkbox is checked and petList is not empty
+    if (addPetChecked && petList.length > 0) {
+        try {
+            for (const pet of petList) {
+                response = await fetch('/db/createPet', {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({
+                        name: pet.name,
+                        breed: pet.breed,
+                        size: pet.size,
+                        photoUrl: pet.photoUrl,
+                        ownerID: customerId,
+                        notes: pet.notes
+                    })
+                });
+
+                if (!response.ok) {
+                    throw new Error("Network response was not ok");
+                }
+            }
+        } catch (error) {
+            console.error("Error creating pets:", error);
+            return;
+        }
+    }
+
     setCustomerInfoOpen(false);
-  };
+};
 
   // Handle next step in form
   const handleNextStep = () => {
@@ -64,6 +140,11 @@ const CreateCustomer = ({ setCustomerInfoOpen }) => {
   const handlePrevStep = () => {
     setStep(step - 1);
   };
+
+  const onPetCreated = () => {
+    // close 
+
+  }
 
   return (
     <Box className="customerInfo" p={4}
@@ -76,6 +157,8 @@ const CreateCustomer = ({ setCustomerInfoOpen }) => {
         w={"100vw"}
         h={"100vh"}
         top={"0px"}
+        left={0}
+        right={0}
         bottom={"0px"}
         backgroundColor={"rgba(18, 18, 18, 0.5)"}
         backdropFilter="blur(5px)"
@@ -126,7 +209,7 @@ const CreateCustomer = ({ setCustomerInfoOpen }) => {
         )}
 
         <Box className="customerInfoHeader" h={"100%"} >
-          <form onSubmit={handleSubmit} className="customerInfoForm">
+          <form className="customerInfoForm">
             <VStack spacing={4} align="stretch">
               <Box>
                 {/* Form fields for step 1 */}
@@ -147,11 +230,16 @@ const CreateCustomer = ({ setCustomerInfoOpen }) => {
                 {/* Form fields for step 2 */}
                 {step === 2 && (
                   <CreatePet 
+                    customer={customer}
                     petName={petName} setPetName={setPetName}
                     petBreed={petBreed} setPetBreed={setPetBreed}
+                    onPetCreated={onPetCreated}
                     petSize={petSize} setPetSize={setPetSize}
                     petNotes={petNotes} setPetNotes={setPetNotes}
-                    petList={petList}
+                    petList={petList} setPetList={setPetList}
+                    isCreatingCustomer={isCreatingCustomer}
+                    petPhotoUrl={petPhotoUrl} setPetPhotoUrl={setPetPhotoUrl}
+                    
                     />
                 )}
                 {/* Navigation buttons */}
@@ -168,10 +256,11 @@ const CreateCustomer = ({ setCustomerInfoOpen }) => {
                     </Button>
                   )}
                   {(step === 2 || !addPetChecked) && (
-                    <Button type="submit" w={step === 2 ? "50%" : "100%"} disabled={!firstName || !lastName || !phoneNumber || (step==2 && !petList.length)}>
+                    <Button onClick={handleSubmit} w={step === 2 ? "50%" : "100%"} disabled={!firstName || !lastName || !phoneNumber || (step === 2 && petList.length === 0)}>
                       Submit
                     </Button>
                   )}
+                  <Toaster></Toaster>
                 </HStack>
               </Box>
             </VStack>

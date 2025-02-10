@@ -8,9 +8,7 @@ const router = express.Router()
     CUSTOMERS
 */ 
 
-// TODOTODOTODOTODOTODO
-router.put('/db/createCustomers')
-// TODOTODOTODOTODOTODO
+router.post('/db/createCustomer', customerController.createCustomer)
 
 router.get('/db/getCustomers', customerController.getCustomers)
 router.get('/db/findCustomer', customerController.findCustomer)

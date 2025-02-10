@@ -1,4 +1,4 @@
-import { HStack, VStack, Button, Text, Input, Box, Textarea } from "@chakra-ui/react";
+import { HStack, VStack, Button, Text, Input, Box, Textarea, IconButton } from "@chakra-ui/react";
 import { useState, useEffect } from "react";
 import { Field } from "@/components/ui/field";
 import { CloseButton } from "@/components/ui/close-button";
@@ -16,16 +16,20 @@ import DogAnimation from "../../assets/Dog.gif";
 import DogResting from "../../assets/DogResting.png";
 import { FaCamera } from "react-icons/fa6";
 import { motion } from "framer-motion";
+import { Toaster, toaster } from "@/components/ui/toaster"
 
 const MotionBox = motion(Box);
 const MotionButton = motion(Button);
 
-const CreatePet2 = ({ customer, setCreatePetPressed, onPetCreated, petToEdit, setPetToEdit }) => {
+const CreatePet2 = ({ customer, setCreatePetPressed, onPetCreated, petToEdit, setPetToEdit, 
+  petList,setPetList, isCreatingCustomer }) => {
   const [sizeButton, setSizeButton] = useState(petToEdit ? petToEdit.size : null);
   const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
-  const [smallImageSrc, setSmallImageSrc] = useState(DogResting);
-  const [mediumImageSrc, setMediumImageSrc] = useState(DogResting);
-  const [largeImageSrc, setLargeImageSrc] = useState(DogResting);
+  const [imageSources, setImageSources] = useState({
+    small: DogResting,
+    medium: DogResting,
+    large: DogResting,
+  });
 
   const [name, setName] = useState(petToEdit ? petToEdit.name : "");
   const [breed, setBreed] = useState(petToEdit ? petToEdit.breed : "");
@@ -62,10 +66,6 @@ const CreatePet2 = ({ customer, setCreatePetPressed, onPetCreated, petToEdit, se
     };
   }, []);
 
-  useEffect(() => {
-    console.log(sizeButton);
-  }, [sizeButton]);
-
   const buttonStyles = {
     height: !isMobile ? "100px" : "80px",
     width: !isMobile ? "100px" : "70px",
@@ -87,28 +87,46 @@ const CreatePet2 = ({ customer, setCreatePetPressed, onPetCreated, petToEdit, se
   });
 
   const handleClick = (size) => {
-    if (sizeButton !== size) {
-      if (sizeButton === "small") setSmallImageSrc(DogResting);
-      if (sizeButton === "medium") setMediumImageSrc(DogResting);
-      if (sizeButton === "large") setLargeImageSrc(DogResting);
-    }
     setSizeButton(size);
-    if (size === "small") setSmallImageSrc(DogAnimation);
-    if (size === "medium") setMediumImageSrc(DogAnimation);
-    if (size === "large") setLargeImageSrc(DogAnimation);
+    setImageSources({
+      small: size === "small" ? DogAnimation : DogResting,
+      medium: size === "medium" ? DogAnimation : DogResting,
+      large: size === "large" ? DogAnimation : DogResting,
+    });
   };
 
   const handleFileChange = (e) => {
     setImage(e.target.files[0]);
   };
 
+
+  const deletePetFromList = (key) => {
+    setPetList(petList.filter((pet) => {
+      return pet.name !== key;
+    }));
+  };
+  
+
+  const clearPets = () => {
+    setName("");
+    setBreed("");
+    setSizeButton(null);
+    setImage(null);
+    setNotes("");
+    setImageSources({
+      small: DogResting,
+      medium: DogResting,
+      large: DogResting,
+    });
+  };
+
   const handleSubmit = async (e) => {
-    e.preventDefault();
-    const endpoint = petToEdit.id ? "/db/updatePet" : "/db/createPet";
-    const method = petToEdit.id ? "PUT" : "POST";
+    e.preventDefault(); // Prevent the default form submission behavior
+    const endpoint = petToEdit && petToEdit.id ? "/db/updatePet" : "/db/createPet";
+    const method = petToEdit && petToEdit.id ? "PUT" : "POST";
 
     const petData = {
-        id: petToEdit.id,
+        id: petToEdit && petToEdit.id ? petToEdit.id : undefined,
         name: name,
         breed: breed,
         size: sizeButton,
@@ -119,25 +137,34 @@ const CreatePet2 = ({ customer, setCreatePetPressed, onPetCreated, petToEdit, se
 
     console.log("Submitting pet data:", petData);
 
-    try {
-        const response = await fetch(endpoint, {
-            method: method,
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify(petData),
-        });
+    if (!isCreatingCustomer) {
+        try {
+            const response = await fetch(endpoint, {
+                method: method,
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(petData)
+            });
 
-        if (!response.ok) {
-            throw new Error("Network response was not ok");
+            if (!response.ok) {
+                throw new Error("Network response was not ok");
+            }
+
+            onPetCreated();
+        } catch (error) {
+            console.error("Error creating/updating pet:", error);
         }
-
-        onPetCreated();
-    } catch (error) {
-        console.error("Error creating/updating pet:", error);
+    } else {
+        petList.push(petData);
+        toaster.create({
+            title: `Pet added to ${customer.firstName}`,
+            description: "Pet has been successfully added."
+        });
+        clearPets();
+        console.log(petList);
     }
 };
-
 
   return (
     <>
@@ -152,25 +179,28 @@ const CreatePet2 = ({ customer, setCreatePetPressed, onPetCreated, petToEdit, se
         animate={{ opacity: 1, scale: 1, y: 0 }}
         exit={{ opacity: 0, scale: 0.95, y: -20 }}
         transition={{ duration: 0.3, ease: "easeInOut" }}
+        
       >
         <Text fontSize="xl" fontWeight="medium">
-          Track a new pet
+          {!petToEdit ? `Track a new pet ` : `Edit ${petToEdit.name}`}
         </Text>
+
       </MotionBox>
       <MotionBox
-      w={"100%"}
+        w={"100%"}
         initial={{ opacity: 0, scale: 0.95, y: 20 }}
         animate={{ opacity: 1, scale: 1, y: 0 }}
         exit={{ opacity: 0, scale: 0.95, y: 20 }}
         transition={{ duration: 0.3, ease: "easeInOut" }}
       >
-        <form onSubmit={handleSubmit}>
+        <form>
           <VStack
             mb={".5rem"}
             gap={".5rem"}
             w={"90%"}
             justify={"center"}
             justifySelf={"center"}
+            
           >
             <Field label="Name" required>
               <Input
@@ -240,7 +270,7 @@ const CreatePet2 = ({ customer, setCreatePetPressed, onPetCreated, petToEdit, se
               style={buttonStyles}
               whileTap={{ scale: 0.9 }}
             >
-              <Image src={smallImageSrc} style={animationStyles("50%")} />
+              <Image src={imageSources.small} style={animationStyles("50%")} />
             </MotionButton>
             <MotionButton
               variant={sizeButton === "medium" ? "solid" : "ghost"}
@@ -248,7 +278,7 @@ const CreatePet2 = ({ customer, setCreatePetPressed, onPetCreated, petToEdit, se
               style={buttonStyles}
               whileTap={{ scale: 0.9 }}
             >
-              <Image src={mediumImageSrc} style={animationStyles("65%")} />
+              <Image src={imageSources.medium} style={animationStyles("65%")} />
             </MotionButton>
             <MotionButton
               size={"2xl"}
@@ -257,32 +287,46 @@ const CreatePet2 = ({ customer, setCreatePetPressed, onPetCreated, petToEdit, se
               style={buttonStyles}
               whileTap={{ scale: 0.9 }}
             >
-              <Image src={largeImageSrc} style={animationStyles("80%")} />
+              <Image src={imageSources.large} style={animationStyles("80%")} />
             </MotionButton>
           </HStack>
           <Field label="Notes" mb={".5rem"}>
-              <Box w={"100%"}  bg={{ base: "primaryL", _dark: "primary"}} borderRadius={"sm"}>
-                  <Textarea
-                    variant={"flushed"}
-                    placeholder="Preferred services and cut:&#10;&#10;Behavioral notes, special handling instructions:"
-                    minH="5lh" maxW={"100%"} wordWrap={"break-word"}
-                    value={notes}
-                    onChange={(e) => setNotes(e.target.value)}
-                    p={2}
-                  />
-              </Box>
+            <Box w={"100%"} bg={{ base: "primaryL", _dark: "primary" }} borderRadius={"sm"}>
+              <Textarea
+                variant={"flushed"}
+                placeholder="Preferred services and cut:&#10;&#10;Behavioral notes, special handling instructions:"
+                minH="5lh" maxW={"100%"} wordWrap={"break-word"}
+                value={notes}
+                onChange={(e) => setNotes(e.target.value)}
+                p={2}
+              />
+            </Box>
           </Field>
+          {petList.length > 0 &&(<HStack flexWrap={"wrap"}>
+          {petList.map((pet,index) => {
+            return (
+              <HStack mb={2} key={index}>
+                <Text>{pet.name}</Text>
+                <IconButton variant={"ghost"} onClick={() => deletePetFromList(pet.name)} w={"1rem"} minW={"1.5rem"} h={"1.5rem"}>x</IconButton>
+              </HStack>
+            )
+          })}
+        </HStack>
+        )}
           <Button
-            type="submit"
+            onClick={(e) => handleSubmit(e)}
             w={"100%"}
             variant={"outline"}
             disabled={name === "" || breed === "" || sizeButton === null}
           >
             Save
           </Button>
-          <Button mt={4} w={"100%"} variant={"outline"} onClick={() => {setCreatePetPressed(false); setPetToEdit({})}}>
-            Back
-          </Button>
+          
+          {!isCreatingCustomer && (
+            <Button mt={4} w={"100%"} variant={"outline"} onClick={() => { setCreatePetPressed(false); setPetToEdit({}) }}>
+              Back
+            </Button>
+          )}
         </form>
       </MotionBox>
     </>

@@ -48,7 +48,7 @@ const PetListDisplay = ({ pets, createPetPressed, setCreatePetPressed, closePets
           <LuCircleX />
         </IconButton>
       </HStack>
-      <Box className="customerInfoHeader" flex={1} w="100%">
+      <Box className="customerInfoHeader" flex={1} w="100%" >
         <Box display={"flex"} flexDir={"column"} gap={"1rem"}
           justifyItems={"start"} alignItems={"start"}
           w={"100%"}
@@ -65,13 +65,14 @@ const PetListDisplay = ({ pets, createPetPressed, setCreatePetPressed, closePets
           {!createPetPressed ? (
             <>
               <Box w={"100%"} p={2} bg={{ base: "primarySurfaceL", _dark: "transparent" }} rounded={"lg"}>
-                <VStack gap={4} w="100%" flexDir={"row"} flexWrap={"wrap"} justify={"center"}>
+                <VStack gap={4} w="100%" flexDir={"row"} flexWrap={"wrap"} justifyContent={"center"}>
                   {pets.map((item, index) => (
                     <Card.Root key={index} w="350px" variant="outline">
                       <Card.Body>
                         <VStack>
-                            <Text fontSize="lg" fontWeight="bold">{item.name} ({item.breed})</Text>
-                            <Text>Size: {item.size}</Text>
+                            <Text alignSelf={"start"} fontSize="lg" fontWeight="bold">{item.name}</Text>
+                            <Text alignSelf={"start"}>Breed: {item.breed}</Text>
+                            <Text alignSelf={"start"}>Size: {item.size}</Text>
                             <Textarea
                               readOnly
                               resize={"none"}

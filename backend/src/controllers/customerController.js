@@ -5,10 +5,16 @@ export const createCustomer = async (req, res) => {
   const { firstName, middleName, lastName, email, phoneNumber, customerComment } = req.body;
   
   try {
+    console.log('Request body:', req.body); // Log the request body
+    console.log('Creating customer with data:', { firstName, middleName, lastName, email, phoneNumber, customerComment });
+    
     const newCustomer = await Customer.create({ firstName, middleName, lastName, email, phoneNumber, customerComment });
-    res.status(201).json(newCustomer); // Respond with the created customer
+    
+    console.log('Customer created successfully:', newCustomer); // Log the created customer data
+    res.status(201).json({ id: newCustomer.id }); // Respond with the created customer ID
   } catch (error) {
     console.error('Error creating customer:', error);
+    console.error('Request body:', req.body); // Log the request body in case of error
     res.status(500).json({ error: 'Failed to create customer.' });
   }
 };
