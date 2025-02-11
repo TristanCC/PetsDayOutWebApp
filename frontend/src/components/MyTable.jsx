@@ -1,6 +1,7 @@
 "use client"
 
 import { Box, Kbd, Table, Theme, Text, Button } from "@chakra-ui/react"
+
 import {
   ActionBarContent,
   ActionBarRoot,
@@ -17,7 +18,7 @@ import {
 
 
 import { Checkbox } from "@/components/ui/checkbox"
-import { useState, useEffect } from "react"
+import { useState, useEffect, useRef } from "react"
 import MenuRoot1 from "./MenuRoot1"
 import CreateCustomer from "./CreateCustomer"
 
@@ -27,6 +28,15 @@ const MyTable = ({ selectedCustomer, setSelectedCustomer, customers, preferredCo
 
   const hasSelection = selection.length > 0
   const indeterminate = hasSelection && selection.length < customers.length
+
+  const scrollRef = useRef(null)
+
+  useEffect(() => {
+    if(scrollRef) {
+      scrollRef.current.scrollTop = 0
+    }
+  }, [customers])
+  
 
   // Ensure searchResults is an array
   const validSearchResults = Array.isArray(searchResults) ? searchResults : [];
@@ -107,7 +117,7 @@ const MyTable = ({ selectedCustomer, setSelectedCustomer, customers, preferredCo
   ))
 
   return (
-    <Box className="table">
+    <Box className="table" ref={scrollRef}>
       <Table.Root interactive stickyHeader striped scrollBehavior={"smooth"} overflow={"hidden"} >
         <Table.Header bg={{ base: "white", _dark: "primary" }}>
           <Table.Row alignItems={"center"} bg={{ base: "white", _dark: "primaryMidpoint" }}>
