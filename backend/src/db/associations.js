@@ -1,6 +1,7 @@
 import Pet from '../models/Pet.js';
 import Customer from '../models/Customer.js';
 import CustomerPet from '../models/CustomerPet.js';
+import Group from '../models/Group.js'; // Import the shared group model
 
 // Many-to-Many Relationship
 Customer.belongsToMany(Pet, {
@@ -17,5 +18,8 @@ Pet.belongsToMany(Customer, {
   onDelete: 'CASCADE',
 });
 
-// Ensure models are exported properly
-export { Customer, Pet, CustomerPet };
+// Association to link CustomerPet to SharedPetGroup
+CustomerPet.belongsTo(Group, { foreignKey: 'groupID' });
+Group.hasMany(CustomerPet, { foreignKey: 'groupID' });
+
+export { Customer, Pet, CustomerPet, Group };

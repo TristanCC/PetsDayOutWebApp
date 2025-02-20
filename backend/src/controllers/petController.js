@@ -1,32 +1,86 @@
 import CustomerPet from '../models/CustomerPet.js'
 import Customer from '../models/Customer.js'
 import Pet from '../models/Pet.js'
+import Group from "../models/Group.js"
 
 // create
 
 export const createPet = async (req, res) => {
-    const { name, breed, size, photoUrl, ownerID, notes } = req.body;
+    const { name, breed, size, photoUrl, ownerID } = req.body;
 
     try {
-        // Step 1: Create the pet
-        const newPet = await Pet.create({ name, breed, size, photoUrl, notes });
+        // Step 1: Create the new pet
+        const newPet = await Pet.create({ name, breed, size, photoUrl });
 
-        // Step 2: If a ownerID is provided, link the pet to the customer
-        if (ownerID) {
-            await CustomerPet.create({ ownerID, petID: newPet.id });
+        // Step 2: Check if the owner is part of a shared group
+        console.log("CHECKING IF PART OF GROUP");
+
+        const customerPet = await CustomerPet.findOne({ where: { ownerID } });
+
+        if (customerPet?.groupID) {
+            console.log("Owner belongs to a group, linking pet to all members.");
+
+            // Find all customers in the group
+            const groupCustomers = await CustomerPet.findAll({
+                where: { groupID: customerPet.groupID }
+            });
+
+            // Create a record for each group member
+            await Promise.all(
+                groupCustomers.map(async (customer) => {
+                    const existingEntry = await CustomerPet.findOne({
+                        where: { petID: newPet.id, ownerID: customer.ownerID }
+                    });
+            
+                    if (!existingEntry) {
+                        await CustomerPet.create({
+                            petID: newPet.id,
+                            ownerID: customer.ownerID,
+                            groupID: customerPet.groupID
+                        });
+                    }
+                })
+            );
+            
+        } else {
+            console.log("Owner does NOT belong to a group, linking pet to the owner only.");
+            await CustomerPet.create({ petID: newPet.id, ownerID });
         }
 
-        res.status(201).json(newPet);
+        return res.status(201).json(newPet);
     } catch (error) {
-        console.error('Error creating pet:', error);
-        res.status(500).json({ error: 'Failed to create pet.' });
+        console.error("Error creating pet:", error);
+        return res.status(500).json({ message: "Failed to create pet." });
     }
-};
+}; 
 
 export const linkCustomers = async (req, res) => {
-    // take in searched for ownerID, current ownerID, array of current petIDs
-    // 
-    // 
+    const { currentOwnerID, targetOwnerID } = req.body
+
+    try {
+
+        let sharedGroup = await Group.findOne({
+            include: {
+                model: CustomerPet,
+                where: {
+                    ownerID: currentOwnerID
+                }
+            }
+        })
+
+        if (!sharedGroup) {
+            sharedGroup = await Group.create()
+        }
+
+        await CustomerPet.update({groupID: sharedGroup}, {where: currentOwnerID})
+        await CustomerPet.update({groupID: sharedGroup}, {where: targetOwnerID})
+
+        return res.status(200).json({ message: 'Customers are now linked in a shared pet group.' });
+
+    } catch(error) {
+        console.error('Error linking customers:', error);
+        return res.status(500).json({ message: 'Internal server error' });
+    }
 }
 
 // GET

@@ -18,7 +18,7 @@ const Pet = sequelize.define('Pet', {
   },
   size: {
     type: DataTypes.STRING,
-    allowNull: true,
+    allowNull: false,
     validate: {
       isIn: [['small', 'medium', 'large']]
     }

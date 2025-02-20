@@ -14,6 +14,7 @@ import { LuBookOpenCheck } from "react-icons/lu";
 import { PiDog, PiDogBold } from "react-icons/pi";
 import { LuCircleUser } from "react-icons/lu";
 import { LuArchive } from "react-icons/lu";
+import { LuHouse } from "react-icons/lu";
 
 import CustomerInfo from './CustomerInfo';
 import PetList from './Pet/PetList';
@@ -107,6 +108,14 @@ const MenuRoot1 = ({ customer, preferredColors, setSelectedCustomer, updateCusto
               </Icon>
             </div>
             <Text fontSize={"1rem"}>Customer Info</Text>
+          </MenuItem>
+          <MenuItem borderRadius={".75rem"} value="household" cursor={"pointer"} >
+            <div>
+              <Icon fontSize={"1.25rem"} color={"blue.500"}>
+                <LuHouse/>
+              </Icon>
+            </div>
+            <Text fontSize={"1rem"}>Household</Text>
           </MenuItem>
           <MenuItem borderRadius={".75rem"} value="delete-customer" onClick={handleDeleteCustomer} cursor={"pointer"} >
             <div>

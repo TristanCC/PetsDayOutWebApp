@@ -2,30 +2,15 @@ import { DataTypes } from 'sequelize';
 import sequelize from '../db/pool.js';
 
 const CustomerPet = sequelize.define('CustomerPet', {
-  ownerID: {
+  id: {
     type: DataTypes.UUID,
-    allowNull: false,
-    references: {
-      model: 'Customers', // Table name of the customers
-      key: 'id', // Primary key of the Customers table
-    },
+    defaultValue: DataTypes.UUIDV4,
+    primaryKey: true,
   },
-  petID: {
+  groupID: {
     type: DataTypes.UUID,
-    allowNull: false,
-    references: {
-      model: 'Pets', // Table name of the pets
-      key: 'id', // Primary key of the Pets table
-    },
+    allowNull: true, // Group ID can be null if not linked
   },
-}, {
-  timestamps: false, // Disable createdAt/updatedAt for this join table
-  indexes: [
-    {
-      unique: true,
-      fields: ['ownerID', 'petID'], // Prevent duplicate rows for the same owner-pet relationship
-    },
-  ],
 });
 
 export default CustomerPet;

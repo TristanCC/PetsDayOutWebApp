@@ -23,7 +23,7 @@ const MotionButton = motion(Button);
 
 const CreatePet2 = ({ customer, setCreatePetPressed, onPetCreated, petToEdit, setPetToEdit, 
   petList,setPetList, isCreatingCustomer }) => {
-  const [sizeButton, setSizeButton] = useState(petToEdit ? petToEdit.size : null);
+  const [sizeButton, setSizeButton] = useState(petToEdit && petToEdit.size ? petToEdit.size.toLowerCase().trim() : null);
   const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
   const [imageSources, setImageSources] = useState({
     small: DogResting,
@@ -190,7 +190,7 @@ const CreatePet2 = ({ customer, setCreatePetPressed, onPetCreated, petToEdit, se
         
       >
         <Text fontSize="xl" fontWeight="medium">
-          {!petToEdit ? `Track a new pet ` : `Edit ${petToEdit.name}`}
+          {petToEdit ? `Edit ${petToEdit.name}` : `Track a new pet`}
         </Text>
 
       </MotionBox>

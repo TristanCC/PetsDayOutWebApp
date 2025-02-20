@@ -1,3 +1,4 @@
+
 import { useEffect, useState } from "react";
 import { Button, Input, IconButton, HStack, Box, Text, VStack } from "@chakra-ui/react";
 import { Field } from "@/components/ui/field";
@@ -160,7 +161,7 @@ const CreateCustomer = ({ setCustomerInfoOpen }) => {
 
   return (
     <Box className="customerInfo" p={4}
-     bg={{ base: "primaryL", _dark: "primaryMidpoint" }} borderRadius="md" boxShadow="md"
+     bg={{ base: "primaryL", _dark: "primaryMidpoint" }} borderRadius="md"
      minW={"259px"} maxW={"400px"}  w="100%">
       {/* Modal background */}
       <Box

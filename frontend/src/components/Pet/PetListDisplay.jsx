@@ -91,7 +91,7 @@ const PetListDisplay = ({ pets, createPetPressed, setCreatePetPressed, closePets
               </Box>
               <HStack justify={"center"}  w="100%">
                 <Button variant={"surface"}>Link Customers</Button>
-                <Button onClick={() => setCreatePetPressed(true)} variant={"surface"}>Add Pet</Button>
+                <Button onClick={() => { setCreatePetPressed(true); setPetToEdit(null); }} variant={"surface"}>Add Pet</Button>
               </HStack>
             </>
           ) : (
