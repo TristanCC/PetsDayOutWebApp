@@ -34,7 +34,6 @@ const Customer = sequelize.define('Customer', {
       is: /^[0-9]{10}$/
     }
   },
-
   customerComment: {
     type: DataTypes.TEXT,
     allowNull: true
@@ -44,6 +43,11 @@ const Customer = sequelize.define('Customer', {
     type: DataTypes.INTEGER,
     allowNull: true,
     defaultValue: 0
+  },
+
+  groupID: {
+    type: DataTypes.UUID,
+    allowNull: true, // or set a default if needed
   }
 });
 

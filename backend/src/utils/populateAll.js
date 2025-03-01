@@ -1,48 +1,105 @@
-// seed.js
+
 import sequelize from '../db/pool.js';
 import { Customer, Pet, CustomerPet, Group } from '../db/associations.js';
 
-const seedDatabase = async () => {
+const resetDatabase = async () => {
   try {
-    await sequelize.sync({ force: true }); // Reset the database
-
-    // Step 1: Create Customers
-    const customers = await Customer.bulkCreate([
-      { firstName: 'John', lastName: 'Smith', email: 'john@example.com', phoneNumber: '2053563548' },
-      { firstName: 'Jane', lastName: 'Smith', email: 'jane@example.com', phoneNumber: '2054894875' },
-      { firstName: 'Fella', lastName: 'Reese', email: 'Fella@example.com', phoneNumber: '2056987787' },
-      { firstName: 'Crane', lastName: 'Frock', email: 'Crane@example.com', phoneNumber: '2056927787' },
-    ]);
-
-    // Step 2: Create Pets
-    const pets = await Pet.bulkCreate([
-      { name: 'Buddy', breed: 'Golden Retriever', size: 'Large', photoUrl: 'https://example.com/buddy.jpg' },
-      { name: 'Mittens', breed: 'Siamese Cat', size: 'Small', photoUrl: 'https://example.com/mittens.jpg' },
-      { name: 'Rex', breed: 'German Shepherd', size: 'Large', photoUrl: 'https://example.com/rex.jpg' },
-      { name: 'Whiskers', breed: 'Persian Cat', size: 'Small', photoUrl: 'https://example.com/whiskers.jpg' },
-      { name: 'Bella', breed: 'Beagle', size: 'Medium', photoUrl: 'https://example.com/bella.jpg' },
-    ]);
-
-    // Step 3: Individual Customer-Pet Links
-    await CustomerPet.create({ ownerID: customers[0].id, petID: pets[0].id }); // John -> Buddy
-    await CustomerPet.create({ ownerID: customers[1].id, petID: pets[1].id }); // Jane -> Mittens
-
-    // Step 4: Shared Pet Group Setup
-    const sharedGroup = await Group.create();
-
-    await CustomerPet.create({ ownerID: customers[2].id, petID: pets[2].id, groupID: sharedGroup.id }); // Sam -> Rex (shared)
-    await CustomerPet.create({ ownerID: customers[3].id, petID: pets[2].id, groupID: sharedGroup.id }); // Alex -> Rex (shared)
-
-    // Also share Whiskers in the same group
-    await CustomerPet.create({ ownerID: customers[2].id, petID: pets[3].id, groupID: sharedGroup.id });
-    await CustomerPet.create({ ownerID: customers[3].id, petID: pets[3].id, groupID: sharedGroup.id });
-
-    console.log('Database successfully seeded!');
-    process.exit(0);
+    // Reset the database: Drop and recreate all tables
+    await sequelize.sync({ force: true });
+    console.log('Database reset successfully!');
   } catch (error) {
-    console.error('Error seeding database:', error);
-    process.exit(1);
+    console.error('Error resetting the database:', error);
   }
 };
 
-seedDatabase();
+const seedData = async () => {
+  try {
+    // Seed Groups
+    const group1 = await Group.create({});
+    const group2 = await Group.create({});
+
+    // Seed Customers
+    const customer1 = await Customer.create({
+      firstName: 'John',
+      middleName: 'Doe',
+      lastName: 'Smith',
+      email: 'john.smith@example.com',
+      phoneNumber: '1234567890',
+      customerComment: 'Loves dogs!',
+      groupID: group1.id,
+    });
+
+    const customer2 = await Customer.create({
+      firstName: 'Jane',
+      middleName: 'A.',
+      lastName: 'Doe',
+      email: 'jane.doe@example.com',
+      phoneNumber: '9876543210',
+      customerComment: 'Cat person.',
+      groupID: group1.id,
+    });
+
+    const customer3 = await Customer.create({
+      firstName: 'Michael',
+      middleName: 'J.',
+      lastName: 'Johnson',
+      email: 'michael.johnson@example.com',
+      phoneNumber: '1122334455',
+      customerComment: 'Bird lover.',
+      groupID: group2.id,
+    });
+
+    // Seed Pets
+    const pet1 = await Pet.create({
+      name: 'Buddy',
+      breed: 'Golden Retriever',
+      size: 'large',
+      photoUrl: 'http://placekitten.com/200/300',
+    });
+
+    const pet2 = await Pet.create({
+      name: 'Fluffy',
+      breed: 'Persian',
+      size: 'small',
+      photoUrl: 'http://placekitten.com/200/300',
+    });
+
+    const pet3 = await Pet.create({
+      name: 'Chirpy',
+      breed: 'Parakeet',
+      size: 'small',
+      photoUrl: 'http://placekitten.com/200/300',
+    });
+
+    // Create associations between Customers and Pets in CustomerPet table
+    await CustomerPet.create({
+      petID: pet1.id,
+      ownerID: customer1.id,
+    });
+
+    await CustomerPet.create({
+      petID: pet2.id,
+      ownerID: customer2.id,
+    });
+
+    await CustomerPet.create({
+      petID: pet3.id,
+      ownerID: customer3.id,
+    });
+
+    console.log('Database seeded successfully!');
+  } catch (error) {
+    console.error('Error seeding database:', error);
+  } finally {
+    // Close the connection
+    sequelize.close();
+  }
+};
+
+const resetAndSeed = async () => {
+  await resetDatabase();  // Reset the database before seeding
+  await seedData();       // Then seed the database
+};
+
+resetAndSeed();
+

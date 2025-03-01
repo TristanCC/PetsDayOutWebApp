@@ -7,10 +7,6 @@ const CustomerPet = sequelize.define('CustomerPet', {
     defaultValue: DataTypes.UUIDV4,
     primaryKey: true,
   },
-  groupID: {
-    type: DataTypes.UUID,
-    allowNull: true, // Group ID can be null if not linked
-  },
 });
 
 export default CustomerPet;

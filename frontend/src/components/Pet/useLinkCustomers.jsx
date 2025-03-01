@@ -1,24 +1,29 @@
 import { useState } from "react";
 
 const useLinkCustomers = () => {
-  const [phoneNumber, setPhoneNumber] = useState("");
   const [searchResults, setSearchResults] = useState(null);
 
-  const handleSearch = async (customer) => {
+  const handleSearch = async (customer, phoneNumber) => {
     try {
-      // Only if current person has no group.
+      // Ensure phoneNumber is defined and formatted
+      if (!phoneNumber) {
+        alert("Please enter a phone number.");
+        return;
+      }
       const formattedPhoneNumber = phoneNumber.replaceAll(/[()\-\ ]/g, "");
       if (formattedPhoneNumber === customer.phoneNumber) {
         alert("Invalid phone number.");
         return;
       }
-      const response = await fetch(`/db/findCustomer?firstName=&lastName=&phone=${formattedPhoneNumber}`);
+      const response = await fetch(
+        `/db/findCustomer?firstName=&lastName=&phone=${formattedPhoneNumber}`
+      );
       const data = await response.json();
       console.log(data);
 
       if (!data || (Array.isArray(data) && data.length === 0)) {
         alert("No customer found.");
-        setSearchResults(null); // Or handle the empty case appropriately
+        setSearchResults(null);
         return;
       }
 
@@ -38,7 +43,7 @@ const useLinkCustomers = () => {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          currentOwnerID: currentID, // Ensure names match backend expectations
+          currentOwnerID: currentID,
           targetOwnerID: targetID,
         }),
       });
@@ -53,7 +58,7 @@ const useLinkCustomers = () => {
     }
   };
 
-  return { phoneNumber, setPhoneNumber, searchResults, handleSearch, handleLink };
+  return { searchResults, handleSearch, handleLink };
 };
 
 export default useLinkCustomers;

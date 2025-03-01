@@ -21,7 +21,8 @@ import useLinkCustomers from "./useLinkCustomers";
 const PetListDisplay = ({ pets, createPetPressed, setCreatePetPressed, closePetsPanel, customer, handleBack, reloadPets, preferredColors }) => {
     const [hasGroup, setHasGroup] = useState(false)
     const [petToEdit, setPetToEdit] = useState({})
-    const { phoneNumber, setPhoneNumber, searchResults, handleSearch } = useLinkCustomers();
+    const [phoneNumber, setPhoneNumber] = useState("");
+    const { searchResults, handleSearch } = useLinkCustomers();
     
 
     return (
@@ -136,7 +137,7 @@ const PetListDisplay = ({ pets, createPetPressed, setCreatePetPressed, closePets
         disabled={phoneNumber.replace(/\D/g, "").length < 10}
         variant={"solid"}
         width={"100%"}
-        onClick={() => handleSearch()}
+        onClick={() => handleSearch(customer, phoneNumber)}
       >
         Link
       </Button>
