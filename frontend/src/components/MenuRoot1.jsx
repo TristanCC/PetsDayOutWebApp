@@ -140,11 +140,11 @@ const MenuRoot1 = ({ customer, preferredColors, setSelectedCustomer, updateCusto
       )}
 
       {petsPanelOpen && (
-        <div ref={petsPanelRef}>
+        <div /*ref={petsPanelRef}*/>
           <PetList 
             customer={customer}
-            closePetsPanel={() => setPetsPanelOpen(false)
-            }
+            closePetsPanel={() => setPetsPanelOpen(false)}
+            preferredColors={preferredColors}
           />
         </div>
       )}

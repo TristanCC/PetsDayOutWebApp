@@ -3,7 +3,7 @@ import { Op } from 'sequelize';
 
 export const createCustomer = async (req, res) => {
   const { firstName, middleName, lastName, email, phoneNumber, customerComment } = req.body;
-  
+  // TODO add a fetch to see if phone number is already in database. if so we want to add both customers to a group
   try {
     console.log('Request body:', req.body); // Log the request body
     console.log('Creating customer with data:', { firstName, middleName, lastName, email, phoneNumber, customerComment });

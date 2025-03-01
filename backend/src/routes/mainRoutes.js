@@ -24,6 +24,7 @@ router.post('/db/createPet', petController.createPet)
 router.get('/db/getPets/:id', petController.getPets)
 router.put('/db/updatePet', petController.updatePet)
 
+router.put('/db/linkCustomers', petController.linkCustomers)
 
 
 export default router

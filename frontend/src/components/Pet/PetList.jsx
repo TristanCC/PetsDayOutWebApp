@@ -97,6 +97,7 @@ const PetList = ({ customer, preferredColors, handleEditPet, closePetsPanel }) =
                     customer={customer} 
                     handleBack={handleBack} 
                     reloadPets={reloadPets} 
+                    preferredColors={preferredColors}
                 />
             )}
         </Box>

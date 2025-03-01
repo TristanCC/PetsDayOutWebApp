@@ -1,11 +1,29 @@
-import { useState } from "react";
-import { Box, Button, IconButton, Text, HStack, Textarea, VStack, Card, Image } from "@chakra-ui/react";
+import { useEffect, useState } from "react";
+import { Box, Button, Input, IconButton, Text, HStack, Textarea, VStack, Card, Image } from "@chakra-ui/react";
 import { LuCircleX } from "react-icons/lu";
 import CreatePet from "./CreatePet2";
 import { Separator } from "@chakra-ui/react";
+import SearchPopup from "../SearchPopup";
 
-const PetListDisplay = ({ pets, createPetPressed, setCreatePetPressed, closePetsPanel, customer, handleBack, reloadPets }) => {
+import {
+  PopoverArrow,
+  PopoverBody,
+  PopoverContent,
+  PopoverRoot,
+  PopoverTitle,
+  PopoverTrigger,
+} from "@/components/ui/popover"
+
+import { withMask } from "use-mask-input"
+
+import useLinkCustomers from "./useLinkCustomers";
+
+const PetListDisplay = ({ pets, createPetPressed, setCreatePetPressed, closePetsPanel, customer, handleBack, reloadPets, preferredColors }) => {
+    const [hasGroup, setHasGroup] = useState(false)
     const [petToEdit, setPetToEdit] = useState({})
+    const { phoneNumber, setPhoneNumber, searchResults, handleSearch } = useLinkCustomers();
+    
+
     return (
     <Box
       bg={{ base: "primarySurfaceL", _dark: "primarySurface" }}
@@ -35,6 +53,8 @@ const PetListDisplay = ({ pets, createPetPressed, setCreatePetPressed, closePets
               : "'s"}{" "}
             Pets
           </Text>
+
+          <Text></Text>
         </Box>
         <IconButton
           aria-label="close update customer"
@@ -64,7 +84,7 @@ const PetListDisplay = ({ pets, createPetPressed, setCreatePetPressed, closePets
         >
           {!createPetPressed ? (
             <>
-              <Box w={"100%"} p={2} bg={{ base: "primarySurfaceL", _dark: "transparent" }} rounded={"lg"}>
+                <Box w={"100%"} p={2} bg={{ base: "primarySurfaceL", _dark: "transparent" }} rounded={"lg"}>
                 <VStack gap={4} w="100%" flexDir={"row"} flexWrap={"wrap"} justifyContent={"center"}>
                   {pets.map((item, index) => (
                     <Card.Root key={index} w="350px" variant="outline">
@@ -81,19 +101,63 @@ const PetListDisplay = ({ pets, createPetPressed, setCreatePetPressed, closePets
                               maxH={"15lh"}
                               value={item.notes}
                             />
-                            <Button w={"100%"} variant={"outline"} mt={2} 
+                            <Button w={"100%"} variant={"outline"} mt={2}
                             onClick={() => {setCreatePetPressed(true); setPetToEdit(item)}}>Edit</Button>
                         </VStack>
                       </Card.Body>
                     </Card.Root>
                   ))}
                 </VStack>
-              </Box>
-              <HStack justify={"center"}  w="100%">
-                <Button variant={"surface"}>Link Customers</Button>
-                <Button onClick={() => { setCreatePetPressed(true); setPetToEdit(null); }} variant={"surface"}>Add Pet</Button>
-              </HStack>
+                </Box>
+                <HStack justify={"center"}  w="100%">
+                <PopoverRoot>
+  <PopoverTrigger asChild>
+    <Button variant="surface" disabled={hasGroup}>
+      Link to Household
+    </Button>
+  </PopoverTrigger>
+  <PopoverContent colorPalette={preferredColors}>
+    <PopoverArrow />
+    <PopoverBody colorPalette={preferredColors}>
+      <PopoverTitle fontSize={"md"} fontWeight="small">
+        Linking to a Household
+      </PopoverTitle>
+      <Text my={2} fontSize="sm" color="gray.600" mb={2}>
+        Search for the phone number of another customer to add to or create a new household.
+      </Text>
+      <Input
+        my={2}
+        fontSize={"md"}
+        placeholder="(999) 999-9999"
+        ref={withMask("(999) 999-9999")}
+        onChange={(e) => setPhoneNumber(e.target.value)}
+      />
+      <Button
+        disabled={phoneNumber.replace(/\D/g, "").length < 10}
+        variant={"solid"}
+        width={"100%"}
+        onClick={() => handleSearch()}
+      >
+        Link
+      </Button>
+      {searchResults && searchResults.length > 0 ? (
+        <Box mt={3} p={2} borderRadius="md">
+          <Text fontSize="md" fontWeight="sm" color={"green.400"}>
+            Matching Household found. Linking...
+          </Text>
+        </Box>
+      ) : searchResults ? (
+        <Text mt={2} fontSize="sm" color="red.500">
+          No matching household found.
+        </Text>
+      ) : null}
+    </PopoverBody>
+  </PopoverContent>
+  </PopoverRoot>
+                  <Button onClick={() => { setCreatePetPressed(true); setPetToEdit(null); }} variant={"surface"}>Add Pet</Button>
+                </HStack>
             </>
+            
           ) : (
             <CreatePet customer={customer} setCreatePetPressed={handleBack} onPetCreated={() => { setCreatePetPressed(false); reloadPets(); }}
              petToEdit={petToEdit} setPetToEdit={setPetToEdit}/>

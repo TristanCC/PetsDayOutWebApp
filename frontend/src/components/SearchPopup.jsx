@@ -3,6 +3,7 @@ import { PopoverRoot, PopoverTrigger, PopoverContent, PopoverArrow, PopoverBody,
 import { IconButton, HStack, Box } from '@chakra-ui/react';
 import { LuSearch } from 'react-icons/lu';
 import { Input, Button, Text } from '@chakra-ui/react';
+import { withMask } from 'use-mask-input';
 
 const SearchPopup = ({ preferredColors, setSearchResults, 
   firstNameSearch, setFirstNameSearch, lastNameSearch, setLastNameSearch, phoneSearch, setPhoneSearch }) => {
@@ -31,7 +32,9 @@ const SearchPopup = ({ preferredColors, setSearchResults,
     }
 
     try {
-      const response = await fetch(`/db/findCustomer?firstName=${firstNameSearch}&lastName=${lastNameSearch}&phone=${phoneSearch}`);
+      const formattedPhoneNumber = phoneSearch.replaceAll(/[()\-\ ]/g, "");
+      console.log(formattedPhoneNumber)
+      const response = await fetch(`/db/findCustomer?firstName=${firstNameSearch}&lastName=${lastNameSearch}&phone=${formattedPhoneNumber}`);
       const data = await response.json();
       setSearchResults(data);
     } catch (error) {
@@ -95,9 +98,9 @@ const SearchPopup = ({ preferredColors, setSearchResults,
               variant="subtle"
               value={phoneSearch}
               onChange={(e) => setPhoneSearch(e.target.value)}
-              placeholder="Phone number"
               size="md"
               disabled={firstNameSearch || lastNameSearch}
+              placeholder="(999) 999-9999" ref={withMask("(999) 999-9999")}
             />
 
             <HStack>

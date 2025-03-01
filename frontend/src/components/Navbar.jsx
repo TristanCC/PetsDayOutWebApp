@@ -22,8 +22,6 @@ function Navbar({
   setOffset,
 }) {
   const [value, setValue] = useState("first");
-  const [searchClicked, setSearchClicked] = useState(false);
-  const [filtered, setFiltered] = useState([]);
 
   const [firstNameSearch, setFirstNameSearch] = useState("");
   const [lastNameSearch, setLastNameSearch] = useState("");
