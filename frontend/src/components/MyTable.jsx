@@ -74,7 +74,7 @@ const MyTable = ({ selectedCustomer, setSelectedCustomer, customers, preferredCo
         />
       </Table.Cell> */}
       <Table.Cell className=""><Text fontWeight={"medium"}zIndex={200} pos={"relative"} >{customer.firstName} {customer.middleName ? customer.middleName[0] + '.' : ""} {customer.lastName}</Text></Table.Cell>
-      <Table.Cell className=""><Text zIndex={200} pos={"relative"}>{customer.phoneNumber}</Text></Table.Cell>
+      <Table.Cell className=""><Text zIndex={200} pos={"relative"}>{`(${customer.phoneNumber.slice(0,3)}) ${customer.phoneNumber.slice(3,6)}-${customer.phoneNumber.slice(6,10)}`}</Text></Table.Cell>
       <Table.Cell className="email"><Text zIndex={200} pos={"relative"}>{customer.email ?? "N/A"}</Text></Table.Cell>
       <Table.Cell className="" zIndex={200}>
         <MenuRoot1 customer={customer} preferredColors={preferredColors} setSelectedCustomer={setSelectedCustomer}
@@ -107,7 +107,7 @@ const MyTable = ({ selectedCustomer, setSelectedCustomer, customers, preferredCo
         />
       </Table.Cell> */}
       <Table.Cell className=""><Text zIndex={200} pos={"relative"}>{customer.firstName} {customer.middleName ? customer.middleName[0] + '.' : ""} {customer.lastName}</Text></Table.Cell>
-      <Table.Cell className=""><Text zIndex={200} pos={"relative"}>{customer.phoneNumber}</Text></Table.Cell>
+      <Table.Cell className=""><Text zIndex={200} pos={"relative"}>{`(${customer.phoneNumber.slice(0,3)}) ${customer.phoneNumber.slice(3,6)}-${customer.phoneNumber.slice(6,9)}`}</Text></Table.Cell>
       <Table.Cell className="email"><Text zIndex={200} pos={"relative"}>{customer.email ?? "N/A"}</Text></Table.Cell>
       <Table.Cell className="" zIndex={200}>
         <MenuRoot1 customer={customer} preferredColors={preferredColors} setSelectedCustomer={setSelectedCustomer}

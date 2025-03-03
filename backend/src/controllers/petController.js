@@ -21,7 +21,7 @@ export const createPet = async (req, res) => {
             console.log("Owner belongs to a group, linking pet to all members.");
 
             // Find all customers in the same group
-            const groupCustomers = await CustomerPet.findAll({
+            const groupCustomers = await Customer.findAll({
                 where: { groupID: customer.groupID } // Use customer.groupID here
             });
 
@@ -29,14 +29,13 @@ export const createPet = async (req, res) => {
             await Promise.all(
                 groupCustomers.map(async (groupCustomer) => {
                     const existingEntry = await CustomerPet.findOne({
-                        where: { petID: newPet.id, ownerID: groupCustomer.ownerID }
+                        where: { petID: newPet.id, ownerID: groupCustomer.id }
                     });
 
                     if (!existingEntry) {
                         await CustomerPet.create({
                             petID: newPet.id,
-                            ownerID: groupCustomer.ownerID,
-                            groupID: customer.groupID // Use customer.groupID here
+                            ownerID: groupCustomer.id,
                         });
                     }
                 })

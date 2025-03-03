@@ -22,6 +22,7 @@ const PetListDisplay = ({ pets, createPetPressed, setCreatePetPressed, closePets
     const [hasGroup, setHasGroup] = useState(false)
     const [petToEdit, setPetToEdit] = useState({})
     const [phoneNumber, setPhoneNumber] = useState("");
+    
     const { searchResults, handleSearch } = useLinkCustomers();
     
 
@@ -113,7 +114,7 @@ const PetListDisplay = ({ pets, createPetPressed, setCreatePetPressed, closePets
                 <HStack justify={"center"}  w="100%">
                 <PopoverRoot>
   <PopoverTrigger asChild>
-    <Button variant="surface" disabled={hasGroup}>
+    <Button variant="surface" disabled={customer.groupID}>
       Link to Household
     </Button>
   </PopoverTrigger>

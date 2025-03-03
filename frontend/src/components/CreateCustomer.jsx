@@ -8,6 +8,8 @@ import CustomerCreationPet from './CustomerCreationPet';
 import { Checkbox } from "@/components/ui/checkbox"
 import { Toaster, toaster } from "@/components/ui/toaster"
 
+import { withMask } from "use-mask-input";
+
 import CreatePet from "./Pet/CreatePet2";
 
 
@@ -30,7 +32,8 @@ const CreateCustomer = ({ setCustomerInfoOpen }) => {
           size={"lg"}
           value={value}
           onChange={(e) => setValue(e.target.value)}
-          placeholder={label}
+          placeholder={label === "Phone Number" ? "(999) 999-9999" : label}
+          ref={label === "Phone Number" ? withMask("(999) 999-9999") : null}
           backgroundColor={{ base: "primaryL", _dark: "primary" }}
         />
       </HStack>
@@ -67,12 +70,13 @@ const CreateCustomer = ({ setCustomerInfoOpen }) => {
   
     // Create customer
     try {
+      const formattedPhoneNumber = phoneNumber.replaceAll(/[()\-\ ]/g, "");
       console.log('Submitting customer data:', {
         firstName: firstName,
         middleName: middleName,
         lastName: lastName,
         email: email || null,
-        phoneNumber: phoneNumber,
+        phoneNumber: formattedPhoneNumber,
       });
   
       response = await fetch('/db/createCustomer', {
@@ -85,7 +89,7 @@ const CreateCustomer = ({ setCustomerInfoOpen }) => {
           middleName: middleName,
           lastName: lastName,
           email: email || null,
-          phoneNumber: phoneNumber,
+          phoneNumber: formattedPhoneNumber,
         })
       });
   

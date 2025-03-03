@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useMemo } from 'react';
 import { PopoverRoot, PopoverTrigger, PopoverContent, PopoverArrow, PopoverBody, PopoverTitle } from '@/components/ui/popover';
 import { IconButton, HStack, Box } from '@chakra-ui/react';
 import { LuSearch } from 'react-icons/lu';
@@ -42,7 +42,8 @@ const SearchPopup = ({ preferredColors, setSearchResults,
     }
   }, [firstNameSearch, lastNameSearch, phoneSearch, setSearchResults]);
 
-  const debouncedSearch = useCallback(debounce(handleSearch, 500), [handleSearch]);
+  const debouncedSearch = useMemo(() => debounce(handleSearch, 1000), [handleSearch]);
+
 
   useEffect(() => {
     debouncedSearch();

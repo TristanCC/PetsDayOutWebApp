@@ -1,10 +1,29 @@
-import { Box, Button, IconButton, HStack } from "@chakra-ui/react";
+import { Box, Button, IconButton, HStack, Input, Text } from "@chakra-ui/react";
 import { EmptyState } from "@/components/ui/empty-state";
 import { GiSniffingDog } from "react-icons/gi";
 import { LuCircleX } from "react-icons/lu";
 import CreatePet from "./CreatePet";
 
-const EmptyStateComponent = ({ createPetPressed, setCreatePetPressed, setShowEmptyState, closePetsPanel, customer, handleBack, reloadPets }) => (
+import {
+    PopoverArrow,
+    PopoverBody,
+    PopoverContent,
+    PopoverRoot,
+    PopoverTitle,
+    PopoverTrigger,
+  } from "@/components/ui/popover"
+
+  import { useState } from "react"
+  import { withMask } from "use-mask-input"
+  
+
+import useLinkCustomers from "./useLinkCustomers";
+
+const EmptyStateComponent = ({ createPetPressed, setCreatePetPressed, setShowEmptyState, closePetsPanel, customer, handleBack, reloadPets, preferredColors }) => {
+
+    const [phoneNumber, setPhoneNumber] = useState("");
+    const { searchResults, handleSearch } = useLinkCustomers();
+    return (
     <Box
         bg={{ base: "primarySurfaceL", _dark: "primarySurface" }}
         borderRadius={"1rem"}
@@ -43,7 +62,50 @@ const EmptyStateComponent = ({ createPetPressed, setCreatePetPressed, setShowEmp
                 You can either create a new pet or link customers together (for pets already in the system).`}
             >
                 <HStack>
-                    <Button>Link Customers</Button>
+                <PopoverRoot>
+  <PopoverTrigger asChild>
+    <Button variant="surface" disabled={customer.groupID}>
+      Link to Household
+    </Button>
+  </PopoverTrigger>
+  <PopoverContent colorPalette={preferredColors}>
+    <PopoverArrow />
+    <PopoverBody colorPalette={preferredColors}>
+      <PopoverTitle fontSize={"md"} fontWeight="small">
+        Linking to a Household
+      </PopoverTitle>
+      <Text my={2} fontSize="sm" color="gray.600" mb={2}>
+        Search for the phone number of another customer to add to or create a new household.
+      </Text>
+      <Input
+        my={2}
+        fontSize={"md"}
+        placeholder="(999) 999-9999"
+        ref={withMask("(999) 999-9999")}
+        onChange={(e) => setPhoneNumber(e.target.value)}
+      />
+      <Button
+        disabled={phoneNumber.replace(/\D/g, "").length < 10}
+        variant={"solid"}
+        width={"100%"}
+        onClick={() => handleSearch(customer, phoneNumber)}
+      >
+        Link
+      </Button>
+      {searchResults && searchResults.length > 0 ? (
+        <Box mt={3} p={2} borderRadius="md">
+          <Text fontSize="md" fontWeight="sm" color={"green.400"}>
+            Matching Household found. Linking...
+          </Text>
+        </Box>
+      ) : searchResults ? (
+        <Text mt={2} fontSize="sm" color="red.500">
+          No matching household found.
+        </Text>
+      ) : null}
+    </PopoverBody>
+  </PopoverContent>
+  </PopoverRoot>
                     <Button onClick={() => { setCreatePetPressed(true); setShowEmptyState(false); }}>Create Pet</Button>
                 </HStack>
             </EmptyState>
@@ -51,6 +113,7 @@ const EmptyStateComponent = ({ createPetPressed, setCreatePetPressed, setShowEmp
             <CreatePet customer={customer} onPetCreated={() => { setCreatePetPressed(false); reloadPets(); }} setCreatePetPressed={handleBack} />
         )}
     </Box>
-);
+    )
+};
 
 export default EmptyStateComponent;
