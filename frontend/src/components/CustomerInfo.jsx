@@ -4,7 +4,8 @@ import { Button, Input, IconButton, HStack, Box, Text, VStack, useBreakpointValu
 import { Field } from "@/components/ui/field";
 import { Textarea } from "@chakra-ui/react";
 import { LuCircleX } from "react-icons/lu";
-import { Separator } from "@chakra-ui/react"
+import { Separator } from "@chakra-ui/react";
+import { withMask } from "use-mask-input";
 
 const createEditableField = (label, value, setValue, edit, setEdit, isMobile, required) => (
     <Field label={label} required={required}>
@@ -15,7 +16,8 @@ const createEditableField = (label, value, setValue, edit, setEdit, isMobile, re
                 value={value}
                 onChange={(e) => setValue(e.target.value)}
                 disabled={!edit}
-                placeholder={label}
+                placeholder={label === "Phone Number" ? "(999) 999-9999" : label}
+                ref={label === "Phone Number" ? withMask("(999) 999-9999") : null}
                 backgroundColor={{ base: "primaryL", _dark: "primary" }}
             />
             <IconButton
@@ -91,6 +93,10 @@ const CustomerInfo = ({ selectedCustomer, setCustomerInfoOpen, updateCustomerInS
 
     const handleSubmit = (e) => {
         e.preventDefault();
+
+        // Format the phone number before sending the payload
+        const formattedPhoneNumber = phoneNumber.replaceAll(/[()\-\ ]/g, "");
+
         fetch(`/db/updateCustomer/${selectedCustomer.id}`, {
             method: "PUT",
             headers: {
@@ -101,7 +107,7 @@ const CustomerInfo = ({ selectedCustomer, setCustomerInfoOpen, updateCustomerInS
                 middleName,
                 lastName,
                 email,
-                phoneNumber,
+                phoneNumber: formattedPhoneNumber, // Use the formatted phone number
                 customerComment,
             }),
         })
@@ -109,6 +115,7 @@ const CustomerInfo = ({ selectedCustomer, setCustomerInfoOpen, updateCustomerInS
             .then((data) => {
                 updateCustomerInState(data);
                 setCustomerInfoOpen(false);
+                setPhoneNumber(formattedPhoneNumber); // Update the state with the formatted phone number
             })
             .catch((error) => console.error("Error updating customer:", error));
     };
@@ -130,17 +137,15 @@ const CustomerInfo = ({ selectedCustomer, setCustomerInfoOpen, updateCustomerInS
             margin={"auto"}
         >
             <Box
-
                 data-state="open"
                 _open={{
-                animationName: "fade-in, scale-in",
-                animationDuration: "300ms",
+                    animationName: "fade-in, scale-in",
+                    animationDuration: "300ms",
                 }}
                 _closed={{
-                animationName: "fade-out, scale-out",
-                animationDuration: "120ms",
+                    animationName: "fade-out, scale-out",
+                    animationDuration: "120ms",
                 }}
-              
                 borderRadius="lg"
                 display={"flex"}
                 flexDir={"column"}
@@ -152,24 +157,24 @@ const CustomerInfo = ({ selectedCustomer, setCustomerInfoOpen, updateCustomerInS
                 position="fixed"
                 bg={{ base: "primarySurfaceL", _dark: "primaryMidpoint" }}
             >
-                <Box minW={"259px"} maxW={"400px"}  w="100%" borderRadius={"lg"} p={2} py={0}  display={"flex"} gap={"3"} lineHeight={"2rem"}
-                 justifyContent={"space-between"} alignItems={"center"}>
+                <Box minW={"259px"} maxW={"400px"} w="100%" borderRadius={"lg"} p={2} py={0} display={"flex"} gap={"3"} lineHeight={"2rem"}
+                    justifyContent={"space-between"} alignItems={"center"}>
                     <Text fontSize="2xl" fontWeight="medium">
-                        {selectedCustomer.firstName} {selectedCustomer.lastName}{selectedCustomer.lastName[selectedCustomer.lastName.length-1] !== "s" ? "'s" : "'"} Info
+                        {selectedCustomer.firstName} {selectedCustomer.lastName}{selectedCustomer.lastName[selectedCustomer.lastName.length - 1] !== "s" ? "'s" : "'"} Info
                     </Text>
                     <IconButton
-                    aria-label="Close"
-                    size="xl"
-                    variant="ghost"
-                    rounded={"1"}
-                    padding={0}
-                    onClick={() => setCustomerInfoOpen(false)}
-                >
-                    <LuCircleX />
-                </IconButton>
+                        aria-label="Close"
+                        size="xl"
+                        variant="ghost"
+                        rounded={"1"}
+                        padding={0}
+                        onClick={() => setCustomerInfoOpen(false)}
+                    >
+                        <LuCircleX />
+                    </IconButton>
                 </Box>
                 <Separator mb={4} w={"80%"} alignSelf={"start"}></Separator>
-        
+
                 <form onSubmit={handleSubmit}>
                     <VStack spacing={4} justifySelf={"center"}>
                         {createEditableField("First Name", firstName, setFirstName, editFirstName, setEditFirstName, isMobile, true)}

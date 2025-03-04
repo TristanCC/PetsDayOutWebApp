@@ -1,5 +1,5 @@
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { Box, chakra, IconButton } from "@chakra-ui/react";
 import { ColorModeButton } from "@/components/ui/color-mode";
 import { LuPaintbrushVertical } from "react-icons/lu";
@@ -8,67 +8,20 @@ import {
   PopoverContent,
   PopoverRoot,
   PopoverTrigger,
-} from "@/components/ui/popover"
+} from "@/components/ui/popover";
 
 import Navbar from './components/Navbar';
 import Home from './pages/Home';
 import Login from './pages/Login';
-
-function colorSwatch(color) {
-  return (
-    <Box
-    ></Box>
-  )
-}
-
+import { CustomerProvider } from './components/context/CustomerContext'; // Import the provider
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [checked, setChecked] = useState(true);
   const [preferredColors, setPreferredColors] = useState('blue');
-  const [customers, setCustomers] = useState(() => {
-    const cachedData = localStorage.getItem('customers');
-    return cachedData ? JSON.parse(cachedData) : [];
-  });
-  const [selectedCustomer, setSelectedCustomer] = useState(null);
-
-  const limit = window.innerHeight > 900 ? 15 : window.innerHeight > 700 ? 8 : window.innerHeight > 500 ? 6 : 3;
-
-  const [offset, setOffset] = useState(0)
-
-  const fetchCustomers = async () => {
-    try {
-      const response = await fetch(`/db/getCustomers?limit=${limit}&offset=${offset}`);
-      const data = await response.json();
-      data.sort((a, b) => a.lastName.toLowerCase().localeCompare(b.lastName.toLowerCase()))
-      setCustomers(data);
-    } catch (error) {
-      console.error('Error fetching customers:', error);
-    }
-  };
-
-
-  useEffect(() => {
-    fetchCustomers();
-  }, [limit, offset, setOffset]);
-
-  const updateCustomerInState = (updatedCustomer) => {
-    setCustomers((prevCustomers) =>
-      prevCustomers.map((customer) =>
-        customer.id === updatedCustomer.id ? updatedCustomer : customer
-      )
-    );
-  };
-
-  const deleteCustomerInState = (deletedCustomer) => {
-    setCustomers((prevCustomers) =>
-      prevCustomers.filter((customer) => customer.id !== deletedCustomer.id)
-    );
-  };
 
   const handleColorModeChange = (colorMode) => {
-    setPreferredColors(colorMode)
-  }
+    setPreferredColors(colorMode);
+  };
 
   const colors = ['red', 'orange', 'yellow', 'green', 'teal', 'blue', 'cyan', 'purple', 'pink'].map((color) => (
     <Box
@@ -86,10 +39,10 @@ function App() {
   ));
 
   return (
-    <>
+    <CustomerProvider> {/* Wrap your app with the provider */}
       <Box
         colorPalette={preferredColors}
-        color={{ base: "primary", _dark: "primaryL"}}
+        color={{ base: "primary", _dark: "primaryL" }}
         bg={{ base: "primaryL", _dark: "primary" }}
         w={"100%"}
         display={"flex"}
@@ -105,14 +58,6 @@ function App() {
               setIsLoggedIn={setIsLoggedIn}
               preferredColors={preferredColors}
               setPreferredColors={setPreferredColors}
-              customers={customers}
-              selectedCustomer={selectedCustomer}
-              setSelectedCustomer={setSelectedCustomer}
-              updateCustomerInState={updateCustomerInState}
-              deleteCustomerInState={deleteCustomerInState}
-              limit={limit}
-              offset={offset}
-              setOffset={setOffset}
             />
             <Box className='wrapperInner'>
               <BrowserRouter>
@@ -125,14 +70,6 @@ function App() {
                         setIsLoggedIn={setIsLoggedIn}
                         preferredColors={preferredColors}
                         setPreferredColors={setPreferredColors}
-                        customers={customers}
-                        selectedCustomer={selectedCustomer}
-                        setSelectedCustomer={setSelectedCustomer}
-                        updateCustomerInState={updateCustomerInState}
-                        deleteCustomerInState={deleteCustomerInState}
-                        limit={limit}
-                        offset={offset}
-                        setOffset={setOffset}
                       />
                     }
                   />
@@ -166,28 +103,8 @@ function App() {
           </PopoverContent>
         </PopoverRoot>
       </Box>
-    </>
+    </CustomerProvider>
   );
 }
 
 export default App;
-
-// | "transparent"
-// | "current"
-// | "black"
-// | "white"
-// | "whiteAlpha"
-// | "blackAlpha"
-// | "gray"
-// | "red"
-// | "orange"
-// | "yellow"
-// | "green"
-// | "teal"
-// | "blue"
-// | "cyan"
-// | "purple"
-// | "pink"
-// | "bg"
-// | "fg"
-// | "border"

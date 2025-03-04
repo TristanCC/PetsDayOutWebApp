@@ -81,6 +81,7 @@ const SearchPopup = ({ preferredColors, setSearchResults,
               onChange={(e) => setFirstNameSearch(e.target.value)}
               placeholder="First name"
               size="md"
+              disabled={phoneSearch}
             />
             <Input
               name="xyz123"
@@ -90,6 +91,7 @@ const SearchPopup = ({ preferredColors, setSearchResults,
               value={lastNameSearch}
               onChange={(e) => setLastNameSearch(e.target.value)}
               placeholder="Last name"
+              disabled={phoneSearch}
               size="md"
             />
             <Input
@@ -115,3 +117,4 @@ const SearchPopup = ({ preferredColors, setSearchResults,
 };
 
 export default SearchPopup;
+

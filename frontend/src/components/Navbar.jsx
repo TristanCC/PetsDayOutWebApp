@@ -1,34 +1,35 @@
-import { Tabs, VStack } from "@chakra-ui/react";
-import { useState, useEffect, createContext } from "react";
-import { Box, Text, IconButton } from "@chakra-ui/react";
+import { Tabs, VStack, Box, Text, IconButton } from "@chakra-ui/react";
+import { useState, useEffect } from "react";
 import MyTable from '../components/MyTable';
 import SearchPopup from './SearchPopup';
 import Login from '../pages/Login';
+import { useCustomers } from './context/CustomerContext'; // Import the context hook
 
-function Navbar({
+const Navbar = ({
   isLoggedIn,
   setIsLoggedIn,
-  theme,
   preferredColors,
-  setTheme,
   setPreferredColors,
-  customers,
-  selectedCustomer,
-  setSelectedCustomer,
-  updateCustomerInState,
-  deleteCustomerInState,
-  limit,
-  offset,
-  setOffset,
-}) {
+}) => {
   const [value, setValue] = useState("first");
-
   const [firstNameSearch, setFirstNameSearch] = useState("");
   const [lastNameSearch, setLastNameSearch] = useState("");
   const [phoneSearch, setPhoneSearch] = useState("");
-
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
   const [searchResults, setSearchResults] = useState([]);
+
+  // Use the context
+  const {
+    customers,
+    selectedCustomer,
+    setSelectedCustomer,
+    fetchCustomers,
+    updateCustomerInState,
+    deleteCustomerInState,
+    limit,
+    offset,
+    setOffset,
+  } = useCustomers();
 
   useEffect(() => {
     const handleResize = () => {
