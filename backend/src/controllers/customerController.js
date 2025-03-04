@@ -19,6 +19,20 @@ export const createCustomer = async (req, res) => {
   }
 };
 
+export const getCustomer = async (req, res) => {
+  const { id } = req.params; // Customer ID
+
+  try{
+    const customer = await Customer.findOne({
+      where: { id: `${id}` }
+    })
+    res.json(customer)
+  } catch(error) {
+    console.error("error getting customer", error)
+    res.status(500).json({error: 'failed to fetch customer.'})
+  }
+}
+
 
 export const getCustomers = async (req, res) => {
   const { limit, offset } = req.query

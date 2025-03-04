@@ -1,7 +1,7 @@
 import { useState } from "react";
 
-const useLinkCustomers = (didLinkCustomer, setDidLinkCustomer, reloadPets) => {
-  const [searchResults, setSearchResults] = useState(null);
+const useFetchCustomers = () => {
+  const [customers, setCustomers] = useState([]);
 
   const handleSearch = async (customer, phoneNumber) => {
     try {
@@ -35,32 +35,8 @@ const useLinkCustomers = (didLinkCustomer, setDidLinkCustomer, reloadPets) => {
     }
   };
 
-  const handleLink = async (currentID, targetID) => {
-    try {
-      const response = await fetch(`/db/linkCustomers`, {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          currentOwnerID: currentID,
-          targetOwnerID: targetID,
-        }),
-      });
 
-      const data = await response.json();
-      if (!response.ok) {
-        throw new Error(data.message || "Failed to link customers.");
-      }
-      alert(data.message);
-      setDidLinkCustomer(true)
-      reloadPets()
-    } catch (error) {
-      console.error("Error linking customers:", error);
-    }
-  };
-
-  return { searchResults, handleSearch, handleLink };
+  return { customers };
 };
 
 export default useLinkCustomers;

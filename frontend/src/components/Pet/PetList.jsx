@@ -14,6 +14,23 @@ const PetList = ({ customer, preferredColors, handleEditPet, closePetsPanel }) =
     const [createPetPressed, setCreatePetPressed] = useState(false)
     const [showEmptyState, setShowEmptyState] = useState(true)
 
+    const [didLinkCustomer, setDidLinkCustomer] = useState(false)
+    
+    useEffect(() => {
+        const fetchCustomer = async () => {
+          try {
+            const response = await fetch(`/db/getCustomer/${customer.id}`);
+            if (!response.ok) throw new Error("Network response was not ok");
+            const updatedCustomer = await response.json();
+            setCustomer(updatedCustomer);
+          } catch (error) {
+            console.error("Error fetching customer:", error);
+          }
+        };
+      
+        fetchCustomer();
+      }, []); // Empty dependency array means this runs only when the component mounts      
+
 
     const reloadPets = async () => {
         try {
@@ -87,6 +104,9 @@ const PetList = ({ customer, preferredColors, handleEditPet, closePetsPanel }) =
                     customer={customer} 
                     handleBack={handleBack} 
                     reloadPets={reloadPets} 
+                    preferredColors={preferredColors}
+                    didLinkCustomer={didLinkCustomer}
+                    setDidLinkCustomer={setDidLinkCustomer}
                 />
             ) : (
                 <PetListDisplay 
@@ -98,6 +118,8 @@ const PetList = ({ customer, preferredColors, handleEditPet, closePetsPanel }) =
                     handleBack={handleBack} 
                     reloadPets={reloadPets} 
                     preferredColors={preferredColors}
+                    didLinkCustomer={didLinkCustomer}
+                    setDidLinkCustomer={setDidLinkCustomer}
                 />
             )}
         </Box>

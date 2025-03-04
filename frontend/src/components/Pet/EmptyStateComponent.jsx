@@ -19,10 +19,11 @@ import {
 
 import useLinkCustomers from "./useLinkCustomers";
 
-const EmptyStateComponent = ({ createPetPressed, setCreatePetPressed, setShowEmptyState, closePetsPanel, customer, handleBack, reloadPets, preferredColors }) => {
+const EmptyStateComponent = ({ createPetPressed, setCreatePetPressed, setShowEmptyState, closePetsPanel, customer, handleBack, reloadPets,
+   preferredColors, didLinkCustomer, setDidLinkCustomer }) => {
 
     const [phoneNumber, setPhoneNumber] = useState("");
-    const { searchResults, handleSearch } = useLinkCustomers();
+    const { searchResults, handleSearch } = useLinkCustomers(didLinkCustomer, setDidLinkCustomer, reloadPets);
     return (
     <Box
         bg={{ base: "primarySurfaceL", _dark: "primarySurface" }}
@@ -64,7 +65,7 @@ const EmptyStateComponent = ({ createPetPressed, setCreatePetPressed, setShowEmp
                 <HStack>
                 <PopoverRoot>
   <PopoverTrigger asChild>
-    <Button variant="surface" disabled={customer.groupID}>
+    <Button variant="solid" disabled={didLinkCustomer || customer.groupID}>
       Link to Household
     </Button>
   </PopoverTrigger>

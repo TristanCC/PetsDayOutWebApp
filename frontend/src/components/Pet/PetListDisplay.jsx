@@ -18,12 +18,13 @@ import { withMask } from "use-mask-input"
 
 import useLinkCustomers from "./useLinkCustomers";
 
-const PetListDisplay = ({ pets, createPetPressed, setCreatePetPressed, closePetsPanel, customer, handleBack, reloadPets, preferredColors }) => {
+const PetListDisplay = ({ pets, createPetPressed, setCreatePetPressed, closePetsPanel, customer,
+   handleBack, reloadPets, preferredColors, didLinkCustomer, setDidLinkCustomer }) => {
     const [hasGroup, setHasGroup] = useState(false)
     const [petToEdit, setPetToEdit] = useState({})
     const [phoneNumber, setPhoneNumber] = useState("");
     
-    const { searchResults, handleSearch } = useLinkCustomers();
+    const { searchResults, handleSearch } = useLinkCustomers(didLinkCustomer, setDidLinkCustomer, reloadPets);
     
 
     return (
@@ -46,6 +47,7 @@ const PetListDisplay = ({ pets, createPetPressed, setCreatePetPressed, closePets
         <Box display={!createPetPressed ? "flex" : "none"} >
           <Text
             fontSize={"2xl"}
+            lineHeight={"normal"}
             fontWeight={"medium"}
             position={"relative"}
           >
@@ -53,6 +55,7 @@ const PetListDisplay = ({ pets, createPetPressed, setCreatePetPressed, closePets
             {customer.lastName.charAt(customer.lastName.length - 1) === "s"
               ? "'"
               : "'s"}{" "}
+              {customer.groupID ? "Household ": ""}
             Pets
           </Text>
 
@@ -114,7 +117,7 @@ const PetListDisplay = ({ pets, createPetPressed, setCreatePetPressed, closePets
                 <HStack justify={"center"}  w="100%">
                 <PopoverRoot>
   <PopoverTrigger asChild>
-    <Button variant="surface" disabled={customer.groupID}>
+    <Button variant="surface" disabled={customer.groupID} display={customer.groupID ? "none" : "block"}>
       Link to Household
     </Button>
   </PopoverTrigger>

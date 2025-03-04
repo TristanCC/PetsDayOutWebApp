@@ -78,7 +78,7 @@ const MenuRoot1 = ({ customer, preferredColors, setSelectedCustomer, updateCusto
     <Box>
       <MenuRoot size={"md"} >
         <MenuTrigger asChild>
-          <Button variant="outline" size="md">
+          <Button variant="ghost" size="md">
             ☰
           </Button>
         </MenuTrigger>
@@ -145,6 +145,7 @@ const MenuRoot1 = ({ customer, preferredColors, setSelectedCustomer, updateCusto
             customer={customer}
             closePetsPanel={() => setPetsPanelOpen(false)}
             preferredColors={preferredColors}
+            updateCustomerInState={updateCustomerInState}
           />
         </div>
       )}

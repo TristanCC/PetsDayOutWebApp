@@ -36,20 +36,19 @@ function App() {
 
   const [offset, setOffset] = useState(0)
 
+  const fetchCustomers = async () => {
+    try {
+      const response = await fetch(`/db/getCustomers?limit=${limit}&offset=${offset}`);
+      const data = await response.json();
+      data.sort((a, b) => a.lastName.toLowerCase().localeCompare(b.lastName.toLowerCase()))
+      setCustomers(data);
+    } catch (error) {
+      console.error('Error fetching customers:', error);
+    }
+  };
 
 
   useEffect(() => {
-    const fetchCustomers = async () => {
-      try {
-        const response = await fetch(`/db/getCustomers?limit=${limit}&offset=${offset}`);
-        const data = await response.json();
-        data.sort((a, b) => a.lastName.toLowerCase().localeCompare(b.lastName.toLowerCase()))
-        setCustomers(data);
-      } catch (error) {
-        console.error('Error fetching customers:', error);
-      }
-    };
-
     fetchCustomers();
   }, [limit, offset, setOffset]);
 
