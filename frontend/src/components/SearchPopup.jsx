@@ -5,9 +5,16 @@ import { LuSearch } from 'react-icons/lu';
 import { Input, Button, Text } from '@chakra-ui/react';
 import { withMask } from 'use-mask-input';
 
-const SearchPopup = ({ preferredColors, setSearchResults, 
-  firstNameSearch, setFirstNameSearch, lastNameSearch, setLastNameSearch, phoneSearch, setPhoneSearch }) => {
-
+const SearchPopup = ({
+  preferredColors,
+  setSearchResults,
+  firstNameSearch,
+  setFirstNameSearch,
+  lastNameSearch,
+  setLastNameSearch,
+  phoneSearch,
+  setPhoneSearch,
+}) => {
   const debounce = (func, wait) => {
     let timeout;
     return (...args) => {
@@ -17,15 +24,16 @@ const SearchPopup = ({ preferredColors, setSearchResults,
   };
 
   const handleSearch = useCallback(async () => {
+    // If no search criteria provided, clear search results.
     if (!firstNameSearch && !lastNameSearch && !phoneSearch) {
-      setSearchResults([]);
+      setSearchResults(null); // indicate no search active
       return;
     }
 
+    // If searching by name, clear phone search, and vice versa.
     if (firstNameSearch || lastNameSearch) {
       setPhoneSearch("");
     }
-
     if (phoneSearch) {
       setFirstNameSearch("");
       setLastNameSearch("");
@@ -33,17 +41,18 @@ const SearchPopup = ({ preferredColors, setSearchResults,
 
     try {
       const formattedPhoneNumber = phoneSearch.replaceAll(/[()\-\ ]/g, "");
-      console.log(formattedPhoneNumber)
-      const response = await fetch(`/db/findCustomer?firstName=${firstNameSearch}&lastName=${lastNameSearch}&phone=${formattedPhoneNumber}`);
+      const response = await fetch(
+        `/db/findCustomer?firstName=${firstNameSearch}&lastName=${lastNameSearch}&phone=${formattedPhoneNumber}`
+      );
       const data = await response.json();
+      // Always set as an array, even if empty.
       setSearchResults(data);
     } catch (error) {
-      console.error('Search failed:', error);
+      console.error("Search failed:", error);
     }
-  }, [firstNameSearch, lastNameSearch, phoneSearch, setSearchResults]);
+  }, [firstNameSearch, lastNameSearch, phoneSearch, setSearchResults, setFirstNameSearch, setLastNameSearch, setPhoneSearch]);
 
   const debouncedSearch = useMemo(() => debounce(handleSearch, 1000), [handleSearch]);
-
 
   useEffect(() => {
     debouncedSearch();
@@ -53,29 +62,26 @@ const SearchPopup = ({ preferredColors, setSearchResults,
     setFirstNameSearch("");
     setLastNameSearch("");
     setPhoneSearch("");
+    setSearchResults(null); // reset search mode
   };
 
   return (
     <PopoverRoot>
       <PopoverTrigger asChild>
-        <IconButton
-          aria-label="Search database"
-          rounded="xl"
-        >
+        <IconButton aria-label="Search database" rounded="xl">
           <LuSearch />
         </IconButton>
       </PopoverTrigger>
-
       <PopoverContent>
         <PopoverArrow />
         <PopoverBody colorPalette={preferredColors}>
-          <PopoverTitle fontSize={"xl"} pb={"1rem"} color={{base: "primary", _dark: "primaryL"}}>Find a customer</PopoverTitle>
-
+          <PopoverTitle fontSize={"xl"} pb={"1rem"} color={{ base: "primary", _dark: "primaryL" }}>
+            Find a customer
+          </PopoverTitle>
           <Box className="flexCol">
             <Input
-              name="xyz123"
-              id="xyz123"
-              autoComplete="xyz123"
+              name="firstName"
+              id="firstName"
               variant="subtle"
               value={firstNameSearch}
               onChange={(e) => setFirstNameSearch(e.target.value)}
@@ -84,9 +90,8 @@ const SearchPopup = ({ preferredColors, setSearchResults,
               disabled={phoneSearch}
             />
             <Input
-              name="xyz123"
-              id="xyz123"
-              autoComplete="xyz123"
+              name="lastName"
+              id="lastName"
               variant="subtle"
               value={lastNameSearch}
               onChange={(e) => setLastNameSearch(e.target.value)}
@@ -95,19 +100,20 @@ const SearchPopup = ({ preferredColors, setSearchResults,
               size="md"
             />
             <Input
-              name="xyz123"
-              id="xyz123"
-              autoComplete="xyz123"
+              name="phoneSearch"
+              id="phoneSearch"
               variant="subtle"
               value={phoneSearch}
               onChange={(e) => setPhoneSearch(e.target.value)}
               size="md"
               disabled={firstNameSearch || lastNameSearch}
-              placeholder="(999) 999-9999" ref={withMask("(999) 999-9999")}
+              placeholder="(999) 999-9999"
+              ref={withMask("(999) 999-9999")}
             />
-
             <HStack>
-              <Button type="button" variant={"outline"} onClick={clearSearch} disabled={!firstNameSearch && !lastNameSearch && !phoneSearch}>Clear</Button>
+              <Button type="button" variant={"outline"} onClick={clearSearch} disabled={!firstNameSearch && !lastNameSearch && !phoneSearch}>
+                Clear
+              </Button>
             </HStack>
           </Box>
         </PopoverBody>
@@ -117,4 +123,3 @@ const SearchPopup = ({ preferredColors, setSearchResults,
 };
 
 export default SearchPopup;
-

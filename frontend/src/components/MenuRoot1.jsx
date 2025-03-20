@@ -18,10 +18,12 @@ import { LuHouse } from "react-icons/lu";
 
 import CustomerInfo from './CustomerInfo';
 import PetList from './Pet/PetList';
+import Household from "./Household";
 
 const MenuRoot1 = ({ customer, preferredColors, setSelectedCustomer, updateCustomerInState, deleteCustomerInState }) => {
   const [customerInfoOpen, setCustomerInfoOpen] = useState(false);
   const [petsPanelOpen, setPetsPanelOpen] = useState(false);
+  const [householdPanelOpen, setHouseholdPanelOpen] = useState(false)
   const customerInfoRef = useRef(null);
   const petsPanelRef = useRef(null);
 
@@ -32,6 +34,10 @@ const MenuRoot1 = ({ customer, preferredColors, setSelectedCustomer, updateCusto
   const handlePets = () => {
     setPetsPanelOpen(!petsPanelOpen);
   };
+
+  const handleHousehold = () => {
+    setHouseholdPanelOpen(!householdPanelOpen)
+  }
 
   const handleDeleteCustomer = async () => {
     // Confirm deletion first! temporary solution for now
@@ -109,7 +115,7 @@ const MenuRoot1 = ({ customer, preferredColors, setSelectedCustomer, updateCusto
             </div>
             <Text fontSize={"1rem"}>Customer Info</Text>
           </MenuItem>
-          <MenuItem borderRadius={".75rem"} value="household" cursor={"pointer"} >
+          <MenuItem borderRadius={".75rem"} value="household" disabled={!customer.groupID} cursor={ customer.groupID? "pointer": "default"} onClick={handleHousehold} >
             <div>
               <Icon fontSize={"1.25rem"} color={"blue.500"}>
                 <LuHouse/>
@@ -146,6 +152,16 @@ const MenuRoot1 = ({ customer, preferredColors, setSelectedCustomer, updateCusto
             closePetsPanel={() => setPetsPanelOpen(false)}
             preferredColors={preferredColors}
             updateCustomerInState={updateCustomerInState}
+          />
+        </div>
+      )}
+
+      {householdPanelOpen && (
+        <div /*ref={petsPanelRef}*/>
+          <Household 
+            customer={customer}
+            closeHouseholdPanel={() => setHouseholdPanelOpen(false)}
+            preferredColors={preferredColors}
           />
         </div>
       )}

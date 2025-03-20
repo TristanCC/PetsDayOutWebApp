@@ -202,3 +202,25 @@ export const deleteCustomer = async (req, res) => {
     res.status(500).json({ error: 'Failed to delete customer. Please try again later.' });
   }
 };
+
+// function to get all members of a particular household
+export const getHousehold = async (req, res) => {
+
+  try {
+    const { groupID } = req.params
+    if (!groupID) {
+      return res.status(404).json({ error: 'No groupID provided.'})
+    }
+
+    const groupMembers = await Customer.findAll({ where: { groupID: `${groupID}` } })
+    if (!groupMembers) {
+      return res.status(404).json({ error: 'No group members provided.'})
+    }
+
+    res.json(groupMembers)
+
+  } catch(error) {
+    console.error("error getting household", error)
+    res.status(500).json({ error: 'Failed to get household.' });
+  }
+}

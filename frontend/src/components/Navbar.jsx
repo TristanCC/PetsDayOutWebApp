@@ -31,21 +31,21 @@ const Navbar = ({
     setOffset,
   } = useCustomers();
 
-  useEffect(() => {
-    const handleResize = () => {
-      const debounceTimeout = setTimeout(() => {
-        setWindowWidth(window.innerWidth);
-      }, 200);
+  // useEffect(() => {
+  //   const handleResize = () => {
+  //     const debounceTimeout = setTimeout(() => {
+  //       setWindowWidth(window.innerWidth);
+  //     }, 200);
 
-      return () => clearTimeout(debounceTimeout);
-    };
+  //     return () => clearTimeout(debounceTimeout);
+  //   };
 
-    window.addEventListener("resize", handleResize);
+  //   window.addEventListener("resize", handleResize);
 
-    return () => {
-      window.removeEventListener("resize", handleResize);
-    };
-  }, []);
+  //   return () => {
+  //     window.removeEventListener("resize", handleResize);
+  //   };
+  // }, []);
 
   useEffect(() => {
     if (firstNameSearch || lastNameSearch) {

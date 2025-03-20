@@ -34,11 +34,11 @@ const configs = mergeConfigs(defaultConfig, customConfig)
 const system = createSystem(defineConfig(configs))
 
 createRoot(document.getElementById('root')).render(
-  <StrictMode>
+  
     <ChakraProvider value={system}>
       <ColorModeProvider theme={defaultSystem}> 
           <App />
       </ColorModeProvider>
     </ChakraProvider>
-  </StrictMode>,
+  ,
 )

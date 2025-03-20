@@ -11,7 +11,7 @@ const LoadingState = ({ loadingText }) => (
             animationName: "fade-out, scale-out",
             animationDuration: "120ms",
         }}
-        bg={{ base: "primarySurfaceL", _dark: "primarySurface" }}
+
         textAlign={"center"}
         borderRadius={"1rem"}
         p={"1rem"}

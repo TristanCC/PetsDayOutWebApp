@@ -12,15 +12,14 @@ const PetList = ({ customer, preferredColors, handleEditPet, closePetsPanel }) =
   const [showEmptyState, setShowEmptyState] = useState(true);
   const [didLinkCustomer, setDidLinkCustomer] = useState(false);
 
-  const { fetchGroupID, groupID } = useCustomers(); // Use fetchGroupID from context
-
-  // Fetch the updated groupID when the component mounts or the customer changes
-  useEffect(() => {
-    if (customer?.id) {
-        fetchGroupID(customer.id); // Fetch the latest groupID
-        customer.groupID = groupID
-    }
-  }, [customer, fetchGroupID]);
+  //const { fetchGroupID, groupID } = useCustomers(); // Use fetchGroupID from context
+//
+  //useEffect(() => {
+  //  if (customer?.id && !customer.groupID) {
+  //    fetchGroupID(customer.id);
+  //  }
+  //}, [customer, fetchGroupID]);
+  
 
   const reloadPets = async () => {
     try {

@@ -13,6 +13,7 @@ router.post('/db/createCustomer', customerController.createCustomer)
 router.get('/db/getCustomers', customerController.getCustomers)
 router.get('/db/findCustomer', customerController.findCustomer)
 router.get('/db/getCustomer/:id', customerController.getCustomer)
+router.get('/db/getHousehold/:groupID', customerController.getHousehold)
 
 router.put('/db/updateCustomer/:id', customerController.updateCustomer)
 // router.delete('/db/deleteCustomer/:id', mainController.deleteCustomer) 

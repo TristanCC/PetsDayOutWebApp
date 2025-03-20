@@ -11,7 +11,7 @@ export const CustomerProvider = ({ children }) => {
   const [groupID, setGroupID] = useState(null); // Add groupID state
   const [offset, setOffset] = useState(0);
 
-  const limit = window.innerHeight > 900 ? 15 : window.innerHeight > 700 ? 8 : window.innerHeight > 500 ? 6 : 3;
+  const limit = 15
 
   const fetchCustomers = async () => {
     try {
