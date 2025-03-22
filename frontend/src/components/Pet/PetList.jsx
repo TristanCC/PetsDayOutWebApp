@@ -100,6 +100,7 @@ const PetList = ({ customer, preferredColors, handleEditPet, closePetsPanel }) =
       ) : (
         <PetListDisplay
           pets={pets}
+          setPets={setPets}
           createPetPressed={createPetPressed}
           setCreatePetPressed={setCreatePetPressed}
           closePetsPanel={closePetsPanel}

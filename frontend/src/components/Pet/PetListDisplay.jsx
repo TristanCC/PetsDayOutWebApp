@@ -23,7 +23,7 @@ import { withMask } from "use-mask-input"
 import useLinkCustomers from "./useLinkCustomers";
 import { Dog } from "lucide-react";
 
-const PetListDisplay = ({ pets, createPetPressed, setCreatePetPressed, closePetsPanel, customer,
+const PetListDisplay = ({ pets, setPets, createPetPressed, setCreatePetPressed, closePetsPanel, customer,
    handleBack, reloadPets, preferredColors, didLinkCustomer, setDidLinkCustomer }) => {
     const [hasGroup, setHasGroup] = useState(false)
     const [petToEdit, setPetToEdit] = useState({})
@@ -31,6 +31,24 @@ const PetListDisplay = ({ pets, createPetPressed, setCreatePetPressed, closePets
     
     const { searchResults, handleSearch } = useLinkCustomers(didLinkCustomer, setDidLinkCustomer, reloadPets);
     
+    const handleDeletion = async (petID) => {
+      try {
+        alert(petID)
+        fetch(`/db/deletePet/${petID}`, {
+          method: "DELETE",
+          headers: {
+            "Content-Type": "application/json"
+          }
+        })
+        const newPets = 
+          pets.filter((pet) => {
+            return pet.id !== petID
+          })
+        setPets(newPets)
+      } catch(error) {
+        console.error("error:",error)
+      }
+    }
 
     return (
     <Box
@@ -113,7 +131,7 @@ const PetListDisplay = ({ pets, createPetPressed, setCreatePetPressed, closePets
                             />
                             <HStack justify={"center"} w={"full"}>
                             <Button w={"100%"} variant={"ghost"} colorPalette={"red"} mt={2} flex={"1 1 0"}
-                            onClick={() => {setCreatePetPressed(true); setPetToEdit(item)}}><LuTrash2 /></Button>
+                            onClick={() => handleDeletion(item.id)}><LuTrash2 /></Button>
                             <Button w={"100%"} variant={"subtle"} mt={2} flex={"3 1 0"}
                             onClick={() => {setCreatePetPressed(true); setPetToEdit(item)}}>Edit</Button>
                             </HStack>
