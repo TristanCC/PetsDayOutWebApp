@@ -4,6 +4,7 @@ import MyTable from '../components/MyTable';
 import SearchPopup from './SearchPopup';
 import Login from '../pages/Login';
 import { useCustomers } from './context/CustomerContext'; // Import the context hook
+import { Hand } from "lucide-react";
 
 const Navbar = ({
   isLoggedIn,
@@ -12,9 +13,6 @@ const Navbar = ({
   setPreferredColors,
 }) => {
   const [value, setValue] = useState("first");
-  const [firstNameSearch, setFirstNameSearch] = useState("");
-  const [lastNameSearch, setLastNameSearch] = useState("");
-  const [phoneSearch, setPhoneSearch] = useState("");
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
   const [searchResults, setSearchResults] = useState([]);
 
@@ -31,27 +29,14 @@ const Navbar = ({
     setOffset,
   } = useCustomers();
 
-  // useEffect(() => {
-  //   const handleResize = () => {
-  //     const debounceTimeout = setTimeout(() => {
-  //       setWindowWidth(window.innerWidth);
-  //     }, 200);
+  const handleRefresh = () => {
+    setSearchResults(null)
+  }
 
-  //     return () => clearTimeout(debounceTimeout);
-  //   };
-
-  //   window.addEventListener("resize", handleResize);
-
-  //   return () => {
-  //     window.removeEventListener("resize", handleResize);
-  //   };
-  // }, []);
 
   useEffect(() => {
-    if (firstNameSearch || lastNameSearch) {
-      setPhoneSearch('');
-    }
-  }, [firstNameSearch, lastNameSearch]);
+    handleRefresh()
+  },[])
 
   return (
     <>
@@ -73,7 +58,8 @@ const Navbar = ({
             <Tabs.List>
               <Box display={"flex"} justifyContent={"space-between"} w={"100%"} alignContent={"center"} p={4}>
                 <Box className="tabs" display={"flex"}>
-                  <Tabs.Trigger fontSize={windowWidth > 500 ? "2xl" : "xl"} letterSpacing="wider" value="first">
+                  <Tabs.Trigger fontSize={windowWidth > 500 ? "2xl" : "xl"} letterSpacing="wider" value="first"
+                    onClick={handleRefresh}>
                     <Text>Customers</Text>
                   </Tabs.Trigger>
                   <Tabs.Trigger fontSize={windowWidth > 500 ? "2xl" : "xl"} letterSpacing="wider" value="second">
@@ -82,8 +68,7 @@ const Navbar = ({
                 </Box>
                 <Box>
                   <SearchPopup preferredColors={preferredColors} setSearchResults={setSearchResults}
-                    firstNameSearch={firstNameSearch} setFirstNameSearch={setFirstNameSearch}
-                    lastNameSearch={lastNameSearch} setLastNameSearch={setLastNameSearch} phoneSearch={phoneSearch} setPhoneSearch={setPhoneSearch} />
+                  />
                 </Box>
               </Box>
             </Tabs.List>

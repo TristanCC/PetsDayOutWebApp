@@ -1,9 +1,13 @@
 import { useEffect, useState } from "react";
 import { Box, Button, Input, IconButton, Text, HStack, Textarea, VStack, Card, Image } from "@chakra-ui/react";
+import { Avatar } from "@chakra-ui/react"
 import { LuCircleX } from "react-icons/lu";
 import CreatePet from "./CreatePet2";
 import { Separator } from "@chakra-ui/react";
 import SearchPopup from "../SearchPopup";
+import { LuTrash2 } from "react-icons/lu";
+import placeholderAvatar from "../../assets/Dogavi.png"
+
 
 import {
   PopoverArrow,
@@ -17,6 +21,7 @@ import {
 import { withMask } from "use-mask-input"
 
 import useLinkCustomers from "./useLinkCustomers";
+import { Dog } from "lucide-react";
 
 const PetListDisplay = ({ pets, createPetPressed, setCreatePetPressed, closePetsPanel, customer,
    handleBack, reloadPets, preferredColors, didLinkCustomer, setDidLinkCustomer }) => {
@@ -34,7 +39,7 @@ const PetListDisplay = ({ pets, createPetPressed, setCreatePetPressed, closePets
       p={"2rem"}
       w={createPetPressed ? "25" : "50vw"}
       minW={"350px"}
-      maxW={"1200px"}
+      maxW={"fit-content"}
       maxH={"90vh"}
       overflowY={"auto"}
       cursor={"radio"}
@@ -44,22 +49,8 @@ const PetListDisplay = ({ pets, createPetPressed, setCreatePetPressed, closePets
       alignItems={"start"}
     >
       <HStack w={"100%"} top={0} zIndex={9999} justify={"space-between"}>
-        <Box display={!createPetPressed ? "flex" : "none"} >
-          <Text
-            fontSize={"2xl"}
-            lineHeight={"normal"}
-            fontWeight={"medium"}
-            position={"relative"}
-          >
-            {customer.firstName} {customer.lastName}
-            {customer.lastName.charAt(customer.lastName.length - 1) === "s"
-              ? "'"
-              : "'s"}{" "}
-              {customer.groupID ? "Household ": ""}
-            Pets
-          </Text>
+        <Box display={!createPetPressed ? "flex" : "none"} top={0} >
 
-          <Text></Text>
         </Box>
         <IconButton
           aria-label="close update customer"
@@ -69,6 +60,9 @@ const PetListDisplay = ({ pets, createPetPressed, setCreatePetPressed, closePets
           display={createPetPressed ? "none" : "flex"}
           onClick={() => closePetsPanel()}
           zIndex={100000}
+          position={"absolute"}
+          top={0}
+          right={0}
         >
           <LuCircleX />
         </IconButton>
@@ -95,9 +89,20 @@ const PetListDisplay = ({ pets, createPetPressed, setCreatePetPressed, closePets
                     <Card.Root key={index} w="350px" variant="outline">
                       <Card.Body>
                         <VStack>
-                            <Text alignSelf={"start"} fontSize="lg" fontWeight="bold">{item.name}</Text>
-                            <Text alignSelf={"start"}>Breed: {item.breed}</Text>
-                            <Text alignSelf={"start"}>Size: {item.size}</Text>
+                          
+                          <HStack align={"start"} w={"100%"} justify={"space-between"}>
+                            <VStack align={"start"}>
+                              <Text fontSize="lg" fontWeight="bold">{item.name}</Text>
+                              <Text>{item.breed}</Text>
+                              <Text>{item.size}</Text>
+                            </VStack>
+
+                            <Avatar.Root shape="full" size="2xl">
+                              <Avatar.Fallback name="Segun Adebayo" />
+                              <Avatar.Image src={placeholderAvatar} />
+                            </Avatar.Root>
+
+                            </HStack>
                             <Textarea
                               readOnly
                               resize={"none"}
@@ -106,8 +111,13 @@ const PetListDisplay = ({ pets, createPetPressed, setCreatePetPressed, closePets
                               maxH={"15lh"}
                               value={item.notes}
                             />
-                            <Button w={"100%"} variant={"outline"} mt={2}
+                            <HStack justify={"center"} w={"full"}>
+                            <Button w={"100%"} variant={"ghost"} colorPalette={"red"} mt={2} flex={"1 1 0"}
+                            onClick={() => {setCreatePetPressed(true); setPetToEdit(item)}}><LuTrash2 /></Button>
+                            <Button w={"100%"} variant={"subtle"} mt={2} flex={"3 1 0"}
                             onClick={() => {setCreatePetPressed(true); setPetToEdit(item)}}>Edit</Button>
+                            </HStack>
+                            
                         </VStack>
                       </Card.Body>
                     </Card.Root>
@@ -159,7 +169,7 @@ const PetListDisplay = ({ pets, createPetPressed, setCreatePetPressed, closePets
     </PopoverBody>
   </PopoverContent>
   </PopoverRoot>
-                  <Button onClick={() => { setCreatePetPressed(true); setPetToEdit(null); }} variant={"surface"}>Add Pet</Button>
+                  <Button onClick={() => { setCreatePetPressed(true); setPetToEdit(null); }} variant={"ghost"}>Add Pet</Button>
                 </HStack>
             </>
             

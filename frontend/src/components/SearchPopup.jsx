@@ -8,20 +8,18 @@ import { withMask } from 'use-mask-input';
 const SearchPopup = ({
   preferredColors,
   setSearchResults,
-  firstNameSearch,
-  setFirstNameSearch,
-  lastNameSearch,
-  setLastNameSearch,
-  phoneSearch,
-  setPhoneSearch,
 }) => {
-  const debounce = (func, wait) => {
-    let timeout;
-    return (...args) => {
-      clearTimeout(timeout);
-      timeout = setTimeout(() => func.apply(this, args), wait);
-    };
-  };
+
+
+  const [firstNameSearch, setFirstNameSearch] = useState("");
+  const [lastNameSearch, setLastNameSearch] = useState("");
+  const [phoneSearch, setPhoneSearch] = useState("");
+
+  useEffect(() => {
+    if (firstNameSearch || lastNameSearch) {
+      setPhoneSearch('');
+    }
+  }, [firstNameSearch, lastNameSearch]);
 
   const handleSearch = useCallback(async () => {
     // If no search criteria provided, clear search results.
@@ -51,12 +49,6 @@ const SearchPopup = ({
       console.error("Search failed:", error);
     }
   }, [firstNameSearch, lastNameSearch, phoneSearch, setSearchResults, setFirstNameSearch, setLastNameSearch, setPhoneSearch]);
-
-  const debouncedSearch = useMemo(() => debounce(handleSearch, 1000), [handleSearch]);
-
-  useEffect(() => {
-    debouncedSearch();
-  }, [firstNameSearch, lastNameSearch, phoneSearch, debouncedSearch]);
 
   const clearSearch = () => {
     setFirstNameSearch("");
@@ -111,8 +103,11 @@ const SearchPopup = ({
               ref={withMask("(999) 999-9999")}
             />
             <HStack>
-              <Button type="button" variant={"outline"} onClick={clearSearch} disabled={!firstNameSearch && !lastNameSearch && !phoneSearch}>
+              <Button type="button" variant={"outline"} onClick={clearSearch} >
                 Clear
+              </Button>
+              <Button type="button" variant={"outline"} onClick={handleSearch} >
+                Search
               </Button>
             </HStack>
           </Box>

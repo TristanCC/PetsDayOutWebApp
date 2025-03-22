@@ -45,7 +45,7 @@ const Household = ({customer, closeHouseholdPanel, preferredColors}) => {
         return data.map((member) => {
             return (
                 <Box key={member.id}>
-                    <Text>{member.firstName}</Text>
+                    <Text>{member.firstName} {member.lastName}</Text>
                 </Box>
             )
         })

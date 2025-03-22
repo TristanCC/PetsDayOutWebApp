@@ -89,7 +89,7 @@ body {
   content: "";
   position: absolute; /* Makes it cover the row */
   inset: 0; /* Ensures it stretches across the entire row */
-  background-color: var(--chakra-colors-blue-600,red);
+  background-color: var(--chakra-colors-blue-600);
   opacity: 0;
   transition: opacity 0.2s ease-in-out;
   z-index: 100; /* Keeps it behind the row content */

@@ -25,6 +25,7 @@ router.put('/db/updateCustomer/:id', customerController.updateCustomer)
 router.post('/db/createPet', petController.createPet)
 router.get('/db/getPets/:id', petController.getPets)
 router.put('/db/updatePet', petController.updatePet)
+router.delete('/db/deletePet/:id', petController.deletePet)
 
 router.put('/db/linkCustomers', petController.linkCustomers)
 
