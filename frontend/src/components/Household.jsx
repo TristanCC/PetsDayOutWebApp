@@ -11,6 +11,7 @@ import { Separator } from "@chakra-ui/react";
 import { withMask } from "use-mask-input";
 
 import LoadingState from './Pet/LoadingState';
+import { Spinner } from "@chakra-ui/react"
 
 const Household = ({customer, closeHouseholdPanel, preferredColors}) => {
 
@@ -19,6 +20,7 @@ const Household = ({customer, closeHouseholdPanel, preferredColors}) => {
     const [loading, setLoading] = useState(false)
     const [groupID, setGroupID] = useState(customer.groupID)
     const [householdMembers, setHouseholdMembers] = useState([])
+    const [householdPets, setHouseholdPets] = useState([])
 
     useEffect(() => {
         // on mount get data from /db/getHousehold route
@@ -30,7 +32,8 @@ const Household = ({customer, closeHouseholdPanel, preferredColors}) => {
                     throw new Error('Network response was not ok');
                   }
                   const data = await response.json()
-                  setHouseholdMembers(data)
+                  setHouseholdMembers(data.groupMembers)
+                  setHouseholdPets(data.groupPets)
                   setLoading(false)
                   
                 
@@ -46,6 +49,16 @@ const Household = ({customer, closeHouseholdPanel, preferredColors}) => {
             return (
                 <Box key={member.id}>
                     <Text>{member.firstName} {member.lastName}</Text>
+                </Box>
+            )
+        })
+    }
+
+    const renderHouseholdPets = (data) => {
+        return data.map((member) => {
+            return (
+                <Box key={member.id}>
+                    <Text>{member.name} {member.breed}</Text>
                 </Box>
             )
         })
@@ -68,6 +81,7 @@ const Household = ({customer, closeHouseholdPanel, preferredColors}) => {
                     alignItems="center"
                     justifyContent="center"
                     margin={"auto"}
+                    cursor={"default"}
                 >
 <MotionBox
     initial={{ opacity: 0, scale: 0.9 }}
@@ -115,10 +129,25 @@ const Household = ({customer, closeHouseholdPanel, preferredColors}) => {
                 </IconButton>
             </Box>
             <Separator mb={4} w={"80%"} alignSelf={"start"} />
-            {householdMembers?.length > 0 && renderHousehold(householdMembers)}
+            <HStack wrap={"wrap"} gap={"2rem"}>
+                <VStack bg={{ base: "primarySurfaceL", _dark: "primary" }} p={"1rem"} align={"start"} rounded={"md"} >
+                    <Text>Owners:</Text>
+                    <Separator mb={2} w={"80%"} alignSelf={"start"} />
+                    {householdMembers?.length > 0 && renderHousehold(householdMembers)}
+                </VStack>
+                <VStack bg={{ base: "primarySurfaceL", _dark: "primary" }} p={"1rem"} align={"start"} rounded={"md"}>
+                    <Text>Pets:</Text>
+                    <Separator mb={2} w={"80%"} alignSelf={"start"} />
+                    {householdPets?.length > 0 && renderHouseholdPets(householdPets)}
+                </VStack>
+            </HStack>
+            
         </>
     ) : (
-        <LoadingState loadingText={"Fetching Household..."} />
+        <HStack justifyContent={"center"} justifyItems={"center"}>
+            <Spinner/>
+            <LoadingState loadingText={"Fetching Household..."} />
+        </HStack>
     )}
 </MotionBox>
 

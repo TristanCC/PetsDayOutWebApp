@@ -22,6 +22,8 @@ const CreateCustomer = ({ setCustomerInfoOpen }) => {
   const [phoneNumber, setPhoneNumber] = useState("");
   const [step, setStep] = useState(1);
   const [addPetChecked, setAddPetChecked] = useState(false);
+  const [verifiedLink, setVerifiedLink] = useState(false)
+  const [linkPhoneNumber, setLinkPhoneNumber] = useState("")
 
 
   const createEditableField = (label, value, setValue, required) => (
@@ -159,6 +161,10 @@ const CreateCustomer = ({ setCustomerInfoOpen }) => {
 
   }
 
+  const handleCheck = () => {
+
+  }
+
   useEffect(() => {
     console.log("FROM INSIDE CREATECUSTOMER PETLIST", petList)
   },[petList])
@@ -166,7 +172,7 @@ const CreateCustomer = ({ setCustomerInfoOpen }) => {
   return (
     <Box className="customerInfo" p={4}
      bg={{ base: "primaryL", _dark: "primaryMidpoint" }} borderRadius="md"
-     minW={"259px"} maxW={"400px"}  w="100%">
+     minW={"259px"} maxW={"600px"}  w="100%">
       {/* Modal background */}
       <Box
         className="transparentBackground"
@@ -196,6 +202,8 @@ const CreateCustomer = ({ setCustomerInfoOpen }) => {
         flex={1}
         flexDir={"column"}
         data-state="open"
+        maxH={"90vh"} // Limit the modal height to 90% of the viewport
+        overflowY={"auto"} // Enable scrolling if content exceeds modal height
         _open={{
           animationName: "fade-in, scale-in",
           animationDuration: "300ms",
@@ -215,6 +223,7 @@ const CreateCustomer = ({ setCustomerInfoOpen }) => {
           variant={"ghost"}
           borderRadius={"1rem"}
           onClick={() => setCustomerInfoOpen(false)}
+          zIndex={9000}
         >
           <LuCircleX />
         </IconButton>
@@ -232,14 +241,44 @@ const CreateCustomer = ({ setCustomerInfoOpen }) => {
                 {/* Form fields for step 1 */}
                 {step === 1 && (
                   <>
-                    {createEditableField("First Name", firstName, setFirstName, true)}
-                    {createEditableField("Middle Name", middleName, setMiddleName, false)}
-                    {createEditableField("Last Name", lastName, setLastName, true)}
-                    {createEditableField("Phone Number", phoneNumber, setPhoneNumber, true)}
-                    {createEditableField("Email", email, setEmail, false)}
+                    <HStack
+                      gap={"1rem"}
+                      flexDirection={{ base: "column", md: "row" }} // Stack vertically on small screens
+                      w={"100%"}
+                    >
+                      <VStack w={"100%"}>
+                        {createEditableField("First Name", firstName, setFirstName, true)}
+                        {createEditableField("Middle Name", middleName, setMiddleName, false)}
+                        {createEditableField("Last Name", lastName, setLastName, true)}
+                      </VStack>
+                      <VStack w={"100%"}>
+                        {createEditableField("Phone Number", phoneNumber, setPhoneNumber, true)}
+                      
+                        {createEditableField("Email", email, setEmail, false)}
+                                    
+                        <Field label={"Link to Customer"} required={false} mb={".5rem"}>
+                          <HStack w={"100%"}>
+                            <Input
+                              variant={"outline"}
+                              size={"lg"}
+                              value={linkPhoneNumber}
+                              onChange={(e) => setLinkPhoneNumber(e.target.value)}
+                              placeholder={"(999) 999-9999"}
+                              ref={withMask("(999) 999-9999")}
+                              backgroundColor={{ base: "primaryL", _dark: "primary" }}
+                            />
+                            <Button disabled={linkPhoneNumber.replace(/\D/g, "").length < 10} onClick={handleCheck}>
+                              Check
+                            </Button>
+                          </HStack>
+                        </Field>
+                      </VStack>
+                    </HStack>
+                    <Text fontSize={"smaller"} maxW={"400px"}>NOTE: Customers with the same phone number will be automatically linked together in a household.</Text>
+
                     <Box mt={"1rem"}>
                       <Checkbox checked={addPetChecked} onCheckedChange={(e) => setAddPetChecked(!addPetChecked)}>
-                        Add pets now?
+                        Add pets
                       </Checkbox>
                     </Box>
                   </>

@@ -35,8 +35,11 @@ const MenuRoot1 = ({ customer, preferredColors, setSelectedCustomer, updateCusto
     setPetsPanelOpen(!petsPanelOpen);
   };
 
-  const handleHousehold = () => {
-    setHouseholdPanelOpen(!householdPanelOpen)
+  const handleHousehold = (groupID) => {
+
+    if (groupID) {
+      setHouseholdPanelOpen(!householdPanelOpen)
+    }
   }
 
   const handleDeleteCustomer = async () => {
@@ -115,7 +118,7 @@ const MenuRoot1 = ({ customer, preferredColors, setSelectedCustomer, updateCusto
             </div>
             <Text fontSize={"1rem"}>Customer Info</Text>
           </MenuItem>
-          <MenuItem borderRadius={".75rem"} value="household" disabled={!customer.groupID} cursor={ customer.groupID? "pointer": "default"} onClick={handleHousehold} >
+          <MenuItem borderRadius={".75rem"} value="household" disabled={!customer.groupID} cursor={ customer.groupID? "pointer": "default"} onClick={() => handleHousehold(customer.groupID)} >
             <div>
               <Icon fontSize={"1.25rem"} color={"blue.500"}>
                 <LuHouse/>

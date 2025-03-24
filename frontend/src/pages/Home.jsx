@@ -63,7 +63,7 @@ function Home({ isLoggedIn, setIsLoggedIn, preferredColors, customers, selectedC
           </HStack>
           {customerInfoOpen && (
             <div ref={localCreateCustomerRef}>
-              <CreateCustomer setCustomerInfoOpen={setCustomerInfoOpen}/>
+              <CreateCustomer setCustomerInfoOpen={setCustomerInfoOpen} preferredColors={preferredColors}/>
             </div>
           )}
         </>

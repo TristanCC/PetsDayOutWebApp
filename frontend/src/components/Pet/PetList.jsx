@@ -1,9 +1,10 @@
 import { useState, useEffect } from "react";
-import { Box } from "@chakra-ui/react";
+import { Box, HStack } from "@chakra-ui/react";
 import LoadingState from "./LoadingState";
 import EmptyStateComponent from "./EmptyStateComponent";
 import PetListDisplay from "./PetListDisplay";
 import { useCustomers } from "../context/CustomerContext";
+import { Spinner } from "@chakra-ui/react";
 
 const PetList = ({ customer, preferredColors, handleEditPet, closePetsPanel }) => {
   const [pets, setPets] = useState([]);
@@ -83,7 +84,11 @@ const PetList = ({ customer, preferredColors, handleEditPet, closePetsPanel }) =
         overflowY={"scroll"}
       ></Box>
       {loading ? (
-        <LoadingState loadingText={"Fetching pets..."} />
+        <HStack justifyContent={"center"} justifyItems={"center"} p={"1rem"} bg={{ base: "primarySurfaceL", _dark: "primaryMidpoint" }} rounded={"md"}>
+            <Spinner/>
+            <LoadingState loadingText={"Fetching pets..."} />
+        </HStack>
+       
       ) : pets.length === 0 && showEmptyState ? (
         <EmptyStateComponent
           createPetPressed={createPetPressed}

@@ -1,23 +1,54 @@
 import Customer from '../models/Customer.js';
+import Pet from '../models/Pet.js'
+import Group from '../models/Group.js';
 import { Op } from 'sequelize';
 
 export const createCustomer = async (req, res) => {
   const { firstName, middleName, lastName, email, phoneNumber, customerComment } = req.body;
-  // TODO add a fetch to see if phone number is already in database. if so we want to add both customers to a group
+
   try {
-    console.log('Request body:', req.body); // Log the request body
-    console.log('Creating customer with data:', { firstName, middleName, lastName, email, phoneNumber, customerComment });
-    
-    const newCustomer = await Customer.create({ firstName, middleName, lastName, email, phoneNumber, customerComment });
-    
-    console.log('Customer created successfully:', newCustomer); // Log the created customer data
-    res.status(201).json({newCustomer}); // Respond with the created customer ID
+    console.log('Request body:', req.body);
+
+    // Check if phone number already in system
+    let customerWithMatchingPhone = await Customer.findOne({
+      where: { phoneNumber }
+    });
+
+    let matchingGroup = null;
+
+    if (customerWithMatchingPhone) {
+      // Create a group if the matched customer doesn't have one
+      if (!customerWithMatchingPhone.groupID) {
+        const newGroup = await Group.create();
+        await customerWithMatchingPhone.update({ groupID: newGroup.id });
+        matchingGroup = newGroup.id;
+      } else {
+        matchingGroup = customerWithMatchingPhone.groupID;
+      }
+    }
+
+    // Create new customer, adding to group if phone matches
+    const newCustomerData = {
+      firstName,
+      middleName,
+      lastName,
+      email,
+      phoneNumber,
+      customerComment,
+      ...(matchingGroup && { groupID: matchingGroup }) // Add groupID only if present
+    };
+
+    const newCustomer = await Customer.create(newCustomerData);
+
+    console.log('Customer created successfully:', newCustomer);
+    res.status(201).json({ newCustomer });
   } catch (error) {
     console.error('Error creating customer:', error);
-    console.error('Request body:', req.body); // Log the request body in case of error
+    console.error('Request body:', req.body);
     res.status(500).json({ error: 'Failed to create customer.' });
   }
 };
+
 
 export const getCustomer = async (req, res) => {
   const { id } = req.params; // Customer ID
@@ -217,7 +248,18 @@ export const getHousehold = async (req, res) => {
       return res.status(404).json({ error: 'No group members provided.'})
     }
 
-    res.json(groupMembers)
+    const groupPets = await Pet.findAll({
+      include: [{
+        model: Customer,
+        where: {groupID},
+        through: {attributes: []}
+      }]
+    })
+
+    res.json({
+      groupMembers,
+      groupPets
+  })
 
   } catch(error) {
     console.error("error getting household", error)
