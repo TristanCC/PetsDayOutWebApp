@@ -25,6 +25,10 @@ const Present = sequelize.define('Present', {
       key: 'id'
     }
   },
+  instructions: {
+    type: DataTypes.TEXT,
+    allowNull: true
+  },
   date: {
     type: DataTypes.DATEONLY,
     allowNull: false,

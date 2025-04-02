@@ -101,7 +101,7 @@ const PetListDisplay = ({ pets, setPets, createPetPressed, setCreatePetPressed, 
           {!createPetPressed ? (
             <>
                 <Box w={"100%"} p={2} bg={{ base: "primarySurfaceL", _dark: "transparent" }} rounded={"lg"}>
-                <HStack gap={4} w="100%" flexWrap="wrap" justify="flex-start" justifyItems={"center"}>
+                <HStack gap={4} w="100%" flexWrap="wrap" justify="center" justifyItems={"center"}>
 
                   {pets.map((item, index) => (
                     <Card.Root key={index} w="300px" variant="outline">

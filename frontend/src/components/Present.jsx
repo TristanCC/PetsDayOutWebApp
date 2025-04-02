@@ -1,21 +1,29 @@
-import { useState, useEffect } from "react";
-import { Tabs, VStack, Box, Text, IconButton, HStack, Spinner, Separator } from "@chakra-ui/react";
+import { useState, useEffect, useCallback, useMemo } from "react";
+import { Tabs, VStack, Box, Text, IconButton, HStack, Table, Spinner, Separator, Button, Avatar, Checkbox } from "@chakra-ui/react";
 import { motion } from "framer-motion";
 import { LuCircleX, LuBookOpenCheck } from "react-icons/lu";
 
+import placeholderAvatar from "../assets/Dogavi.png";
+
+const MotionBox = motion(Box);
+
 const Present = ({ selectedCustomer, setPresentOpen, preferredColors }) => {
-    const MotionBox = motion(Box);
     const [loading, setLoading] = useState(false);
     const [pets, setPets] = useState([]);
+    const [selectedPets, setSelectedPets] = useState([]);
+
+    const handleCheck = useCallback((petID) => {
+        setSelectedPets((prev) =>
+            prev.includes(petID) ? prev.filter((id) => id !== petID) : [...prev, petID]
+        );
+    }, []);
 
     useEffect(() => {
         const fetchPets = async () => {
             try {
                 setLoading(true);
                 const response = await fetch(`/db/getPets/${selectedCustomer.id}`);
-                if (!response.ok) {
-                    throw new Error("Network response was not ok");
-                }
+                if (!response.ok) throw new Error("Network error");
                 const data = await response.json();
                 setPets(Array.isArray(data) ? data : []);
             } catch (error) {
@@ -26,10 +34,42 @@ const Present = ({ selectedCustomer, setPresentOpen, preferredColors }) => {
             }
         };
 
-        if (selectedCustomer?.id) {
-            fetchPets();
-        }
+        if (selectedCustomer?.id) fetchPets();
     }, [selectedCustomer?.id]);
+
+    const rows = useMemo(() => (
+        pets.map((pet) => (
+            <Table.Row key={pet.id} bg={{ base: "white", _dark: "primary" }}>
+                <Table.Cell>
+                    <Avatar.Root shape="rounded" size="xl">
+                        <Avatar.Fallback name="Segun Adebayo" />
+                        <Avatar.Image src={placeholderAvatar} />
+                    </Avatar.Root>
+                </Table.Cell>
+                <Table.Cell maxW="150px" overflow="hidden" whiteSpace="nowrap">
+                    <Text maxW={"4rem"} fontWeight="medium">{pet.name}</Text>
+                </Table.Cell>
+                <Table.Cell maxW="150px" overflow="hidden" whiteSpace="nowrap">
+                    <Text maxW={"4rem"}>{pet.breed || "N/A"}</Text>
+                </Table.Cell>
+                <Table.Cell >
+                    <Checkbox.Root
+                        size="lg"
+                        variant="outline"
+                        checked={selectedPets.includes(pet.id)}
+                        onCheckedChange={() => handleCheck(pet.id)}
+                    >
+                        <Checkbox.HiddenInput />
+                        <Checkbox.Control>
+                            <Checkbox.Indicator />
+                        </Checkbox.Control>
+                        <Checkbox.Label />
+                    </Checkbox.Root>
+                </Table.Cell>
+            </Table.Row>
+        ))
+    ), [pets, selectedPets, handleCheck]);
+    
 
     return (
         <Box
@@ -56,20 +96,16 @@ const Present = ({ selectedCustomer, setPresentOpen, preferredColors }) => {
                 display="flex"
                 flexDir="column"
                 alignItems="center"
-                p={6}
+                p={4}
                 boxShadow="lg"
                 maxH="90vh"
-                w={{ base: "90vw", md: "50vw", lg: "600px" }}
+                w={{ base: "90vw", md: "50vw", lg: "450px" }}
                 overflowY="auto"
                 bg={{ base: "primarySurfaceL", _dark: "primarySurface" }}
             >
                 <HStack w="100%" justifyContent="space-between" p={2}>
                     <HStack>
-                        <IconButton 
-                        variant={"plain"}
-                        pointerEvents={"none"}
-                        scale={"125%"}
-                        colorPalette={preferredColors}>
+                        <IconButton variant="plain" pointerEvents="none" scale="125%" colorPalette={preferredColors}>
                             <LuBookOpenCheck />
                         </IconButton>
                         <Text fontSize="2xl" fontWeight="medium">Mark Present</Text>
@@ -78,22 +114,43 @@ const Present = ({ selectedCustomer, setPresentOpen, preferredColors }) => {
                         <LuCircleX />
                     </IconButton>
                 </HStack>
-                
-                <Separator  w="80%" alignSelf={"start"} mb={"1rem"} />
-                
+
+                <Separator w="80%" alignSelf="start" mb="1rem" />
+
                 {loading ? (
                     <HStack justifyContent="center">
                         <Spinner />
                         <Text>Loading...</Text>
                     </HStack>
                 ) : (
-                    <VStack w="100%" align="stretch" spacing={4}>
+                <VStack
+                    w="100%"
+                    bg={{ base: "primarySurfaceL", _dark: "primary" }}
+                    align="start"
+                    rounded="md"
+                    flex="1 1 0"
+                >
+                    <Box w="100%" maxH="70vh" overflowY="auto">
                         {pets.length > 0 ? (
-                            pets.map((pet) => <Text key={pet.id}>{pet.name} - {pet.breed}</Text>)
+                            <Table.Root interactive stickyHeader striped>
+                                <Table.Header bg={{ base: "white", _dark: "primary" }}>
+                                    <Table.Row alignItems="center" bg={{ base: "white", _dark: "primaryMidpoint" }}>
+                                        <Table.ColumnHeader />
+                                        <Table.ColumnHeader><Text>Name</Text></Table.ColumnHeader>
+                                        <Table.ColumnHeader><Text>Breed</Text></Table.ColumnHeader>
+                                        <Table.ColumnHeader><Text></Text></Table.ColumnHeader>
+                                    </Table.Row>
+                                </Table.Header>
+                                <Table.Body>{rows}</Table.Body>
+                            </Table.Root>
                         ) : (
-                            <Text>No pets found.</Text>
+                            <Text textAlign="center" w="100%">This customer has no pets yet.</Text>
                         )}
-                    </VStack>
+                    </Box>
+                    <Button disabled={selectedPets.length === 0} display={pets.length > 0 ? "block" : "none"} w="100%">
+                        Confirm
+                    </Button>
+                </VStack>
                 )}
             </MotionBox>
         </Box>
