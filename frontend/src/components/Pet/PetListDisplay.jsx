@@ -17,6 +17,7 @@ import {
   PopoverTitle,
   PopoverTrigger,
 } from "@/components/ui/popover"
+import { PiDogBold } from "react-icons/pi";
 
 import { withMask } from "use-mask-input"
 
@@ -55,9 +56,8 @@ const PetListDisplay = ({ pets, setPets, createPetPressed, setCreatePetPressed, 
       bg={{ base: "primarySurfaceL", _dark: "primarySurface" }}
       borderRadius={"1rem"}
       p={"2rem"}
-      w={createPetPressed ? "25" : "50vw"}
+      w={!createPetPressed ? { base: "90vw", md: "80vw", lg: "1100px" } : { base: "90vw", md: "50vw", lg: "25vw" }}
       minW={"350px"}
-      maxW={"fit-content"}
       maxH={"90vh"}
       overflowY={"auto"}
       cursor={"radio"}
@@ -67,27 +67,26 @@ const PetListDisplay = ({ pets, setPets, createPetPressed, setCreatePetPressed, 
       alignItems={"start"}
     >
       <HStack w={"100%"} top={0} zIndex={9999} justify={"space-between"}>
-        <Box display={!createPetPressed ? "flex" : "none"} top={0} >
-
-        </Box>
-        <IconButton
-          aria-label="close update customer"
-          size={"lg"}
-          variant={"ghost"}
-          borderRadius={"1rem"}
-          display={createPetPressed ? "none" : "flex"}
-          onClick={() => closePetsPanel()}
-          zIndex={100000}
-          position={"absolute"}
-          top={0}
-          right={0}
-        >
-          <LuCircleX />
-        </IconButton>
-      </HStack>
-      <Box className="customerInfoHeader" flex={1} w="100%" >
-        <Box display={"flex"} flexDir={"column"} gap={"1rem"}
-          justifyItems={"start"} alignItems={"start"}
+        <HStack w="100%" justifyContent="space-between" p={2}>
+            <HStack>
+                <IconButton 
+                variant={"plain"}
+                pointerEvents={"none"}
+                scale={"125%"}
+                colorPalette={preferredColors}>
+                    <PiDogBold />
+                </IconButton>
+                <Text fontSize="2xl" fontWeight="medium">Mark Present</Text>
+            </HStack>
+            <IconButton aria-label="Close" size="lg" variant="ghost" onClick={() => closePetsPanel()}>
+                <LuCircleX />
+            </IconButton>
+        </HStack>
+        </HStack>
+        <Separator w={"100%"} mb={"1rem"}></Separator>
+      <Box className="customerInfoHeader" flex={1} w="100%">
+        <Box 
+          
           w={"100%"}
           data-state="open"
           _open={{
@@ -102,9 +101,10 @@ const PetListDisplay = ({ pets, setPets, createPetPressed, setCreatePetPressed, 
           {!createPetPressed ? (
             <>
                 <Box w={"100%"} p={2} bg={{ base: "primarySurfaceL", _dark: "transparent" }} rounded={"lg"}>
-                <VStack gap={4} w="100%" flexDir={"row"} flexWrap={"wrap"} justifyContent={"center"}>
+                <HStack gap={4} w="100%" flexWrap="wrap" justify="flex-start" justifyItems={"center"}>
+
                   {pets.map((item, index) => (
-                    <Card.Root key={index} w="350px" variant="outline">
+                    <Card.Root key={index} w="300px" variant="outline">
                       <Card.Body>
                         <VStack>
                           
@@ -140,7 +140,7 @@ const PetListDisplay = ({ pets, setPets, createPetPressed, setCreatePetPressed, 
                       </Card.Body>
                     </Card.Root>
                   ))}
-                </VStack>
+                </HStack>
                 </Box>
                 <HStack justify={"center"}  w="100%">
                 <PopoverRoot>

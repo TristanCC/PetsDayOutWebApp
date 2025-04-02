@@ -64,11 +64,15 @@ const CreateCustomer = ({ setCustomerInfoOpen }) => {
 
   const [isCreatingCustomer, setIsCreatingCustomer] = useState(true)
 
+  const [isLoading, setIsLoading] = useState(false)
+
   // Handle form submission
   const handleSubmit = async (e) => {
     e.preventDefault();
     let response;
     let customerId;
+
+    setIsLoading(true)
   
     // Create customer
     try {
@@ -312,7 +316,7 @@ const CreateCustomer = ({ setCustomerInfoOpen }) => {
                     </Button>
                   )}
                   {(step === 2 || !addPetChecked) && (
-                    <Button onClick={handleSubmit} w={step === 2 ? "50%" : "100%"} disabled={!firstName || !lastName || !phoneNumber || (addPetChecked && petList.length === 0)}>
+                    <Button onClick={handleSubmit} w={step === 2 ? "50%" : "100%"} disabled={!firstName || !lastName || !phoneNumber || (addPetChecked && petList.length === 0) || isLoading}>
                       Submit
                     </Button>
                   )}

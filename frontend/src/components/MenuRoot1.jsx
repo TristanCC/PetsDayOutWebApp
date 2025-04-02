@@ -19,13 +19,19 @@ import { LuHouse } from "react-icons/lu";
 import CustomerInfo from './CustomerInfo';
 import PetList from './Pet/PetList';
 import Household from "./Household";
+import Present from "./Present"
 
 const MenuRoot1 = ({ customer, preferredColors, setSelectedCustomer, updateCustomerInState, deleteCustomerInState }) => {
+  const [presentOpen, setPresentOpen] = useState(false);
   const [customerInfoOpen, setCustomerInfoOpen] = useState(false);
   const [petsPanelOpen, setPetsPanelOpen] = useState(false);
   const [householdPanelOpen, setHouseholdPanelOpen] = useState(false)
   const customerInfoRef = useRef(null);
   const petsPanelRef = useRef(null);
+
+  const handlePresent = () => {
+    setPresentOpen(!presentOpen)
+  }
 
   const handleCustomerInfo = () => {
     setCustomerInfoOpen(!customerInfoOpen);
@@ -94,7 +100,7 @@ const MenuRoot1 = ({ customer, preferredColors, setSelectedCustomer, updateCusto
         <MenuContent className="menuContent" bg={{ base: "white", _dark: "primarySurface" }}>
           <MenuItemGroup p={"0.5rem"}>{customer.firstName} {customer.lastName}</MenuItemGroup>
           <MenuSeparator />
-          <MenuItem borderRadius={".75rem"} value="mark-present" cursor={"pointer"}>
+          <MenuItem borderRadius={".75rem"} value="mark-present" onClick={handlePresent} cursor={"pointer"}>
             <div>
               <Icon fontSize={"1.25rem"} color={"green.500"}>
                 <LuBookOpenCheck />
@@ -137,13 +143,24 @@ const MenuRoot1 = ({ customer, preferredColors, setSelectedCustomer, updateCusto
         </MenuContent>
       </MenuRoot>
 
+      {presentOpen && (
+        <div>
+          <Present
+            selectedCustomer={customer}
+            setPresentOpen={setPresentOpen}
+            setSelectedCustomer={setSelectedCustomer}
+            updateCustomerInState={updateCustomerInState}
+            preferredColors={preferredColors}
+          />
+        </div>
+      )}
+
       {customerInfoOpen && (
         <div ref={customerInfoRef}>
           <CustomerInfo
             selectedCustomer={customer}
             setCustomerInfoOpen={setCustomerInfoOpen}
             setSelectedCustomer={setSelectedCustomer}
-            updateCustomerInState={updateCustomerInState}
           />
         </div>
       )}

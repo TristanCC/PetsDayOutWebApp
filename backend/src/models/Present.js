@@ -38,8 +38,4 @@ const Present = sequelize.define('Present', {
   }
 });
 
-// Define the associations
-Present.belongsTo(Customer, { foreignKey: 'customerID' });
-Present.belongsTo(Pet, { foreignKey: 'petID' });
-
 export default Present;

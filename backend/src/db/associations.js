@@ -2,6 +2,7 @@ import Pet from '../models/Pet.js';
 import Customer from '../models/Customer.js';
 import CustomerPet from '../models/CustomerPet.js';
 import Group from '../models/Group.js';
+import Present from '../models/Present.js'
 
 // Many-to-Many Relationship between Customer and Pet (via CustomerPet)
 Customer.belongsToMany(Pet, {
@@ -26,4 +27,9 @@ Group.hasMany(Customer, { foreignKey: 'groupID' });   // Group has many Customer
 CustomerPet.belongsTo(Pet, { foreignKey: 'petID' }); // CustomerPet belongs to Pet
 Pet.hasMany(CustomerPet, { foreignKey: 'petID' });   // Pet has many CustomerPets
 
-export { Customer, Pet, CustomerPet, Group };
+Present.belongsTo(Customer, { foreignKey: 'customerID' });
+Present.belongsTo(Pet, { foreignKey: 'petID' });
+
+
+export { Customer, Pet, CustomerPet, Group, Present};
+
