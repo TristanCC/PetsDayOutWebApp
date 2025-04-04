@@ -30,4 +30,11 @@ router.delete('/db/deletePet/:petID', petController.deletePet)
 router.put('/db/linkCustomers', petController.linkCustomers)
 
 
+/*
+    PRESENT
+*/ 
+
+router.post('/db/markPresent', customerController.markPresent)
+router.get('/db/getPresent', customerController.getPresent)
+
 export default router

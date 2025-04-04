@@ -3,6 +3,7 @@ import { useState, useEffect } from "react";
 import MyTable from '../components/MyTable';
 import SearchPopup from './SearchPopup';
 import Login from '../pages/Login';
+import Present from './Present'
 import { useCustomers } from './context/CustomerContext'; // Import the context hook
 import { Hand } from "lucide-react";
 
@@ -109,7 +110,8 @@ const Navbar = ({
               minH={"70vh"}
               overflowY={"auto"}
             >
-              <Text>Second panel</Text>
+              <Present
+                value={value}/>
             </Tabs.Content>
           </Tabs.Root>
         </Box>

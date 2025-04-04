@@ -1,6 +1,7 @@
 import Customer from '../models/Customer.js';
 import Pet from '../models/Pet.js'
 import Group from '../models/Group.js';
+import Present from '../models/Present.js'
 import { Op } from 'sequelize';
 
 export const createCustomer = async (req, res) => {
@@ -266,3 +267,81 @@ export const getHousehold = async (req, res) => {
     res.status(500).json({ error: 'Failed to get household.' });
   }
 }
+
+export const removeFromHousehold = async (req, res) => {
+  // handle case where 1 person left
+}
+
+
+
+/*
+    PRESENT
+*/ 
+
+export const markPresent = async (req, res) => {
+  try {
+    const { customer: customerId, pets } = req.body;
+
+    if (!customerId || !Array.isArray(pets)) {
+      return res.status(400).json({ message: "Invalid input" });
+    }
+
+    // Check for existing records
+    const existingRecords = await Present.findAll({
+      where: {
+        customerID: customerId,
+        petID: { [Op.in]: pets }
+      }
+    });
+
+    // Filter out already marked pets
+    const existingPetIDs = existingRecords.map(record => record.petID);
+    const newPets = pets.filter(petID => !existingPetIDs.includes(petID));
+
+    if (newPets.length === 0) {
+      return res.status(400).json({ 
+        message: "All pets are already marked as present" 
+      });
+    }
+
+    // Prepare and create new records
+    const entries = newPets.map(petID => ({
+      customerID: customerId,
+      petID: petID,
+      status: 'present',
+      date: new Date().toISOString().split('T')[0]
+    }));
+
+    const results = await Present.bulkCreate(entries);
+
+    res.status(200).json({ 
+      message: "Marked as present", 
+      records: results 
+    });
+  } catch (error) {
+    console.error("Error marking present:", error);
+    res.status(500).json({ message: "Server error" });
+  }
+};
+
+
+
+export const getPresent = async (req, res) => {
+  try {
+    const presentCustomers = await Present.findAll({
+      where: {
+        status: 'present',
+      }
+    });
+
+    // Check if no records were found
+    if (presentCustomers.length === 0) {
+      return res.status(404).json({ message: "No present customers found" });
+    }
+
+    res.json({ presentCustomers });
+  } catch (error) {
+    console.error('Error getting present customers:', error);
+    res.status(500).json({ message: "Server error" });
+  }
+};

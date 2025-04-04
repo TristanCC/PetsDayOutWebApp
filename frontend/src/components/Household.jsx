@@ -32,6 +32,7 @@ const Household = ({ customer, closeHouseholdPanel, preferredColors }) => {
   const [groupID, setGroupID] = useState(customer.groupID);
   const [householdMembers, setHouseholdMembers] = useState([]);
   const [householdPets, setHouseholdPets] = useState([]);
+  const [deleteMode, setDeleteMode] = useState(false)
 
   const handleOwnerDelete = async () => {
 
@@ -66,7 +67,7 @@ const Household = ({ customer, closeHouseholdPanel, preferredColors }) => {
   const renderHousehold = (data) => {
     return data.map((member) => {
       return (
-        <HStack key={member.id} w="100%" justify="space-between" align="center">
+        <HStack key={member.id} w="100%" justify="space-between" align="center" minH={"3rem"}>
           <Text flex="1" textAlign="start">
             {member.firstName} {member.lastName}
           </Text>
@@ -81,6 +82,7 @@ const Household = ({ customer, closeHouseholdPanel, preferredColors }) => {
             size="xs"
             aria-label="Remove"
             flexShrink={0} // Prevents button from shrinking
+            visibility={deleteMode ? "visible" : "hidden"}
           >
             x
           </IconButton>
@@ -93,7 +95,7 @@ const Household = ({ customer, closeHouseholdPanel, preferredColors }) => {
   const renderHouseholdPets = (data) => {
     return data.map((member) => {
       return (
-        <HStack key={member.id} w={"100%"} justify={"space-between"}>
+        <HStack key={member.id} w={"100%"} justify={"space-between"} minH={"2rem"}>
           <Text>
             {member.name} {member.breed}
           </Text>
@@ -149,14 +151,15 @@ const Household = ({ customer, closeHouseholdPanel, preferredColors }) => {
               colorPalette={"red"}
             >
             <HStack gap={".5rem"}>
-                              <IconButton variant={"plain"}
-                               pointerEvents={"none"}
-                                scale={"125%"}
-                               colorPalette={preferredColors}>
-                                
-                                <LuHouse/>
-                                
-                              </IconButton>
+              <IconButton 
+                variant={"plain"}
+                pointerEvents={"none"}
+                scale={"125%"}
+                colorPalette={preferredColors}>
+
+                <LuHouse/>
+                
+              </IconButton>
                   <Text fontSize="2xl" fontWeight="medium">
                     Household
                   </Text>
@@ -219,6 +222,7 @@ const Household = ({ customer, closeHouseholdPanel, preferredColors }) => {
                 </VStack>
               </HStack>
             </VStack>
+            <Button alignSelf={"end"} mt={"1rem"} mr={"1rem"} p={"1rem"} display={deleteMode ? "block" : "none"}>Confirm Deletion</Button>
           </>
         ) : (
           <HStack justifyContent="center" justifyItems="center">

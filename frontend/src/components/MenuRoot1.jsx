@@ -19,7 +19,7 @@ import { LuHouse } from "react-icons/lu";
 import CustomerInfo from './CustomerInfo';
 import PetList from './Pet/PetList';
 import Household from "./Household";
-import Present from "./Present"
+import MarkPresent from "./MarkPresent"
 
 const MenuRoot1 = ({ customer, preferredColors, setSelectedCustomer, updateCustomerInState, deleteCustomerInState }) => {
   const [presentOpen, setPresentOpen] = useState(false);
@@ -145,7 +145,7 @@ const MenuRoot1 = ({ customer, preferredColors, setSelectedCustomer, updateCusto
 
       {presentOpen && (
         <div>
-          <Present
+          <MarkPresent
             selectedCustomer={customer}
             setPresentOpen={setPresentOpen}
             setSelectedCustomer={setSelectedCustomer}
