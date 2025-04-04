@@ -177,7 +177,6 @@ const CreatePet2 = ({ customer, setCreatePetPressed, onPetCreated, petToEdit, se
   return (
     <>
       <MotionBox
-        w="100%"
         borderRadius={"lg"}
         alignSelf={"center"}
         justifySelf={"center"}
@@ -195,7 +194,7 @@ const CreatePet2 = ({ customer, setCreatePetPressed, onPetCreated, petToEdit, se
 
       </MotionBox>
       <MotionBox
-        w={"100%"}
+        justifySelf={"center"}
         initial={{ opacity: 0, scale: 0.95, y: 20 }}
         animate={{ opacity: 1, scale: 1, y: 0 }}
         exit={{ opacity: 0, scale: 0.95, y: 20 }}

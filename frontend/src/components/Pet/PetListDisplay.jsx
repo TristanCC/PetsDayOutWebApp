@@ -55,9 +55,10 @@ const PetListDisplay = ({ pets, setPets, createPetPressed, setCreatePetPressed, 
     <Box
       bg={{ base: "primarySurfaceL", _dark: "primarySurface" }}
       borderRadius={"1rem"}
-      p={"2rem"}
+      p={4}
       w={!createPetPressed ? { base: "90vw", md: "80vw", lg: "1100px" } : { base: "90vw", md: "50vw", lg: "25vw" }}
       minW={"350px"}
+      
       maxH={"90vh"}
       overflowY={"auto"}
       cursor={"radio"}
@@ -76,7 +77,7 @@ const PetListDisplay = ({ pets, setPets, createPetPressed, setCreatePetPressed, 
                 colorPalette={preferredColors}>
                     <PiDogBold />
                 </IconButton>
-                <Text fontSize="2xl" fontWeight="medium">Mark Present</Text>
+                <Text fontSize="2xl" fontWeight="medium">Pets</Text>
             </HStack>
             <IconButton aria-label="Close" size="lg" variant="ghost" onClick={() => closePetsPanel()}>
                 <LuCircleX />

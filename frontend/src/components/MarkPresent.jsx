@@ -130,10 +130,12 @@ const MarkPresent = ({ selectedCustomer, setPresentOpen, preferredColors }) => {
                 flexDir="column"
                 alignItems="center"
                 p={4}
+                pos={"fixed"}
                 boxShadow="lg"
-                maxH="90vh"
+                maxH="80vh"
+                position={"fixed"}
                 w={{ base: "90vw", md: "50vw", lg: "450px" }}
-                overflowY="auto"
+                
                 bg={{ base: "primarySurfaceL", _dark: "primarySurface" }}
             >
                 <HStack w="100%" justifyContent="space-between" p={2}>
@@ -163,7 +165,7 @@ const MarkPresent = ({ selectedCustomer, setPresentOpen, preferredColors }) => {
                     rounded="md"
                     flex="1 1 0"
                 >
-                    <Box w="100%" maxH="70vh" overflowY="auto">
+                    <Box w="100%" maxH="60vh" overflowY="auto">
                         {pets.length > 0 ? (
                             <Table.Root interactive stickyHeader >
                                 <Table.Header bg={{ base: "white", _dark: "primary" }}>
@@ -180,7 +182,7 @@ const MarkPresent = ({ selectedCustomer, setPresentOpen, preferredColors }) => {
                             <Text textAlign="center" w="100%">This customer has no pets yet.</Text>
                         )}
                     </Box>
-                    <Button disabled={selectedPets.length === 0} display={pets.length > 0 ? "block" : "none"} w="100%" onClick={handleConfirm}>
+                    <Button disabled={selectedPets.length === 0} display={pets.length > 0 ? "block" : "none"} w="100%" onClick={handleConfirm} >
                         Confirm
                     </Button>
                 </VStack>
