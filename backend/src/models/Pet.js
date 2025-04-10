@@ -12,6 +12,13 @@ const Pet = sequelize.define('Pet', {
     type: DataTypes.STRING,
     allowNull: false
   },
+  sex: {
+    type: DataTypes.STRING,
+    allowNull: false,
+    validate: {
+      isIn: [["male", "female"]]
+    }
+  },
   breed: {
     type: DataTypes.STRING,
     allowNull: false

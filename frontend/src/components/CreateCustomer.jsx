@@ -97,7 +97,8 @@ const CreateCustomer = ({ setCustomerInfoOpen }) => {
           email: email || null,
           phoneNumber: formattedPhoneNumber,
         })
-      });
+      }
+    );
   
       if (!response.ok) {
         throw new Error("Network response was not ok");
@@ -113,6 +114,10 @@ const CreateCustomer = ({ setCustomerInfoOpen }) => {
         ...prevCustomer,
         id: customerId,
       }));
+      toaster.create({
+        title: "Customer created succesfully",
+        type: "success"
+      })
     } catch (error) {
       console.error("Error creating customer:", error);
       return;
@@ -129,6 +134,7 @@ const CreateCustomer = ({ setCustomerInfoOpen }) => {
             },
             body: JSON.stringify({
               name: pet.name,
+              sex: pet.sex,
               breed: pet.breed,
               size: pet.size,
               photoUrl: pet.photoUrl,
@@ -320,7 +326,6 @@ const CreateCustomer = ({ setCustomerInfoOpen }) => {
                       Submit
                     </Button>
                   )}
-                  <Toaster></Toaster>
                 </HStack>
               </Box>
             </VStack>

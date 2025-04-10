@@ -1,5 +1,6 @@
 import { useState, useEffect, useCallback, useMemo } from "react";
-import { Tabs, VStack, Box, Text, IconButton, HStack, Table, Spinner, Separator, Button, Avatar, Checkbox } from "@chakra-ui/react";
+import { Tabs, VStack, Box, Text, IconButton, HStack, Table, Spinner, Separator, Button, Avatar, Checkbox} from "@chakra-ui/react";
+import { Toaster, toaster } from "@/components/ui/toaster"
 import { motion } from "framer-motion";
 import { LuCircleX, LuBookOpenCheck } from "react-icons/lu";
 
@@ -44,6 +45,12 @@ const MarkPresent = ({ selectedCustomer, setPresentOpen, preferredColors }) => {
             } catch (error) {
                 console.error("Error marking present:", error);
             } finally {
+                const namesString = pets.map((pet) => pet.name).join(`, `)
+                toaster.create({
+                    title: `Marked Present successfully`,
+                    description: `${namesString}`,
+                    type: "success"
+                })
                 setLoading(false);
                 setPresentOpen(false)
             }

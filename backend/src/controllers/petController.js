@@ -6,11 +6,11 @@ import Group from "../models/Group.js"
 // create
 
 export const createPet = async (req, res) => {
-    const { name, breed, size, photoUrl, ownerID } = req.body;
+    const { name, sex, breed, size, photoUrl, ownerID } = req.body;
 
     try {
         // Step 1: Create the new pet
-        const newPet = await Pet.create({ name, breed, size, photoUrl });
+        const newPet = await Pet.create({ name, sex, breed, size, photoUrl });
 
         // Step 2: Check if the owner is part of a shared group
         console.log("CHECKING IF PART OF GROUP");
@@ -134,8 +134,8 @@ export const getPets = async (req, res) => {
 
 
 export const updatePet = async (req, res) => {
-    const { id, name, breed, size, photoUrl, notes } = req.body;
-    console.log("Received update request for pet:", { id, name, breed, size, photoUrl, notes });
+    const { id, name, sex, breed, size, photoUrl, notes } = req.body;
+    console.log("Received update request for pet:", { id, name, sex, breed, size, photoUrl, notes });
 
     try {
         const pet = await Pet.findByPk(id); // Find pet by primary key
@@ -146,7 +146,7 @@ export const updatePet = async (req, res) => {
             return res.status(404).json({ message: 'Pet not found' });
         }
 
-        await pet.update({ name, breed, size, photoUrl, notes });
+        await pet.update({ name, sex, breed, size, photoUrl, notes });
         console.log("Pet updated successfully:", pet);
 
         res.status(200).json({ message: 'Pet updated successfully', pet });

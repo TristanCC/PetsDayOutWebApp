@@ -17,6 +17,7 @@ import DogResting from "../../assets/DogResting.png";
 import { FaCamera } from "react-icons/fa6";
 import { motion } from "framer-motion";
 import { Toaster, toaster } from "@/components/ui/toaster"
+import { BsGenderFemale, BsGenderMale } from "react-icons/bs";
 
 const MotionBox = motion(Box);
 const MotionButton = motion(Button);
@@ -32,6 +33,7 @@ const CreatePet2 = ({ customer, setCreatePetPressed, onPetCreated, petToEdit, se
   });
 
   const [name, setName] = useState(petToEdit ? petToEdit.name : "");
+  const [sex, setSex] = useState(petToEdit ? petToEdit.sex : "")
   const [breed, setBreed] = useState(petToEdit ? petToEdit.breed : "");
   const [image, setImage] = useState(petToEdit ? petToEdit.photoUrl : null);
   const [notes, setNotes] = useState(petToEdit ? petToEdit.notes : "");
@@ -94,6 +96,10 @@ const CreatePet2 = ({ customer, setCreatePetPressed, onPetCreated, petToEdit, se
       large: size === "large" ? DogAnimation : DogResting,
     });
   };
+  
+  const handleClickSex = (sex) => {
+    setSex(sex)
+  }
 
   const handleFileChange = (e) => {
     setImage(e.target.files[0]);
@@ -109,6 +115,7 @@ const CreatePet2 = ({ customer, setCreatePetPressed, onPetCreated, petToEdit, se
 
   const clearPets = () => {
     setName("");
+    setSex("")
     setBreed("");
     setSizeButton(null);
     setImage(null);
@@ -126,6 +133,7 @@ const CreatePet2 = ({ customer, setCreatePetPressed, onPetCreated, petToEdit, se
     const petData = {
       id: petToEdit && petToEdit.id ? petToEdit.id : undefined,
       name: name,
+      sex: sex,
       breed: breed,
       size: sizeButton,
       photoUrl: image,
@@ -188,9 +196,6 @@ const CreatePet2 = ({ customer, setCreatePetPressed, onPetCreated, petToEdit, se
         transition={{ duration: 0.3, ease: "easeInOut" }}
         
       >
-        <Text fontSize="xl" fontWeight="medium">
-          {petToEdit ? `Edit ${petToEdit.name}` : `Track a new pet`}
-        </Text>
 
       </MotionBox>
       <MotionBox
@@ -209,15 +214,23 @@ const CreatePet2 = ({ customer, setCreatePetPressed, onPetCreated, petToEdit, se
             justifySelf={"center"}
             
           >
-            <Field label="Name" required>
-              <Input
-                variant={"outline"}
-                bg={{ base: "primaryL", _dark: "primary" }}
-                value={name}
-                onChange={(e) => setName(e.target.value)}
-                placeholder={randomChoice.name}
-              />
-            </Field>
+            <HStack flex={1}>
+              <Field label="Name" required>
+                <Input
+                  variant={"outline"}
+                  bg={{ base: "primaryL", _dark: "primary" }}
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
+                  placeholder={randomChoice.name}
+                />
+              </Field>
+              <Field label="Sex" required flex={1}>
+                <HStack>
+                  <IconButton onClick={() => handleClickSex("female")} variant={sex == "female" ? "solid" : "outline"}><BsGenderFemale/></IconButton>
+                  <IconButton onClick={() => handleClickSex("male")} variant={sex == "male" ? "solid" : "outline"}><BsGenderMale/></IconButton>
+                </HStack>
+              </Field>
+            </HStack>
             <Field label="Breed" required>
               <Input
                 variant={"outline"}
@@ -324,7 +337,7 @@ const CreatePet2 = ({ customer, setCreatePetPressed, onPetCreated, petToEdit, se
             onClick={(e) => handleSubmit(e)}
             w={"100%"}
             variant={"outline"}
-            disabled={name === "" || breed === "" || sizeButton === null}
+            disabled={name === "" || breed === "" || sizeButton === null || sex === ""}
           >
             Save
           </Button>

@@ -8,6 +8,7 @@ import { withMask } from 'use-mask-input';
 const SearchPopup = ({
   preferredColors,
   setSearchResults,
+  setValue
 }) => {
 
 
@@ -45,6 +46,7 @@ const SearchPopup = ({
       const data = await response.json();
       // Always set as an array, even if empty.
       setSearchResults(data);
+      setValue("first")
     } catch (error) {
       console.error("Search failed:", error);
     }

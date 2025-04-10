@@ -289,8 +289,8 @@ export const markPresent = async (req, res) => {
     // Check for existing records
     const existingRecords = await Present.findAll({
       where: {
-        customerID: customerId,
-        petID: { [Op.in]: pets }
+        petID: { [Op.in]: pets },
+        status: 'present'
       }
     });
 
@@ -329,17 +329,37 @@ export const markPresent = async (req, res) => {
 export const getPresent = async (req, res) => {
   try {
     const presentCustomers = await Present.findAll({
-      where: {
-        status: 'present',
-      }
+      where: { status: 'present' },
+      include: [
+        { model: Customer, attributes: { exclude: ['createdAt', 'updatedAt'] } },
+        { model: Pet }
+      ]
     });
 
-    // Check if no records were found
-    if (presentCustomers.length === 0) {
+    if (!presentCustomers || presentCustomers.length === 0) {
       return res.status(404).json({ message: "No present customers found" });
     }
+    console.log("First record:", JSON.stringify(presentCustomers[0], null, 2));
 
-    res.json({ presentCustomers });
+
+    const grouped = presentCustomers.reduce((acc, record) => {
+      const customerId = record.customerID;
+
+      if (!acc[customerId]) {
+        acc[customerId] = {
+          customer: record.Customer,
+          pets: []
+        };
+      }
+
+      acc[customerId].pets.push(record.Pet);
+      return acc;
+    }, {});
+
+    // convert object to array
+    const groupedArray = Object.values(grouped);
+
+    res.json(groupedArray);
   } catch (error) {
     console.error('Error getting present customers:', error);
     res.status(500).json({ message: "Server error" });

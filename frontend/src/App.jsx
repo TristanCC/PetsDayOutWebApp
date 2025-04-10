@@ -3,6 +3,8 @@ import { useState } from 'react';
 import { Box, chakra, IconButton } from "@chakra-ui/react";
 import { ColorModeButton } from "@/components/ui/color-mode";
 import { LuPaintbrushVertical } from "react-icons/lu";
+import { Toaster, toaster } from "@/components/ui/toaster"
+
 import {
   PopoverBody,
   PopoverContent,
@@ -86,6 +88,7 @@ function App() {
                   />
                 </Routes>
               </BrowserRouter>
+              <Toaster />
             </Box>
           </Box>
         </Box>

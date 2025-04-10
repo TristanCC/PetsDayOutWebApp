@@ -7,6 +7,7 @@ import { Separator } from "@chakra-ui/react";
 import SearchPopup from "../SearchPopup";
 import { LuTrash2 } from "react-icons/lu";
 import placeholderAvatar from "../../assets/Dogavi.png"
+import { BsGenderFemale, BsGenderMale } from "react-icons/bs";
 
 
 import {
@@ -56,7 +57,7 @@ const PetListDisplay = ({ pets, setPets, createPetPressed, setCreatePetPressed, 
       bg={{ base: "primarySurfaceL", _dark: "primarySurface" }}
       borderRadius={"1rem"}
       p={4}
-      w={!createPetPressed ? { base: "90vw", md: "80vw", lg: "1100px" } : { base: "90vw", md: "50vw", lg: "25vw" }}
+      w={!createPetPressed ? { base: "90vw", md: "80vw", lg: "800px" } : { base: "90vw", md: "50vw", lg: "25vw" }}
       minW={"350px"}
       
       maxH={"90vh"}
@@ -111,9 +112,8 @@ const PetListDisplay = ({ pets, setPets, createPetPressed, setCreatePetPressed, 
                           
                           <HStack align={"start"} w={"100%"} justify={"space-between"}>
                             <VStack align={"start"}>
-                              <Text fontSize="lg" fontWeight="bold">{item.name}</Text>
-                              <Text>{item.breed}</Text>
-                              <Text>{item.size}</Text>
+                              <Text fontSize="2xl" fontWeight="light"><HStack>{item.name} {item.sex === "male" ? <BsGenderMale/> : <BsGenderFemale/>} </HStack></Text>
+                              <Text fontSize="lg" fontWeight="light">{item.breed} {item.size == "small" ? "(sm)" : item.size == "medium" ? "(md)" : "(lg)"}</Text>
                             </VStack>
 
                             <Avatar.Root shape="full" size="2xl">

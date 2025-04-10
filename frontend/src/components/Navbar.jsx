@@ -3,7 +3,7 @@ import { useState, useEffect } from "react";
 import MyTable from '../components/MyTable';
 import SearchPopup from './SearchPopup';
 import Login from '../pages/Login';
-import Present from './Present'
+import Present from './Present/Present'
 import { useCustomers } from './context/CustomerContext'; // Import the context hook
 import { Hand } from "lucide-react";
 
@@ -68,7 +68,7 @@ const Navbar = ({
                   </Tabs.Trigger>
                 </Box>
                 <Box>
-                  <SearchPopup preferredColors={preferredColors} setSearchResults={setSearchResults}
+                  <SearchPopup preferredColors={preferredColors} setSearchResults={setSearchResults} setValue={setValue}
                   />
                 </Box>
               </Box>
@@ -111,7 +111,9 @@ const Navbar = ({
               overflowY={"auto"}
             >
               <Present
-                value={value}/>
+                value={value}
+                preferredColors={preferredColors}
+                />
             </Tabs.Content>
           </Tabs.Root>
         </Box>
