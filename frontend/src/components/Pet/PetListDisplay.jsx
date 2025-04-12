@@ -8,6 +8,8 @@ import SearchPopup from "../SearchPopup";
 import { LuTrash2 } from "react-icons/lu";
 import placeholderAvatar from "../../assets/Dogavi.png"
 import { BsGenderFemale, BsGenderMale } from "react-icons/bs";
+import { LuFolderClock } from "react-icons/lu";
+import { FaRegEdit } from "react-icons/fa";
 
 
 import {
@@ -30,6 +32,7 @@ const PetListDisplay = ({ pets, setPets, createPetPressed, setCreatePetPressed, 
     const [hasGroup, setHasGroup] = useState(false)
     const [petToEdit, setPetToEdit] = useState({})
     const [phoneNumber, setPhoneNumber] = useState("");
+    const [open, setOpen] = useState(false)
     
     const { searchResults, handleSearch } = useLinkCustomers(didLinkCustomer, setDidLinkCustomer, reloadPets);
     
@@ -134,7 +137,9 @@ const PetListDisplay = ({ pets, setPets, createPetPressed, setCreatePetPressed, 
                             <Button w={"100%"} variant={"ghost"} colorPalette={"red"} mt={2} flex={"1 1 0"}
                             onClick={() => handleDeletion(item.id)}><LuTrash2 /></Button>
                             <Button w={"100%"} variant={"subtle"} mt={2} flex={"3 1 0"}
-                            onClick={() => {setCreatePetPressed(true); setPetToEdit(item)}}>Edit</Button>
+                            onClick={() => {setCreatePetPressed(true); setPetToEdit(item)}}><LuFolderClock/></Button>
+                            <Button w={"100%"} variant={"subtle"} mt={2} flex={"3 1 0"}
+                            onClick={() => {setCreatePetPressed(true); setPetToEdit(item)}}><FaRegEdit/></Button>
                             </HStack>
                             
                         </VStack>
@@ -144,7 +149,7 @@ const PetListDisplay = ({ pets, setPets, createPetPressed, setCreatePetPressed, 
                 </HStack>
                 </Box>
                 <HStack justify={"center"}  w="100%">
-                <PopoverRoot>
+                <PopoverRoot open={open} onOpenChange={(e) => setOpen(e.open)}>
   <PopoverTrigger asChild>
     <Button variant="surface" disabled={customer.groupID} display={customer.groupID ? "none" : "block"}>
       Link to Household
