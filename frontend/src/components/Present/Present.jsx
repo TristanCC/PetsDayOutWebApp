@@ -38,6 +38,39 @@ const Present = ({ value, preferredColors }) => {
     
     }, [value]);
 
+    // after your useEffect
+    const markPetComplete = useCallback(async (petId) => {
+      try {
+        const res = await fetch('/db/togglePetComplete', {
+          method: 'POST', // or 'PATCH' if you wired it that way
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ petID: petId })
+        });
+        if (!res.ok) throw new Error('Network error');
+      
+        const { record } = await res.json();
+      
+        // OPTION A: Re‑fetch the entire list
+        // const fresh = await fetch('/db/getPresent');
+        // setPresent(await fresh.json());
+      
+        // OPTION B: Optimistically update local state
+        setPresent(prev =>
+          prev.map(customer => ({
+            ...customer,
+            pets: customer.pets.map(p =>
+              p.id === petId
+                ? { ...p, completed: record.completed }
+                : p
+            )
+          }))
+        );
+      } catch (err) {
+        console.error('Failed to toggle complete:', err);
+      }
+    }, [setPresent]);
+
+
     return (
         <Box w={"100%"} display={"flex"} flexDir={"column"} alignItems={"center"} justifyContent={"space-between"} m={"1rem"}>
             {loading ? (
@@ -48,11 +81,16 @@ const Present = ({ value, preferredColors }) => {
             ) : (
               <VStack w={"100%"} spacing={4}>
                 <Button position={"absolute"} bottom={0} right={0} m={"2rem"}>End Day</Button>
-                {present.map((customer) => (
+                {present.map((customer) => {
+                  const allComplete = customer.pets.every(p => p.completed);
+                  
+                  return (
+
                   <Box
                     key={customer.customer.id}
                     w="100%"
                     bg={{ base: "white", _dark: "primary" }}
+                    color={allComplete ? "green.500" :"none" }
                     p={4}
                     rounded="lg"
                     boxShadow="md"
@@ -83,21 +121,32 @@ const Present = ({ value, preferredColors }) => {
                           <Popover.Trigger asChild>
                             <Button size={"lg"} variant="plain" p={0}>
                             <Box
-                          key={pet.id}
-                        
-                          px={3}
-                          py={1}
-                         
-                          colorPalette={preferredColors}
-                          bg={{ base: "primaryL", _dark: "primarySurface" }}
-                          borderRadius="full"
-                          fontSize="sm"
-                          fontWeight="medium"
+                               as="button" // Important!
+                               position="relative"
+                               px={3}
+                               py={1}
+                               bg={pet.completed
+                                 ? { base: "green.50", _dark: "green.900" }
+                                 : { base: "primaryL", _dark: "primarySurface" }
+                               }
+                               borderWidth="1px"
+                               borderColor={pet.completed ? "green.300" : "transparent"}
+                               borderRadius="full"
+                               opacity={pet.completed ? 0.7 : 1}
+                               textDecoration={pet.completed ? "line-through" : "none"}
+                               cursor="pointer"
+                               _hover={{ boxShadow: "md" }}
+                               transition="all 0.2s"
                         >
                         
                           
                             <HStack>
-                              <Icon><PiDogBold/></Icon> <Text>{pet.name} ({pet.breed})</Text>
+                              <Icon           as={LuCheck}
+          boxSize={4}
+          color="green.500"
+          position="absolute"
+          top={-1}
+          right={-1}>{pet.completed ? <LuCheck/> :<PiDogBold/>}</Icon> <Text>{pet.name} ({pet.breed})</Text>
                             </HStack>
                             </Box>
                             </Button>
@@ -108,14 +157,14 @@ const Present = ({ value, preferredColors }) => {
                                 <Popover.Arrow />
                                 <Popover.Body p={"1rem"}>
                                 <HStack wrap={"wrap"} maxW={"33vw"} flex={1}>
-                                  <Button variant={"subtle"} flex={"min-content"} >              
-                                    <HStack justify={"flex-start"}  w={"100%"}>
-                                      <Icon fontSize={"1.25rem"} color={"green.500"}>
-                                        <LuCheck />
-                                      </Icon>
-                                      <Text>Complete</Text>
-                                    </HStack>
-                                  </Button>
+                                <Button variant={"subtle"} flex={"min-content"} onClick={() => markPetComplete(pet.id)}>              
+                                  <HStack justify={"flex-start"} w={"100%"}>
+                                    <Icon fontSize={"1.25rem"} color={"green.500"}>
+                                      <LuCheck />
+                                    </Icon>
+                                    <Text>Complete</Text>
+                                  </HStack>
+                                </Button>
                                 <Button variant={"subtle"} flex={"min-content"} > 
                                     <HStack justify={"flex-start"} w={"100%"}>
                                       <Icon fontSize={"1.25rem"} color={"purple.500"}>
@@ -135,7 +184,7 @@ const Present = ({ value, preferredColors }) => {
                       ))}
                     </HStack>
                   </Box>
-                ))}
+                )})}
               </VStack>
 
             )}

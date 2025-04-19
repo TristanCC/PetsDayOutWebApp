@@ -339,10 +339,10 @@ export const getPresent = async (req, res) => {
     if (!presentCustomers || presentCustomers.length === 0) {
       return res.status(404).json({ message: "No present customers found" });
     }
-    console.log("First record:", JSON.stringify(presentCustomers[0], null, 2));
-
 
     const grouped = presentCustomers.reduce((acc, record) => {
+      if (!record.Customer || !record.Pet) return acc;
+
       const customerId = record.customerID;
 
       if (!acc[customerId]) {
@@ -352,16 +352,42 @@ export const getPresent = async (req, res) => {
         };
       }
 
-      acc[customerId].pets.push(record.Pet);
+      const petWithStatus = {
+        ...record.Pet.get({ plain: true }),
+        completed: record.completed
+      };
+
+      acc[customerId].pets.push(petWithStatus);
       return acc;
     }, {});
 
-    // convert object to array
     const groupedArray = Object.values(grouped);
-
     res.json(groupedArray);
   } catch (error) {
     console.error('Error getting present customers:', error);
+    res.status(500).json({ message: "Server error" });
+  }
+};
+
+
+export const togglePetComplete = async (req, res) => {
+  try {
+    const { petID} = req.body;
+
+    const record = await Present.findOne({
+      where: { petID, status: 'present' }
+    });
+
+    if (!record) {
+      return res.status(404).json({ message: "Pet record not found" });
+    }
+
+    record.completed = !record.completed;
+    await record.save();
+
+    res.status(200).json({ message: "Updated completion status", record });
+  } catch (error) {
+    console.error("Error toggling pet completion:", error);
     res.status(500).json({ message: "Server error" });
   }
 };

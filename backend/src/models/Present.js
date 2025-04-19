@@ -39,7 +39,12 @@ const Present = sequelize.define('Present', {
     validate: {
       isIn: [['present', 'archived']]
     }
+  },
+  completed: {
+    type: DataTypes.BOOLEAN,
+    defaultValue: false
   }
 });
+
 
 export default Present;

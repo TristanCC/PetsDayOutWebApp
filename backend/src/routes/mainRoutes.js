@@ -36,5 +36,6 @@ router.put('/db/linkCustomers', petController.linkCustomers)
 
 router.post('/db/markPresent', customerController.markPresent)
 router.get('/db/getPresent', customerController.getPresent)
+router.post('/db/togglePetComplete', customerController.togglePetComplete)
 
 export default router
