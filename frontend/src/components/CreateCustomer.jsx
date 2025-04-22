@@ -25,6 +25,10 @@ const CreateCustomer = ({ setCustomerInfoOpen }) => {
   const [verifiedLink, setVerifiedLink] = useState(false)
   const [linkPhoneNumber, setLinkPhoneNumber] = useState("")
 
+  const [newCreatedCustomerID, setNewCreatedCustomerID] = useState("")
+
+  const [customerIDToLink, setCustomerIDToLink] = useState("")
+
 
   const createEditableField = (label, value, setValue, required) => (
     <Field label={label} required={required} mb={".5rem"}>
@@ -106,6 +110,7 @@ const CreateCustomer = ({ setCustomerInfoOpen }) => {
   
       const customerData = await response.json();
       customerId = customerData.newCustomer.id; // Extract the customer ID
+      setNewCreatedCustomerID(customerId)
       console.log("Customer ID:", customerId);
       console.log("Customer Data:", customerData);
   
@@ -152,6 +157,34 @@ const CreateCustomer = ({ setCustomerInfoOpen }) => {
         return;
       }
     }
+
+    if(verifiedLink) {
+      const handleLink = async (currentID, targetID) => {
+        try {
+          const response = await fetch(`/db/linkCustomers`, {
+            method: "PUT",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              currentOwnerID: currentID,
+              targetOwnerID: targetID,
+            }),
+          });
+    
+          const data = await response.json();
+          if (!response.ok) {
+            throw new Error(data.message || "Failed to link customers.");
+          }
+          alert(data.message);
+          setDidLinkCustomer(true)
+          reloadPets()
+        } catch (error) {
+          console.error("Error linking customers:", error);
+        }
+      };
+      handleLink(customerId, customerIDToLink)
+    }
   
     setCustomerInfoOpen(false);
   };
@@ -171,9 +204,59 @@ const CreateCustomer = ({ setCustomerInfoOpen }) => {
 
   }
 
-  const handleCheck = () => {
+  const handleVerify = async () => {
+    try {
+      const formattedPhoneNumber = linkPhoneNumber.replaceAll(/[()\-\ ]/g, "");
+      const response = await fetch(`/db/verifyPhone/${formattedPhoneNumber}`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json"
+        }
+      });
+  
+      if (response.status === 304) {
+        toaster.create({
+          title: "Phone number already verified.",
+          type: "info"
+        });
+        return;
+      }
+  
+      if (response.status === 404) {
+        toaster.create({
+          title: "No customers with this phone number found.",
+          type: "error"
+        });
+        return; // Don't continue if 404
+      }
+  
+      if (!response.ok) {
+        throw new Error("Error verifying linked phone number");
+      }
+  
+      const data = await response.json(); 
+  
+      setVerifiedLink(true);
+      setCustomerIDToLink(data.id); 
+      toaster.create({
+        title: "Successfully verified phone number.",
+        type: "success"
+      });
+  
+    } catch (error) {
+      console.error("Error verifying linked phone number", error);
+      toaster.create({
+        title: "Failed to verify phone number.",
+        type: "error"
+      });
+    }
+  };
+  
+  
 
-  }
+  useEffect(() => {
+    setVerifiedLink(false)
+  }, [linkPhoneNumber])
 
   useEffect(() => {
     console.log("FROM INSIDE CREATECUSTOMER PETLIST", petList)
@@ -277,8 +360,8 @@ const CreateCustomer = ({ setCustomerInfoOpen }) => {
                               ref={withMask("(999) 999-9999")}
                               backgroundColor={{ base: "primaryL", _dark: "primary" }}
                             />
-                            <Button disabled={linkPhoneNumber.replace(/\D/g, "").length < 10} onClick={handleCheck}>
-                              Check
+                            <Button disabled={linkPhoneNumber.replace(/\D/g, "").length < 10} onClick={handleVerify} backgroundColor={verifiedLink? "green.500" : "blue.500"}>
+                              {verifiedLink ? "Verified!" : "Verify"}
                             </Button>
                           </HStack>
                         </Field>

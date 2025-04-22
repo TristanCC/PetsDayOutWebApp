@@ -76,7 +76,7 @@ const Household = ({ customer, closeHouseholdPanel, preferredColors }) => {
             textAlign="center"
             whiteSpace="nowrap" // Prevents text from wrapping
           >
-            {`(${customer.phoneNumber.slice(0, 3)}) ${customer.phoneNumber.slice(3,6)}-${customer.phoneNumber.slice(6, 10)}`}
+            {`(${member.phoneNumber.slice(0, 3)}) ${member.phoneNumber.slice(3,6)}-${member.phoneNumber.slice(6, 10)}`}
           </Text>
           <IconButton
             size="xs"

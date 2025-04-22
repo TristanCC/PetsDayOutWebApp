@@ -272,6 +272,24 @@ export const removeFromHousehold = async (req, res) => {
   // handle case where 1 person left
 }
 
+export const verifyPhone = async (req, res) => {
+  const { phoneNumber } = req.params;
+
+  try {
+    const customer = await Customer.findOne({ where: { phoneNumber } });
+
+    if (customer) {
+      const customerID = customer.id
+      return res.status(200).json({ status: "verified", id: customerID });
+    } else {
+      return res.status(404).json({ status: "not found", message: "Customer not found" });
+    }
+  } catch (error) {
+    console.error("Error verifying phone number:", error);
+    return res.status(500).json({ status: "error", message: "Internal server error" });
+  }
+};
+
 
 
 /*

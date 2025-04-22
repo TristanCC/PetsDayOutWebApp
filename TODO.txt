@@ -26,3 +26,11 @@ Misc:
  - optionally link customers together to share pet pool
  - delete confirmation modal
  - on customer delete, check (likely using a join table) for linked customers, if so, don't delete pets
+
+
+
+ NEW TODO:
+
+ implement archival records for pets and customers
+ fix deleting functionality (currently bugged wrt households)
+ implement removing person from household.

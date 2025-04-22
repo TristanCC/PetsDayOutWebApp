@@ -161,6 +161,7 @@ const MenuRoot1 = ({ customer, preferredColors, setSelectedCustomer, updateCusto
             selectedCustomer={customer}
             setCustomerInfoOpen={setCustomerInfoOpen}
             setSelectedCustomer={setSelectedCustomer}
+            updateCustomerInState={updateCustomerInState}
           />
         </div>
       )}

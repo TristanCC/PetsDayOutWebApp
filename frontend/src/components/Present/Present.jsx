@@ -8,6 +8,7 @@ import { LuFolderClock } from "react-icons/lu";
 import { LuCheck } from "react-icons/lu";
 import { LuArchive } from "react-icons/lu";
 import { PiDog, PiDogBold } from "react-icons/pi";
+import { FaCircle } from "react-icons/fa";
 
 const Present = ({ value, preferredColors }) => {
     const [present, setPresent] = useState([]);
@@ -90,7 +91,6 @@ const Present = ({ value, preferredColors }) => {
                     key={customer.customer.id}
                     w="100%"
                     bg={{ base: "white", _dark: "primary" }}
-                    color={allComplete ? "green.500" :"none" }
                     p={4}
                     rounded="lg"
                     boxShadow="md"
@@ -123,30 +123,29 @@ const Present = ({ value, preferredColors }) => {
                             <Box
                                as="button" // Important!
                                position="relative"
-                               px={3}
+                               px={"1rem"}
                                py={1}
-                               bg={pet.completed
-                                 ? { base: "green.50", _dark: "green.900" }
-                                 : { base: "primaryL", _dark: "primarySurface" }
-                               }
-                               borderWidth="1px"
-                               borderColor={pet.completed ? "green.300" : "transparent"}
-                               borderRadius="full"
-                               opacity={pet.completed ? 0.7 : 1}
-                               textDecoration={pet.completed ? "line-through" : "none"}
+                               bg={{ base: "primarySurfaceL", _dark: "primarySurface" }}
+                               opacity={pet.completed ? 0.5 : 1}
+                              
                                cursor="pointer"
                                _hover={{ boxShadow: "md" }}
                                transition="all 0.2s"
+                               borderRadius={".5rem"}
+
                         >
                         
                           
                             <HStack>
                               <Icon           as={LuCheck}
           boxSize={4}
-          color="green.500"
+          color={pet.completed ? "green.500" : "yellow.500"}
           position="absolute"
-          top={-1}
-          right={-1}>{pet.completed ? <LuCheck/> :<PiDogBold/>}</Icon> <Text>{pet.name} ({pet.breed})</Text>
+          top={0}
+          right={0}
+          scale={.5}
+          >
+            <FaCircle /></Icon> <Text>{pet.name} ({pet.breed})</Text>
                             </HStack>
                             </Box>
                             </Button>
@@ -162,7 +161,7 @@ const Present = ({ value, preferredColors }) => {
                                     <Icon fontSize={"1.25rem"} color={"green.500"}>
                                       <LuCheck />
                                     </Icon>
-                                    <Text>Complete</Text>
+                                    <Text>{pet.completed ? "Uncomplete" : "Complete"}</Text>
                                   </HStack>
                                 </Button>
                                 <Button variant={"subtle"} flex={"min-content"} > 
