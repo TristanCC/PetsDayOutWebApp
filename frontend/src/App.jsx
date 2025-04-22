@@ -25,6 +25,8 @@ function App() {
     setPreferredColors(colorMode);
   };
 
+  
+
   const colors = ['red', 'orange', 'yellow', 'green', 'teal', 'blue', 'cyan', 'purple', 'pink'].map((color) => (
     <Box
       display={"inline-block"}

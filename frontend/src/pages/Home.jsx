@@ -9,6 +9,10 @@ function Home({ isLoggedIn, setIsLoggedIn, preferredColors, customers, selectedC
 
   const localCreateCustomerRef = useRef(null); // Local ref to track the CustomerInfo modal
 
+  const handleFormOpen = () => {
+    setCustomerInfoOpen(!customerInfoOpen);
+    console.log("Customer Info Open: ", customerInfoOpen);
+  }
 
   useEffect(() => {
     const handleClickOutside = (event) => {

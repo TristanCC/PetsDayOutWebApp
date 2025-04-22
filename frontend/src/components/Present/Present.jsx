@@ -44,6 +44,11 @@ const Present = ({ value, preferredColors }) => {
         // Optional: Show error message to user
       }
     };
+
+    const handleRecords = (pet) => {
+      setRecordsOpen(!recordsOpen)
+      setSelectedPet(pet)
+    }
     
 
     useEffect(() => {
@@ -105,15 +110,14 @@ const Present = ({ value, preferredColors }) => {
 
 
     return (
-      <Box w={"100%"} display={"flex"} flexDir={"column"} alignItems={"center"} justifyContent={"space-between"} m={"1rem"}>
+      <Box w={"100%"} display={"flex"} flexDir={"column"} alignItems={"center"} p={{lg: "1rem", md: 0, sm: 0}} justifyContent={"space-between"} m={"1rem"} position={"relative"}>
           {loading ? (
               <HStack justifyContent="center" justifyItems="center">
                 <Spinner />
                 <LoadingState loadingText="Fetching Present..." />
               </HStack>
           ) : (
-            <VStack w={"100%"} spacing={4}>
-              <Button position={"absolute"} bottom={0} right={0} m={"2rem"} onClick={() => handleEndDay()}>End Day</Button>
+            <VStack w={"100%"} spacing={4} justify={"space-between"} h={"100%"}>
               {present && present.length > 0 ? present.map((customer) => {
                 // Add null checks for customer and its properties
                 if (!customer || !customer.customer || !customer.pets) return null;
@@ -255,10 +259,11 @@ const Present = ({ value, preferredColors }) => {
                   </HStack>
                 </Box>
               )}) : <Text>No customers present</Text>}
+              <Button position={"relative"} m={"1rem"} visibility={present.length >= 1 ? "visible" : "hidden"} onClick={() => handleEndDay()}>End Day</Button>
             </VStack>
           )}
           {recordsOpen && (
-            <Records selectedPet={selectedPet}/>
+            <Records selectedPet={selectedPet} preferredColors={preferredColors} setRecordsOpen={setRecordsOpen}/>
           )}
       </Box>
   );

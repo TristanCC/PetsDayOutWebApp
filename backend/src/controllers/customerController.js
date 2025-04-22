@@ -441,3 +441,26 @@ export const archivePresentCustomers = async (req, res) => {
     res.status(500).json({ message: "Server error" });
   }
 };
+
+export const getRecords = async (req,res) => {
+
+  const { petID } = req.params
+
+  try {
+    const records = await Present.findAll({
+      where: {
+        petID: petID
+      }
+    })
+
+    if (!records) {
+      res.status(404).json({message: "no records found for this pet."})
+    }
+
+    res.status(200).json({records})
+
+  } catch (error) {
+    console.error("Error getting records for this pet", error)
+    res.status(500).json({message: "Server error"})
+  }
+}
