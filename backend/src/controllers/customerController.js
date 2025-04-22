@@ -409,3 +409,35 @@ export const togglePetComplete = async (req, res) => {
     res.status(500).json({ message: "Server error" });
   }
 };
+
+export const archivePresentCustomers = async (req, res) => {
+  try {
+    // Update status to "archived" for all customers currently marked as "present"
+    const [updatedCount] = await Present.update(
+      { status: "archived" },
+      {
+        where: {
+          status: "present"
+        }
+      }
+    );
+
+    // If no customers were updated, return a message indicating so
+    if (updatedCount === 0) {
+      return res.status(404).json({ message: "No customers found to archive." });
+    }
+
+    // Optionally, you could fetch the updated customers to send back in the response
+    const archivedCustomers = await Present.findAll({
+      where: {
+        status: "archived"
+      }
+    });
+
+    res.status(200).json({ updatedCount, archivedCustomers });
+
+  } catch (error) {
+    console.error("Error archiving customers.", error);
+    res.status(500).json({ message: "Server error" });
+  }
+};
