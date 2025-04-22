@@ -15,6 +15,8 @@ const Present = ({ value, preferredColors }) => {
     const [loading, setLoading] = useState(false);
     const [completePets, setCompletePets] = useState([])
 
+    const MotionBox = motion(Box);
+
     useEffect(() => {
         const fetchPresent = async () => {
             try {
@@ -93,6 +95,7 @@ const Present = ({ value, preferredColors }) => {
                     bg={{ base: "white", _dark: "primary" }}
                     p={4}
                     rounded="lg"
+                    position="relative"
                     boxShadow="md"
                     transition="all 0.2s"
                     _hover={{ boxShadow: "lg", transform: "scale(1.01)" }}
@@ -107,6 +110,47 @@ const Present = ({ value, preferredColors }) => {
                             <Text>
                             {`(${customer.customer.phoneNumber.slice(0,3)})-${customer.customer.phoneNumber.slice(3,6)}-${customer.customer.phoneNumber.slice(6,10)}`}
                             </Text>
+                              {allComplete ? (
+                                <MotionBox
+                                boxSize={4}
+                                bg={allComplete ? "green.500" : "yellow.500"}
+                                borderRadius="full"
+                                position="absolute"
+                                top="1rem"
+                                right="1rem"
+                                boxShadow="0 2px 10px green"
+                                animate={{
+                                  scale: [1, 1.1, 1],
+                                  opacity: [0.8, 1, 0.8],
+                                }}
+                                transition={{
+                                  duration: 3,
+                                  repeat: Infinity,
+                                  ease: "easeInOut",
+                                }}
+                              />
+                              
+                            ) :
+                            <MotionBox
+                            boxSize={4}
+                            bg={allComplete ? "green.500" : "yellow.500"}
+                            borderRadius="full"
+                            position="absolute"
+                            top="1rem"
+                            right="1rem"
+                            boxShadow="0 2px 10px orange"
+                            animate={{
+                              scale: [1, 1.1, 1],
+                              opacity: [0.8, 1, 0.8],
+                            }}
+                            transition={{
+                              duration: 3,
+                              repeat: Infinity,
+                              ease: "easeInOut",
+                            }}
+                          />
+                            }
+
                           </HStack>
                         </Box>
                         {/* <Button>Info</Button> */}
@@ -161,7 +205,7 @@ const Present = ({ value, preferredColors }) => {
                                     <Icon fontSize={"1.25rem"} color={"green.500"}>
                                       <LuCheck />
                                     </Icon>
-                                    <Text>{pet.completed ? "Uncomplete" : "Complete"}</Text>
+                                    <Text>{"Complete"}</Text>
                                   </HStack>
                                 </Button>
                                 <Button variant={"subtle"} flex={"min-content"} > 

@@ -8,6 +8,8 @@ import CustomerCreationPet from './CustomerCreationPet';
 import { Checkbox } from "@/components/ui/checkbox"
 import { Toaster, toaster } from "@/components/ui/toaster"
 
+import { useCustomers } from "./context/CustomerContext";
+
 import { withMask } from "use-mask-input";
 
 import CreatePet from "./Pet/CreatePet2";
@@ -28,6 +30,10 @@ const CreateCustomer = ({ setCustomerInfoOpen }) => {
   const [newCreatedCustomerID, setNewCreatedCustomerID] = useState("")
 
   const [customerIDToLink, setCustomerIDToLink] = useState("")
+
+  const {
+    fetchCustomers
+  } = useCustomers();
 
 
   const createEditableField = (label, value, setValue, required) => (
@@ -176,15 +182,15 @@ const CreateCustomer = ({ setCustomerInfoOpen }) => {
           if (!response.ok) {
             throw new Error(data.message || "Failed to link customers.");
           }
-          alert(data.message);
           setDidLinkCustomer(true)
           reloadPets()
         } catch (error) {
           console.error("Error linking customers:", error);
         }
       };
-      handleLink(customerId, customerIDToLink)
+      await handleLink(customerId, customerIDToLink)
     }
+    await fetchCustomers()
   
     setCustomerInfoOpen(false);
   };

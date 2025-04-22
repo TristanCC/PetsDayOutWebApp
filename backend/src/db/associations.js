@@ -28,7 +28,7 @@ CustomerPet.belongsTo(Pet, { foreignKey: 'petID' }); // CustomerPet belongs to P
 Pet.hasMany(CustomerPet, { foreignKey: 'petID' });   // Pet has many CustomerPets
 
 Present.belongsTo(Customer, { foreignKey: 'customerID' });
-Present.belongsTo(Pet, { foreignKey: 'petID' });
+Present.belongsTo(Pet, { foreignKey: 'petID', onDelete: 'CASCADE' });
 
 
 export { Customer, Pet, CustomerPet, Group, Present};

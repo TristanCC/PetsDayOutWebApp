@@ -9,10 +9,6 @@ function Home({ isLoggedIn, setIsLoggedIn, preferredColors, customers, selectedC
 
   const localCreateCustomerRef = useRef(null); // Local ref to track the CustomerInfo modal
 
-  const handleFormOpen = () => {
-    setCustomerInfoOpen(!customerInfoOpen);
-    console.log("Customer Info Open: ", customerInfoOpen);
-  }
 
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -56,9 +52,6 @@ function Home({ isLoggedIn, setIsLoggedIn, preferredColors, customers, selectedC
           <HStack flex={1} justifyContent={"space-between"}>
             <Button mt="5" ml="5" variant="ghost" onClick={handleLogout}>
               Log Out
-            </Button>
-            <Button mt="5" mr="5" variant="surface" onClick={handleFormOpen}>
-              Add Customer
             </Button>
           </HStack>
           {customerInfoOpen && (

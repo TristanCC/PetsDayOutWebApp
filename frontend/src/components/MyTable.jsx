@@ -1,12 +1,13 @@
 "use client"
 
 import { Box, Table, Text, Button } from "@chakra-ui/react"
-import { EmptyState, List, VStack } from "@chakra-ui/react"
+import { EmptyState, List, VStack, HStack } from "@chakra-ui/react"
 import { HiColorSwatch } from "react-icons/hi"
 import { useState, useEffect, useRef } from "react"
 import MenuRoot1 from "./MenuRoot1"
 import { motion } from "framer-motion";
 import { Box as ChakraBox } from "@chakra-ui/react";
+import CreateCustomer from "./CreateCustomer"
 const MyTable = ({
   selectedCustomer,
   setSelectedCustomer,
@@ -24,6 +25,12 @@ const MyTable = ({
 
   const [selection, setSelection] = useState([])
   const scrollRef = useRef(null)
+  const [addCustomerOpen, setAddCustomerOpen] = useState(false)
+
+
+  const handleAddCustomer = () => {
+    setAddCustomerOpen(!addCustomerOpen)
+  }
 
   useEffect(() => {
     if (scrollRef.current) {
@@ -122,7 +129,7 @@ const MyTable = ({
       </Table.Root>
       {/* Pagination Controls: only render if not in search mode */}
       {!isSearchActive && (
-        <Box display={"flex"} justifyContent={"space-between"}>
+        <HStack justify={"space-between"} align={"center"}>
           <Button
             m={"1rem"}
             variant={"outline"}
@@ -131,6 +138,9 @@ const MyTable = ({
           >
             Previous
           </Button>
+          <Button m={"1rem"} variant="outline" onClick={handleAddCustomer}>
+              Add Customer
+            </Button>
           <Button
             m={"1rem"}
             variant={"outline"}
@@ -139,8 +149,11 @@ const MyTable = ({
           >
             Next
           </Button>
-        </Box>
+        </HStack>
       )}
+        {addCustomerOpen && (
+          <CreateCustomer setCustomerInfoOpen={setAddCustomerOpen}/>
+        )}
     </MotionBox>
   )
 }

@@ -193,7 +193,7 @@ const PetListDisplay = ({ pets, setPets, createPetPressed, setCreatePetPressed, 
     </PopoverBody>
   </PopoverContent>
   </PopoverRoot>
-                  <Button onClick={() => { setCreatePetPressed(true); setPetToEdit(null); }} variant={"ghost"}>Add Pet</Button>
+                  <Button onClick={() => { setCreatePetPressed(true); setPetToEdit(null); }} variant={"ghost"}>+ Add Pet</Button>
                 </HStack>
             </>
             

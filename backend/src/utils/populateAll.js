@@ -52,6 +52,7 @@ const seedData = async () => {
     // Seed Pets
     const pet1 = await Pet.create({
       name: 'Buddy',
+      sex: "male",
       breed: 'Golden Retriever',
       size: 'large',
       photoUrl: 'http://placekitten.com/200/300',
@@ -59,6 +60,7 @@ const seedData = async () => {
 
     const pet2 = await Pet.create({
       name: 'Fluffy',
+      sex: "male",
       breed: 'Persian',
       size: 'small',
       photoUrl: 'http://placekitten.com/200/300',
@@ -66,6 +68,7 @@ const seedData = async () => {
 
     const pet3 = await Pet.create({
       name: 'Chirpy',
+      sex: "male",
       breed: 'Parakeet',
       size: 'small',
       photoUrl: 'http://placekitten.com/200/300',
