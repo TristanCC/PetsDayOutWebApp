@@ -12,11 +12,23 @@ const Records = ({ selectedPet, preferredColors, setRecordsOpen }) => {
 
     useEffect(() => {
         const getRecords = async () => {
-            const response = await fetch(`/db/getRecords/${selectedPet.id}`)
-            const formattedResponse = await response.json()
-            console.log(formattedResponse)
-        }
-        getRecords()
+            setLoading(true);
+            try {
+                const response = await fetch(`/db/getRecords/${selectedPet.id}`);
+                const data = await response.json();
+        
+                console.log("Fetched data:", data); // See what structure it has
+        
+                // If the API returns an object with a `records` array inside:
+                setRecords(data.records || []);
+            } catch (error) {
+                console.error("Error fetching records:", error);
+            } finally {
+                setLoading(false);
+            }
+        };
+    getRecords()
+        
     }, [])
 
     return (
@@ -75,8 +87,14 @@ const Records = ({ selectedPet, preferredColors, setRecordsOpen }) => {
                                 <Text>Loading...</Text>
                             </HStack>
                         ) : (
-                            <Text>{selectedPet.name}</Text>
+                            <>
+                                <Text>{selectedPet.name}</Text>
+                                {records.map((record, idx) => (
+                                    <Text key={idx}>{record.date}</Text>
+                                ))}
+                            </>
                         )}
+
                     </MotionBox>
                 </Box>
     )

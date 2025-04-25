@@ -117,7 +117,7 @@ const Present = ({ value, preferredColors }) => {
                 <LoadingState loadingText="Fetching Present..." />
               </HStack>
           ) : (
-            <VStack w={"100%"} spacing={4} justify={"space-between"} h={"100%"}>
+            <VStack w={"100%"} spacing={4} h={"100%"}>
               {present && present.length > 0 ? present.map((customer) => {
                 // Add null checks for customer and its properties
                 if (!customer || !customer.customer || !customer.pets) return null;
