@@ -50,7 +50,7 @@ const Records = ({ selectedPet, preferredColors, setRecordsOpen }) => {
         };
 
         getRecords();
-    }, []);
+    }, [editInstructionsOpen]);
 
     const handleEditClick = (record, color) => {
         setSelectedRecord(record);
@@ -117,7 +117,7 @@ const Records = ({ selectedPet, preferredColors, setRecordsOpen }) => {
                     </HStack>
                 ) : (
                     <>
-                        <Accordion.Root variant="enclosed" collapsible overflow={"auto"} cursor={"pointer"} rounded={"lg"}>
+                        <Accordion.Root variant="enclosed" collapsible overflow={"auto"} cursor={"pointer"} rounded={"lg"} multiple>
                             {!editInstructionsOpen ? records.map((record, idx) => (
                                 <Accordion.Item
                                     key={idx}
@@ -144,7 +144,7 @@ const Records = ({ selectedPet, preferredColors, setRecordsOpen }) => {
                                                         return `${month}/${day}/${year}`;
                                                     })()}
 
-                                                    {record.status === "present" ? " - Today": ""}
+                                                    {record.status === "present" ? " - New": ""}
                                                 </Text>
                                             </HStack>
 

@@ -6,11 +6,11 @@ import Group from "../models/Group.js"
 // create
 
 export const createPet = async (req, res) => {
-    const { name, sex, breed, size, photoUrl, ownerID } = req.body;
+    const { name, sex, breed, size, photoUrl, ownerID, notes } = req.body;
 
     try {
         // Step 1: Create the new pet
-        const newPet = await Pet.create({ name, sex, breed, size, photoUrl });
+        const newPet = await Pet.create({ name, sex, breed, size, photoUrl, notes });
 
         // Step 2: Check if the owner is part of a shared group
         console.log("CHECKING IF PART OF GROUP");

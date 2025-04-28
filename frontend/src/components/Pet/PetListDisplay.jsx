@@ -27,12 +27,16 @@ import { withMask } from "use-mask-input"
 import useLinkCustomers from "./useLinkCustomers";
 import { Dog } from "lucide-react";
 
+import Records from "../Present/Records";
+
 const PetListDisplay = ({ pets, setPets, createPetPressed, setCreatePetPressed, closePetsPanel, customer,
    handleBack, reloadPets, preferredColors, didLinkCustomer, setDidLinkCustomer }) => {
     const [hasGroup, setHasGroup] = useState(false)
     const [petToEdit, setPetToEdit] = useState({})
     const [phoneNumber, setPhoneNumber] = useState("");
     const [open, setOpen] = useState(false)
+    const [recordsOpen, setRecordsOpen] = useState(false)
+    const [selectedPet, setSelectedPet] = useState({})
     
     const { searchResults, handleSearch } = useLinkCustomers(didLinkCustomer, setDidLinkCustomer, reloadPets);
     
@@ -55,8 +59,14 @@ const PetListDisplay = ({ pets, setPets, createPetPressed, setCreatePetPressed, 
       }
     }
 
+    const handleRecords = (pet) => {
+      setSelectedPet(pet)
+      setRecordsOpen(true)
+    }
+
     return (
     <Box
+      visibility={recordsOpen ? "hidden" : "visible"}
       bg={{ base: "primarySurfaceL", _dark: "primarySurface" }}
       borderRadius={"1rem"}
       p={4}
@@ -104,8 +114,13 @@ const PetListDisplay = ({ pets, setPets, createPetPressed, setCreatePetPressed, 
           }}
         >
           {!createPetPressed ? (
+            recordsOpen ? (
+              <Box visibility={recordsOpen ? "visible" : "hidden"}>
+                <Records selectedPet={selectedPet} preferredColors={preferredColors} setRecordsOpen={setRecordsOpen}/>
+              </Box>
+            ) :
             <>
-                <Box w={"100%"} p={2} bg={{ base: "primarySurfaceL", _dark: "transparent" }} rounded={"lg"}>
+                <Box  w={"100%"} p={2} bg={{ base: "primarySurfaceL", _dark: "transparent" }} rounded={"lg"}>
                 <HStack gap={4} w="100%" flexWrap="wrap" justify="center" justifyItems={"center"}>
 
                   {pets.map((item, index) => (
@@ -137,7 +152,7 @@ const PetListDisplay = ({ pets, setPets, createPetPressed, setCreatePetPressed, 
                             <Button w={"100%"} variant={"ghost"} colorPalette={"red"} mt={2} flex={"1 1 0"}
                             onClick={() => handleDeletion(item.id)}><LuTrash2 /></Button>
                             <Button w={"100%"} variant={"subtle"} mt={2} flex={"3 1 0"}
-                            onClick={() => {setCreatePetPressed(true); setPetToEdit(item)}}><LuFolderClock/></Button>
+                            onClick={() => {handleRecords(item);}}><LuFolderClock/></Button>
                             <Button w={"100%"} variant={"subtle"} mt={2} flex={"3 1 0"}
                             onClick={() => {setCreatePetPressed(true); setPetToEdit(item)}}><FaRegEdit/></Button>
                             </HStack>
@@ -150,49 +165,49 @@ const PetListDisplay = ({ pets, setPets, createPetPressed, setCreatePetPressed, 
                 </Box>
                 <HStack justify={"center"}  w="100%">
                 <PopoverRoot open={open} onOpenChange={(e) => setOpen(e.open)}>
-  <PopoverTrigger asChild>
-    <Button variant="surface" disabled={customer.groupID} display={customer.groupID ? "none" : "block"}>
-      Link to Household
-    </Button>
-  </PopoverTrigger>
-  <PopoverContent colorPalette={preferredColors}>
-    <PopoverArrow />
-    <PopoverBody colorPalette={preferredColors}>
-      <PopoverTitle fontSize={"md"} fontWeight="small">
-        Linking to a Household
-      </PopoverTitle>
-      <Text my={2} fontSize="sm" color="gray.600" mb={2}>
-        Search for the phone number of another customer to add to or create a new household.
-      </Text>
-      <Input
-        my={2}
-        fontSize={"md"}
-        placeholder="(999) 999-9999"
-        ref={withMask("(999) 999-9999")}
-        onChange={(e) => setPhoneNumber(e.target.value)}
-      />
-      <Button
-        disabled={phoneNumber.replace(/\D/g, "").length < 10}
-        variant={"solid"}
-        width={"100%"}
-        onClick={() => handleSearch(customer, phoneNumber)}
-      >
-        Link
-      </Button>
-      {searchResults && searchResults.length > 0 ? (
-        <Box mt={3} p={2} borderRadius="md">
-          <Text fontSize="md" fontWeight="sm" color={"green.400"}>
-            Matching Household found. Linking...
-          </Text>
-        </Box>
-      ) : searchResults ? (
-        <Text mt={2} fontSize="sm" color="red.500">
-          No matching household found.
-        </Text>
-      ) : null}
-    </PopoverBody>
-  </PopoverContent>
-  </PopoverRoot>
+                  <PopoverTrigger asChild>
+                    <Button variant="surface" disabled={customer.groupID} display={customer.groupID ? "none" : "block"}>
+                      Link to Household
+                    </Button>
+                  </PopoverTrigger>
+                  <PopoverContent colorPalette={preferredColors}>
+                    <PopoverArrow />
+                    <PopoverBody colorPalette={preferredColors}>
+                      <PopoverTitle fontSize={"md"} fontWeight="small">
+                        Linking to a Household
+                      </PopoverTitle>
+                      <Text my={2} fontSize="sm" color="gray.600" mb={2}>
+                        Search for the phone number of another customer to add to or create a new household.
+                      </Text>
+                      <Input
+                        my={2}
+                        fontSize={"md"}
+                        placeholder="(999) 999-9999"
+                        ref={withMask("(999) 999-9999")}
+                        onChange={(e) => setPhoneNumber(e.target.value)}
+                      />
+                      <Button
+                        disabled={phoneNumber.replace(/\D/g, "").length < 10}
+                        variant={"solid"}
+                        width={"100%"}
+                        onClick={() => handleSearch(customer, phoneNumber)}
+                      >
+                        Link
+                      </Button>
+                      {searchResults && searchResults.length > 0 ? (
+                        <Box mt={3} p={2} borderRadius="md">
+                          <Text fontSize="md" fontWeight="sm" color={"green.400"}>
+                            Matching Household found. Linking...
+                          </Text>
+                        </Box>
+                      ) : searchResults ? (
+                        <Text mt={2} fontSize="sm" color="red.500">
+                          No matching household found.
+                        </Text>
+                      ) : null}
+                    </PopoverBody>
+                  </PopoverContent>
+                  </PopoverRoot>
                   <Button onClick={() => { setCreatePetPressed(true); setPetToEdit(null); }} variant={"ghost"}>+ Add Pet</Button>
                 </HStack>
             </>
