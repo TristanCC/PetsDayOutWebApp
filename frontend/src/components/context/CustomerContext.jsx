@@ -17,12 +17,12 @@ export const CustomerProvider = ({ children }) => {
     try {
       const response = await fetch(`/db/getCustomers?limit=${limit}&offset=${offset}`);
       const data = await response.json();
-      data.sort((a, b) => a.lastName.toLowerCase().localeCompare(b.lastName.toLowerCase()));
       setCustomers(data);
     } catch (error) {
       console.error('Error fetching customers:', error);
     }
   };
+  
 
   const fetchGroupID = async (customerId) => {
     try {

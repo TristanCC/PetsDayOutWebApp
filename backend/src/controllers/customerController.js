@@ -2,7 +2,7 @@ import Customer from '../models/Customer.js';
 import Pet from '../models/Pet.js'
 import Group from '../models/Group.js';
 import Present from '../models/Present.js'
-import { Op } from 'sequelize';
+import { Op, Sequelize } from 'sequelize';
 
 export const createCustomer = async (req, res) => {
   const { firstName, middleName, lastName, email, phoneNumber, customerComment } = req.body;
@@ -65,25 +65,25 @@ export const getCustomer = async (req, res) => {
   }
 }
 
-
 export const getCustomers = async (req, res) => {
-  const { limit, offset } = req.query
+  const { limit, offset } = req.query;
   try {
     const customers = await Customer.findAll({
-      limit,
-      offset
+      limit: parseInt(limit),
+      offset: parseInt(offset),
+      order: [
+        [Sequelize.fn('lower', Sequelize.col('lastName')), 'ASC'] // <- sort case-insensitively
+      ]
     });
-    
-    // Convert Sequelize instances to plain objects
-    const plainCustomers = customers.map(customer => customer.toJSON());
 
-    // Send plain customers as JSON
+    const plainCustomers = customers.map(customer => customer.toJSON());
     res.json(plainCustomers);
   } catch (error) {
     console.error('Error fetching customers:', error);
     res.status(500).json({ error: 'Failed to fetch customers. Please try again later.' });
   }
 };
+
 
 const sanitizeNames = (names) => {
   return names.map((name) => name.toLowerCase()); // Convert everything to lowercase
@@ -462,5 +462,23 @@ export const getRecords = async (req,res) => {
   } catch (error) {
     console.error("Error getting records for this pet", error)
     res.status(500).json({message: "Server error"})
+  }
+}
+
+export const updateRecord = async (req, res) => {
+  const { recordID } = req.params
+  const { instructions } = req.body
+  try {
+    const recordToUpdate = await Present.findByPk(recordID)
+
+    if(!recordToUpdate) {
+      return res.status(404).json({ message: "no record found."})
+    }
+    await recordToUpdate.update({instructions: instructions})
+    
+    res.status(200).json({ message: "successfully updated record instructions."})
+  } catch (error) {
+    console.error("Error updating records.", error)
+    res.status(500).json({ message: "Server error"})
   }
 }

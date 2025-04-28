@@ -12,12 +12,14 @@ import { FaCircle } from "react-icons/fa";
 import { Toaster, toaster } from "@/components/ui/toaster"
 
 import Records from "./Records";
+
 const Present = ({ value, preferredColors }) => {
     const [present, setPresent] = useState([]);
     const [loading, setLoading] = useState(false);
     const [completePets, setCompletePets] = useState([])
     const [recordsOpen, setRecordsOpen] = useState(false)
     const [selectedPet, setSelectedPet] = useState({})
+    const [openPopoverId, setOpenPopoverId] = useState(null) // Track which popover is open
 
     const MotionBox = motion(Box);
 
@@ -29,27 +31,28 @@ const Present = ({ value, preferredColors }) => {
     
         if (!response.ok) throw new Error("Failed to archive customers");
     
-        // Instead of refetching, just clear the present state
         setPresent([]);
         toaster.create({
           title: "Day completed!",
           type: "success"
         })
         
-        // Optional: Show a success message
         console.log("Day ended successfully, all customers archived");
     
       } catch (error) {
         console.error("Error archiving present customers", error);
-        // Optional: Show error message to user
       }
     };
 
     const handleRecords = (pet) => {
+      setOpenPopoverId(null); // Close the popover when opening records
       setRecordsOpen(!recordsOpen)
       setSelectedPet(pet)
     }
     
+    const handlePopoverToggle = (petId, isOpen) => {
+      setOpenPopoverId(isOpen ? petId : null);
+    }
 
     useEffect(() => {
         const fetchPresent = async () => {
@@ -58,8 +61,6 @@ const Present = ({ value, preferredColors }) => {
                 const response = await fetch(`/db/getPresent`);
                 if (!response.ok) throw new Error("Network error");
                 const data = await response.json();
-
-                // Assuming the response contains an object with 'presentCustomers' property
                 setPresent(data || []); 
                 console.log(present)
             } catch (error) {
@@ -70,16 +71,13 @@ const Present = ({ value, preferredColors }) => {
             }
         };
 
-        
         fetchPresent();
-    
     }, [value]);
 
-    // after your useEffect
     const markPetComplete = useCallback(async (petId) => {
       try {
         const res = await fetch('/db/togglePetComplete', {
-          method: 'POST', // or 'PATCH' if you wired it that way
+          method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ petID: petId })
         });
@@ -87,11 +85,6 @@ const Present = ({ value, preferredColors }) => {
       
         const { record } = await res.json();
       
-        // OPTION A: Re‑fetch the entire list
-        // const fresh = await fetch('/db/getPresent');
-        // setPresent(await fresh.json());
-      
-        // OPTION B: Optimistically update local state
         setPresent(prev =>
           prev.map(customer => ({
             ...customer,
@@ -107,8 +100,6 @@ const Present = ({ value, preferredColors }) => {
       }
     }, [setPresent]);
 
-
-
     return (
       <Box w={"100%"} display={"flex"} flexDir={"column"} alignItems={"center"} p={{lg: "1rem", md: 0, sm: 0}} justifyContent={"space-between"} m={"1rem"} position={"relative"}>
           {loading ? (
@@ -119,7 +110,6 @@ const Present = ({ value, preferredColors }) => {
           ) : (
             <VStack w={"100%"} spacing={4} h={"100%"}>
               {present && present.length > 0 ? present.map((customer) => {
-                // Add null checks for customer and its properties
                 if (!customer || !customer.customer || !customer.pets) return null;
                 
                 const allComplete = customer.pets.every(p => p.completed);
@@ -196,7 +186,11 @@ const Present = ({ value, preferredColors }) => {
                   <HStack wrap="wrap">
                     {customer.pets.map((pet) => (
                         pet && 
-                        <Popover.Root key={pet.id} >
+                        <Popover.Root 
+                          key={pet.id} 
+                          open={openPopoverId === pet.id}
+                          onOpenChange={(isOpen) => handlePopoverToggle(pet.id, isOpen)}
+                        >
                         <Popover.Trigger asChild>
                           <Button size={"lg"} variant="plain" p={0}>
                           <Box
@@ -206,7 +200,6 @@ const Present = ({ value, preferredColors }) => {
                              py={1}
                              bg={{ base: "primarySurfaceL", _dark: "primarySurface" }}
                              opacity={pet.completed ? 0.5 : 1}
-                            
                              cursor="pointer"
                              _hover={{ boxShadow: "md" }}
                              transition="all 0.2s"
@@ -233,7 +226,10 @@ const Present = ({ value, preferredColors }) => {
                               <Popover.Arrow />
                               <Popover.Body p={"1rem"}>
                               <HStack wrap={"wrap"} maxW={"33vw"} flex={1}>
-                              <Button variant={"subtle"} flex={"min-content"} onClick={() => markPetComplete(pet.id)}>              
+                              <Button variant={"subtle"} flex={"min-content"} onClick={() => {
+                                markPetComplete(pet.id);
+                                setOpenPopoverId(null); // Close after clicking
+                              }}>              
                                 <HStack justify={"flex-start"} w={"100%"}>
                                   <Icon fontSize={"1.25rem"} color={"green.500"}>
                                     <LuCheck />
@@ -270,6 +266,3 @@ const Present = ({ value, preferredColors }) => {
 };
 
 export default Present;
-
-//bg={{ base: "white", _dark: "primary" }}
-//bg={{ base: "white", _dark: "primaryMidpoint" }

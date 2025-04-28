@@ -40,5 +40,6 @@ router.get('/db/getPresent', customerController.getPresent)
 router.post('/db/togglePetComplete', customerController.togglePetComplete)
 router.patch('/db/archivePresentCustomers', customerController.archivePresentCustomers)
 router.get('/db/getRecords/:petID', customerController.getRecords)
+router.patch('/db/updateRecord/:recordID', customerController.updateRecord)
 
 export default router
