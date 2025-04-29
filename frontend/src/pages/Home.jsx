@@ -54,15 +54,11 @@ function Home({ isLoggedIn, setIsLoggedIn, preferredColors, customers, selectedC
       {isLoggedIn && (
         <>
           <HStack flex={1} justifyContent={"space-between"}>
-            <Button mt="5" ml="5" variant="ghost" onClick={handleLogout}>
+            <Button zIndex={99999} w={"10rem"} pos={"absolute"} margin={"auto"} left={0} right={0} bottom={0} variant="ghost" onClick={handleLogout}>
               Log Out
             </Button>
           </HStack>
-          {customerInfoOpen && (
-            <div ref={localCreateCustomerRef}>
-              <CreateCustomer setCustomerInfoOpen={setCustomerInfoOpen} preferredColors={preferredColors}/>
-            </div>
-          )}
+
         </>
       )}
     </>

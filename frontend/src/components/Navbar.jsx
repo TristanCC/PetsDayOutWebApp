@@ -82,8 +82,6 @@ const Navbar = ({
               pt={"0"}
               w={"100%"}
               h={"70vh"}
-              maxH={"70vh"}
-              minH={"70vh"}
               overflowY={"auto"}
               
             >
@@ -108,8 +106,6 @@ const Navbar = ({
               pt={"0"}
               w={"100%"}
               h={"70vh"}
-              maxH={"70vh"}
-              minH={"70vh"}
               overflowY={"auto"}
               
             >

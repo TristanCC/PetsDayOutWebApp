@@ -1,6 +1,6 @@
 "use client"
 
-import { Box, Table, Text, Button } from "@chakra-ui/react"
+import { Box, Table, Text, Button, Flex } from "@chakra-ui/react"
 import { EmptyState, List, VStack, HStack } from "@chakra-ui/react"
 import { HiColorSwatch } from "react-icons/hi"
 import { useState, useEffect, useRef } from "react"
@@ -8,6 +8,7 @@ import MenuRoot1 from "./MenuRoot1"
 import { motion } from "framer-motion";
 import { Box as ChakraBox } from "@chakra-ui/react";
 import CreateCustomer from "./CreateCustomer"
+
 const MyTable = ({
   selectedCustomer,
   setSelectedCustomer,
@@ -18,15 +19,13 @@ const MyTable = ({
   limit,
   offset,
   setOffset,
-  searchResults, // will be null when no search is active, otherwise an array (empty or with data)
+  searchResults,
 }) => {
   
   const MotionBox = motion(ChakraBox);
-
   const [selection, setSelection] = useState([])
   const scrollRef = useRef(null)
   const [addCustomerOpen, setAddCustomerOpen] = useState(false)
-
 
   const handleAddCustomer = () => {
     setAddCustomerOpen(!addCustomerOpen)
@@ -38,13 +37,9 @@ const MyTable = ({
     }
   }, [customers, searchResults])
 
-  // Check if we are in search mode by testing for null.
   const isSearchActive = searchResults !== null
-
-  // Ensure validSearchResults is always an array when in search mode.
   const validSearchResults = isSearchActive && Array.isArray(searchResults) ? searchResults : []
 
-  // Render the empty state for searches (or no customers)
   const emptyResults = (
     <Box display={"flex"} position={"absolute"} w={"100%"}>
       <EmptyState.Root>
@@ -61,7 +56,6 @@ const MyTable = ({
     </Box>
   )
 
-  // Map customer rows
   const renderRows = (data) =>
     data.map((customer) => (
       <Table.Row
@@ -77,13 +71,13 @@ const MyTable = ({
           </Text>
         </Table.Cell>
         <Table.Cell>
-          <Text zIndex={200} pos={"relative"}>
+          <Text zIndex={200} pos={"relative"} fontWeight={"inherit"}>
             {`(${customer.phoneNumber.slice(0, 3)}) ${customer.phoneNumber.slice(3, 6)}-${customer.phoneNumber.slice(6, 10)}`}
           </Text>
         </Table.Cell>
         <Table.Cell className="email">
           <Text zIndex={200} pos={"relative"}>
-            {customer.email ?? "N/A"}
+            {customer.email ?? ""}
           </Text>
         </Table.Cell>
         <Table.Cell zIndex={200}>
@@ -98,7 +92,6 @@ const MyTable = ({
       </Table.Row>
     ))
 
-  // Determine rows to display based on search mode.
   let tableBodyContent = null
   if (isSearchActive) {
     tableBodyContent = validSearchResults.length > 0 ? renderRows(validSearchResults) : emptyResults
@@ -107,54 +100,80 @@ const MyTable = ({
   }
 
   return (
-    <MotionBox className="table" ref={scrollRef} 
-    initial={{ opacity: 0}}
-    animate={{ opacity: 1 }}>
-      <Table.Root interactive stickyHeader striped scrollBehavior={"smooth"} overflow={"hidden"}>
-        <Table.Header bg={{ base: "white", _dark: "primary" }}>
-          <Table.Row alignItems={"center"} bg={{ base: "white", _dark: "primaryMidpoint" }}>
-            <Table.ColumnHeader className="columnHeader">
-              <Text>Name</Text>
-            </Table.ColumnHeader>
-            <Table.ColumnHeader className="columnHeader">
-              <Text>Phone Number</Text>
-            </Table.ColumnHeader>
-            <Table.ColumnHeader className="columnHeader email">
-              <Text>Email</Text>
-            </Table.ColumnHeader>
-            <Table.ColumnHeader w={"6"} className="columnHeader" />
-          </Table.Row>
-        </Table.Header>
-        <Table.Body>{tableBodyContent}</Table.Body>
-      </Table.Root>
-      {/* Pagination Controls: only render if not in search mode */}
-      {!isSearchActive && (
-        <HStack justify={"space-between"} align={"center"}>
-          <Button
-            m={"1rem"}
-            variant={"solid"}
-            onClick={() => setOffset((prevOffset) => Math.max(prevOffset - limit, 0))}
-            disabled={offset === 0}
-          >
-            Previous
-          </Button>
-          <Button m={"1rem"} variant="solid" onClick={handleAddCustomer}>
+    <Flex 
+      direction="column" 
+      height="100%"
+      position="relative"
+      w={"100%"}
+    >
+      <MotionBox 
+        className="table" 
+        ref={scrollRef} 
+        initial={{ opacity: 0, y: "20px"}}
+        animate={{ opacity: 1, y: 0 }}
+        w={"100%"} 
+        flex="1"
+        overflow="auto"
+      >
+        <Table.Root interactive stickyHeader striped scrollBehavior={"smooth"} overflow={"hidden"}>
+          <Table.Header bg={{ base: "white", _dark: "primary" }}>
+            <Table.Row alignItems={"center"} bg={{ base: "white", _dark: "primaryMidpoint" }}>
+              <Table.ColumnHeader className="columnHeader">
+                <Text>Name</Text>
+              </Table.ColumnHeader>
+              <Table.ColumnHeader className="columnHeader">
+                <Text>Phone Number</Text>
+              </Table.ColumnHeader>
+              <Table.ColumnHeader className="columnHeader email">
+                <Text>Email</Text>
+              </Table.ColumnHeader>
+              <Table.ColumnHeader w={"6"} className="columnHeader" />
+            </Table.Row>
+          </Table.Header>
+          <Table.Body>{tableBodyContent}</Table.Body>
+        </Table.Root>
+      </MotionBox>
+
+      {/* Fixed controls at the bottom */}
+      <Box 
+        position="sticky"
+        bottom="0"
+        bg={{ base: "white", _dark: "primary" }}
+        pt={2}
+        pb={2}
+        borderTop="1px solid"
+        borderColor={{ base: "gray.100", _dark: "gray.700" }}
+        zIndex={1}
+      >
+        {!isSearchActive && (
+          <HStack justify={"space-between"} align={"center"} w="full">
+            <Button
+              ml={"1rem"}
+              variant={"solid"}
+              onClick={() => setOffset((prevOffset) => Math.max(prevOffset - limit, 0))}
+              disabled={offset === 0}
+            >
+              Previous
+            </Button>
+            <Button variant="solid" onClick={handleAddCustomer}>
               Add Customer
             </Button>
-          <Button
-            m={"1rem"}
-            variant={"solid"}
-            onClick={() => setOffset((prevOffset) => prevOffset + limit)}
-            disabled={customers.length < limit}
-          >
-            Next
-          </Button>
-        </HStack>
-      )}
-        {addCustomerOpen && (
-          <CreateCustomer setCustomerInfoOpen={setAddCustomerOpen}/>
+            <Button
+              mr={"1rem"}
+              variant={"solid"}
+              onClick={() => setOffset((prevOffset) => prevOffset + limit)}
+              disabled={customers.length < limit}
+            >
+              Next
+            </Button>
+          </HStack>
         )}
-    </MotionBox>
+      </Box>
+
+      {addCustomerOpen && (
+        <CreateCustomer setCustomerInfoOpen={setAddCustomerOpen}/>
+      )}
+    </Flex>
   )
 }
 

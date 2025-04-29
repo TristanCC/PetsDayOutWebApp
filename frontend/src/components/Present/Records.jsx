@@ -1,13 +1,13 @@
-import {useState, useEffect} from "react"
-import { Tabs, VStack, Box, Text, IconButton, HStack, Table, Spinner, Separator, Button, Avatar, Checkbox, Icon } from "@chakra-ui/react";
-import { AbsoluteCenter, Accordion, Span } from "@chakra-ui/react"
-import { motion } from "framer-motion";
-import { LuFolderClock, LuCircleX } from "react-icons/lu";
-import { LuFolder } from "react-icons/lu";
-import { FaRegEdit } from "react-icons/fa";
-import { Textarea } from "@chakra-ui/react"
-
+import { useState, useEffect } from "react";
+import { 
+  Box, Text, IconButton, HStack, Spinner, Separator, Icon, VStack, AbsoluteCenter 
+} from "@chakra-ui/react";
+import { motion, AnimatePresence } from "framer-motion";
+import { LuFolderClock, LuCircleX, LuFolder } from "react-icons/lu";
+import { FaRegEdit, FaChevronDown, FaChevronUp } from "react-icons/fa";
 import EditInstructions from "./EditInstructions";
+
+const MotionBox = motion(Box);
 
 const Records = ({ selectedPet, preferredColors, setRecordsOpen }) => {
     const [loading, setLoading] = useState(false);
@@ -15,20 +15,19 @@ const Records = ({ selectedPet, preferredColors, setRecordsOpen }) => {
     const [editInstructionsOpen, setEditInstructionsOpen] = useState(false);
     const [selectedRecord, setSelectedRecord] = useState(null);
     const [selectedColor, setSelectedColor] = useState("");
+    const [expandedItems, setExpandedItems] = useState({});
 
     const catppuccinPastelRainbow = [
-        "#89b4fa", // blue
-        "#74c7ec", // sky
-        "#94e2d5", // teal
-        "#a6e3a1", // green
-        "#f9e2af", // yellow
-        "#fab387", // peach
-        "#eba0ac", // rose
-        "#f5c2e7", // pink
-        "#cba6f7", // mauve
+        "#89b4fa", "#74c7ec", "#94e2d5", "#a6e3a1", 
+        "#f9e2af", "#fab387", "#eba0ac", "#f5c2e7", "#cba6f7"
     ];
 
-    const MotionBox = motion(Box);
+    const toggleItem = (id) => {
+        setExpandedItems(prev => ({
+            ...prev,
+            [id]: !prev[id]
+        }));
+    };
 
     useEffect(() => {
         const getRecords = async () => {
@@ -42,6 +41,13 @@ const Records = ({ selectedPet, preferredColors, setRecordsOpen }) => {
                 );
 
                 setRecords(sortedRecords);
+                
+                // Initialize all items as collapsed
+                const initialExpandedState = {};
+                sortedRecords.forEach(record => {
+                    initialExpandedState[record.id] = false;
+                });
+                setExpandedItems(initialExpandedState);
             } catch (error) {
                 console.error("Error fetching records:", error);
             } finally {
@@ -54,7 +60,7 @@ const Records = ({ selectedPet, preferredColors, setRecordsOpen }) => {
 
     const handleEditClick = (record, color) => {
         setSelectedRecord(record);
-        setSelectedColor(color); // Set the color when editing a record
+        setSelectedColor(color);
         setEditInstructionsOpen(!editInstructionsOpen);
     };
 
@@ -84,12 +90,12 @@ const Records = ({ selectedPet, preferredColors, setRecordsOpen }) => {
                 flexDir="column"
                 alignItems="center"
                 p={4}
-                pos={"fixed"}
+                pos="fixed"
                 boxShadow="lg"
                 maxH="80vh"
-                position={"fixed"}
                 w={{ base: "90vw", md: "50vw", lg: "450px" }}
                 bg={{ base: "primarySurfaceL", _dark: "primarySurface" }}
+                
             >
                 <HStack w="100%" justifyContent="space-between" p={2}>
                     <HStack>
@@ -117,65 +123,115 @@ const Records = ({ selectedPet, preferredColors, setRecordsOpen }) => {
                     </HStack>
                 ) : records.length === 0 ? (
                     <VStack justifyContent="center" alignItems="center" mt={4}>
-                    <Text fontSize="md" fontWeight="medium" textAlign="center">
-                        No records found for this pet.
-                    </Text>
-                </VStack>
-                ):
-                (
+                        <Text fontSize="md" fontWeight="medium" textAlign="center">
+                            No records found for this pet.
+                        </Text>
+                    </VStack>
+                ) : (
                     <>
-                        <Accordion.Root variant="enclosed" collapsible overflow={"auto"} cursor={"pointer"} rounded={"lg"} multiple>
+                        <Box overflow="auto" cursor="pointer" rounded="lg" w="100%">
                             {!editInstructionsOpen ? records.map((record, idx) => (
-                                <Accordion.Item
-                                    key={idx}
-                                    value={record.id}
-                                    p={".25rem"}
-                                    py={".5rem"}
-                                    cursor={"pointer"}
-                                    bg={`${catppuccinPastelRainbow[idx % catppuccinPastelRainbow.length]}99`}
-                                    borderLeft="5px solid"
-                                    borderColor={catppuccinPastelRainbow[idx % catppuccinPastelRainbow.length]}
-                                    _hover={{
-                                        base: { bg: `${catppuccinPastelRainbow[idx % catppuccinPastelRainbow.length]}33` },
-                                        _dark: { bg: `${catppuccinPastelRainbow[idx % catppuccinPastelRainbow.length]}33` },
-                                        cursor: "pointer",
-                                    }}
+                                <MotionBox
+                                    key={record.id}
+                                    initial={{ opacity: 0, y: 20 }}
+                                    animate={{ opacity: 1, y: 0 }}
+                                    transition={{ duration: 0.3, delay: idx * 0.05 }}
+                                    mb={1}
                                 >
-                                    <Box position="relative" cursor={"pointer"}>
-                                        <Accordion.ItemTrigger cursor={"pointer"}>
-                                            <HStack flex="1" cursor={"pointer"} gap={"1rem"}>
-                                                <Icon><LuFolder /></Icon>
-                                                <Text>
-                                                    {(() => {
-                                                        const [year, month, day] = record.date.split("-");
-                                                        return `${month}/${day}/${year}`;
-                                                    })()}
-
-                                                    {record.status === "present" ? " - Newest": ""}
-                                                </Text>
-                                            </HStack>
-
-                                            <Accordion.ItemIndicator />
-                                        </Accordion.ItemTrigger>
-                                        <AbsoluteCenter axis="vertical" insetEnd="0">
-                                            <IconButton
-                                                variant="ghost"
-                                                onClick={() => { handleEditClick(record, catppuccinPastelRainbow[idx % catppuccinPastelRainbow.length]) }}
+                                    <MotionBox
+                                        p=".25rem"
+                                        py="1rem"
+                                        bg={`${catppuccinPastelRainbow[idx % catppuccinPastelRainbow.length]}99`}
+                                        borderLeft="5px solid"
+                                        borderColor={catppuccinPastelRainbow[idx % catppuccinPastelRainbow.length]}
+                                        borderRadius="md"
+                                        _hover={{
+                                            bg: `${catppuccinPastelRainbow[idx % catppuccinPastelRainbow.length]}33`,
+                                            cursor: "pointer",
+                                        }}
+                                        
+                                    >
+                                        <Box position="relative">
+                                            <HStack
+                                                onClick={() => toggleItem(record.id)}
+                                                justifyContent="space-between"
+                                                cursor="pointer"
                                             >
-                                                <FaRegEdit />
-                                            </IconButton>
-                                        </AbsoluteCenter>
-                                    </Box>
-                                    <Accordion.ItemContent>
-                                        <Accordion.ItemBody>
-                                            <Text>{record.instructions ? record.instructions : "No information from this visit."}</Text>
-                                        </Accordion.ItemBody>
-                                    </Accordion.ItemContent>
-                                </Accordion.Item>
+                                                <HStack flex="1" gap="1rem" ml={".5rem"}>
+                                                    <Icon size={"md"} as={LuFolder} color={"gray.600"}/>
+                                                    <Text color={"gray.800"}>
+                                                        {(() => {
+                                                            const [year, month, day] = record.date.split("-");
+                                                            return `${month}/${day}/${year}`;
+                                                        })()}
+                                                        {record.status === "present" ? " - Newest" : ""}
+                                                    </Text>
+                                                </HStack>
+                                                <Icon 
+                                                    as={expandedItems[record.id] ? FaChevronUp : FaChevronDown}
+                                                    mr={".5rem"}
+                                                    transition="transform 0.2s"
+                                                    transform={expandedItems[record.id] ? "rotate(0deg)" : "rotate(0deg)"}
+                                                />
+                                            </HStack>
+                                            <AbsoluteCenter axis="vertical" insetEnd="0">
+                                                <IconButton
+                                                    mr={"2rem"}
+                                                    variant="ghost"
+                                                    color="white"
+                                                    onClick={(e) => {
+                                                        e.stopPropagation();
+                                                        handleEditClick(record, catppuccinPastelRainbow[idx % catppuccinPastelRainbow.length]);
+                                                    }}
+                                                >
+                                                    <FaRegEdit />
+                                                </IconButton>
+                                            </AbsoluteCenter>
+                                        </Box>
+
+                                        <AnimatePresence>
+                                            {expandedItems[record.id] && (
+                                                <MotionBox
+                                                    initial={{ height: 0, opacity: 0 }}
+                                                    animate={{ height: "auto", opacity: 1 }}
+                                                    exit={{ height: 0, opacity: 0 }}
+                                                    transition={{ duration: 0.2 }}
+                                                    overflow="hidden"
+                                                    mt={2}
+                                                >
+                                                    <Box 
+                                                        p={2}
+                                                        display="flex"
+                                                        justifyContent="space-between"
+                                                        alignItems="flex-start"  // Changed from center to flex-start for better text alignment
+                                                        gap={2}  // Added gap for spacing
+                                                    >
+                                                        <Text 
+                                                            flex="1"  // Takes up available space
+                                                            wordBreak="break-word"  // Ensures long words break
+                                                            whiteSpace="normal"  // Allows text to wrap
+                                                            overflowWrap="break-word"  // Alternative to wordBreak
+                                                            pr={2}  // Right padding to separate from button
+                                                        >
+                                                            {record.instructions || "No information from this visit."}
+                                                        </Text>
+
+                                                    </Box>
+                                                </MotionBox>
+                                            )}
+                                        </AnimatePresence>
+                                    </MotionBox>
+                                </MotionBox>
                             )) : (
-                                <EditInstructions selectedRecord={selectedRecord} setEditInstructionsOpen={setEditInstructionsOpen} selectedColor={selectedColor} />
+                                <MotionBox>
+                                    <EditInstructions
+                                        selectedRecord={selectedRecord}
+                                        setEditInstructionsOpen={setEditInstructionsOpen}
+                                        selectedColor={selectedColor}
+                                    />
+                                </MotionBox>
                             )}
-                        </Accordion.Root>
+                        </Box>
                     </>
                 )}
             </MotionBox>

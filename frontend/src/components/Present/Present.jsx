@@ -100,6 +100,16 @@ const Present = ({ value, preferredColors }) => {
       }
     }, [setPresent]);
 
+    useEffect(() => {
+      const handleClickOutside = (e) => {
+        if (openPopoverId && !e.target.closest('[data-popover]')) {
+          setOpenPopoverId(null);
+        }
+      };
+      document.addEventListener('mousedown', handleClickOutside);
+      return () => document.removeEventListener('mousedown', handleClickOutside);
+    }, [openPopoverId]);
+
     return (
       <Box w={"100%"} display={"flex"} flexDir={"column"} alignItems={"center"} p={{lg: "1rem", md: 0, sm: 0}} justifyContent={"space-between"} m={"1rem"} position={"relative"}>
           {loading ? (
@@ -144,7 +154,7 @@ const Present = ({ value, preferredColors }) => {
                               position="absolute"
                               top="1rem"
                               right="1rem"
-                              boxShadow="0 2px 10px green"
+                              boxShadow="0px 0px 5px rgb(40, 229, 40)"
                               animate={{
                                 scale: [1, 1.1, 1],
                                 opacity: [0.8, 1, 0.8],
@@ -164,7 +174,7 @@ const Present = ({ value, preferredColors }) => {
                           position="absolute"
                           top="1rem"
                           right="1rem"
-                          boxShadow="0 2px 10px orange"
+                          boxShadow="0 0px 5px orange"
                           animate={{
                             scale: [1, 1.1, 1],
                             opacity: [0.8, 1, 0.8],
@@ -186,40 +196,39 @@ const Present = ({ value, preferredColors }) => {
                   <HStack wrap="wrap">
                     {customer.pets.map((pet) => (
                         pet && 
-                        <Popover.Root 
-                          key={pet.id} 
-                          open={openPopoverId === pet.id}
-                          onOpenChange={(isOpen) => handlePopoverToggle(pet.id, isOpen)}
-                        >
-                        <Popover.Trigger asChild>
-                          <Button size={"lg"} variant="plain" p={0}>
-                          <Box
-                             as="button"
-                             position="relative"
-                             px={"1rem"}
-                             py={1}
-                             bg={{ base: "primarySurfaceL", _dark: "primarySurface" }}
-                             opacity={pet.completed ? 0.5 : 1}
-                             cursor="pointer"
-                             _hover={{ boxShadow: "md" }}
-                             transition="all 0.2s"
-                             borderRadius={".5rem"}
-                          >
-                            <HStack>
-                              <Icon as={FaCircle}
-                                 boxSize={4}
-                                 color={pet.completed ? "green.500" : "yellow.500"}
-                                 position="absolute"
-                                 top={0}
-                                 right={0}
-                                 scale={.5}
-                                 >
-                                   <FaCircle /></Icon> 
-                              <Text>{pet.name} ({pet.breed})</Text>
-                            </HStack>
-                          </Box>
-                          </Button>
-                        </Popover.Trigger>
+<Popover.Root 
+  key={pet.id} 
+  open={openPopoverId === pet.id}
+  onOpenChange={(isOpen) => handlePopoverToggle(pet.id, isOpen)}
+  closeOnInteractOutside={true}
+  closeOnEsc={true}
+>
+  <Popover.Trigger>
+    <Box
+      as="button"
+      position="relative"
+      px={"1rem"}
+      py={1}
+      bg={{ base: "primarySurfaceL", _dark: "primarySurface" }}
+      opacity={pet.completed ? 0.5 : 1}
+      cursor="pointer"
+      _hover={{ boxShadow: "md" }}
+      transition="all 0.2s"
+      borderRadius={".5rem"}
+    >
+      <HStack>
+        <Icon as={FaCircle}
+          boxSize={4}
+          color={pet.completed ? "green.500" : "yellow.500"}
+          position="absolute"
+          top={0}
+          right={0}
+          scale={.5}
+        />
+        <Text>{pet.name} ({pet.breed})</Text>
+      </HStack>
+    </Box>
+  </Popover.Trigger>
                         <Portal>
                           <Popover.Positioner>
                             <Popover.Content w={"100%"} rounded={"lg"}>
