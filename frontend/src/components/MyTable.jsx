@@ -132,18 +132,18 @@ const MyTable = ({
         <HStack justify={"space-between"} align={"center"}>
           <Button
             m={"1rem"}
-            variant={"outline"}
+            variant={"solid"}
             onClick={() => setOffset((prevOffset) => Math.max(prevOffset - limit, 0))}
             disabled={offset === 0}
           >
             Previous
           </Button>
-          <Button m={"1rem"} variant="outline" onClick={handleAddCustomer}>
+          <Button m={"1rem"} variant="solid" onClick={handleAddCustomer}>
               Add Customer
             </Button>
           <Button
             m={"1rem"}
-            variant={"outline"}
+            variant={"solid"}
             onClick={() => setOffset((prevOffset) => prevOffset + limit)}
             disabled={customers.length < limit}
           >

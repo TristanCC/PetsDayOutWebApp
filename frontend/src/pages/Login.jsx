@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
-import { Button, Input, Box, VStack, Text, Spinner } from "@chakra-ui/react";
+import { Button, Input, Box, VStack, Text, Spinner, Separator } from "@chakra-ui/react";
 import { Field } from "@/components/ui/field";
+import { motion } from "framer-motion"; // <-- fixed import
 
 function Login({ isLoggedIn, setIsLoggedIn }) {
   const [error, setError] = useState(null);
@@ -8,6 +9,7 @@ function Login({ isLoggedIn, setIsLoggedIn }) {
   const [password, setPassword] = useState('');
   const [isLoading, setIsLoading] = useState(true);
   const [isLoggingOut, setIsLoggingOut] = useState(false);
+
 
   useEffect(() => {
     const checkLoginStatus = async () => {
@@ -33,6 +35,7 @@ function Login({ isLoggedIn, setIsLoggedIn }) {
 
     checkLoginStatus();
   }, [setIsLoggedIn]);
+
 
   const handleLogin = async (e) => {
     e.preventDefault();
@@ -90,101 +93,196 @@ function Login({ isLoggedIn, setIsLoggedIn }) {
     );
   }
 
+  const defaultAnimations = {
+    hidden: {
+      opacity: 0,
+      y: 10
+    },
+    visible: {
+      opacity: 1,
+      y: 0
+    }
+  }
+
+  const panelAnimations = {
+    hidden: {
+      opacity: 0,
+      y: -30
+    },
+    visible: {
+      opacity: 1,
+      y: 0
+    }
+  }
+
   return (
-    <>
-      {!isLoggedIn ? (
-        <Box
-          borderRadius="lg"
-          p={6}
-          maxW="350px"
-          w="90%"
-          boxShadow="lg"
-          position="fixed"
-          rounded={"2xl"}
-          bg={{ base: "white", _dark: "primarySurface" }}
-          color={{ base: "black", _dark: "white" }}
-          display="flex"
-          alignItems="center"
-          justifyContent="center"
-          margin="auto"
-          top="50%"
-          left="50%"
-          transform="translate(-50%, -50%)"
+<>
+  <Box
+    minHeight="100vh"
+    display="flex"
+    flexDirection="column"
+    justifyContent="center"
+    alignItems="center"
+    px={4}
+    py={8}
+    gap={{ base: "3rem", md: "5rem" }}
+  >
+    <motion.div
+      style={{
+        display: "flex",
+        flexDirection: "column",
+        zIndex: 1,
+        textAlign: "center",
+        maxWidth: "100%",
+      }}
+    >
+      <motion.div
+        initial="hidden"
+        animate="visible"
+        transition={{ staggerChildren: 0.025 }}
+        style={{ display: "flex", flexDirection: "column" }}
+      >
+        <Text
+          fontSize={{ base: "4xl", md: "6xl", lg: "7xl" }}
+          color={{ base: "#121212", _dark: "white" }}
+          lineHeight="shorter"
         >
-          <VStack spacing={2} >
-            <Box display={"flex"} flexDir={"column"}>
-              <Text fontSize="2xl" fontWeight="bold">
-                Sign in
-              </Text>
-            </Box>
-            <form onSubmit={handleLogin}>
-              <Box display={"flex"} flexDir={"column"} gap={3}>
-                <Field label="Email" required>
-                  <Input
-                    size="lg"
-                    type="email"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    placeholder="Email"
-                  />
-                </Field>
-                <Field label="Password" required>
-                  <Input
-                    size="lg"
-                    type="password"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    placeholder="Password"
-                  />
-                </Field>
-                {error && <Text color="red.500">{error}</Text>}
-                <Button
-                  type="submit"
-                  colorScheme="blue"
-                  width="100%"
-                  mt={4}
-                  isLoading={isLoading}
-                >
-                  Submit
-                </Button>
-              </Box>
-            </form>
-            <Button as="a" href="/auth/google" variant="outline" width="100%" mt={4}>
-              Sign in with Google
-            </Button>
-          </VStack>
-        </Box>
-      ) : (
-        <Box
-          borderRadius="lg"
-          p={6}
-          maxW="400px"
-          w="90%"
-          boxShadow="lg"
-          position="fixed"
-          bg={{ base: "white", _dark: "primarySurface" }}
-          color={{ base: "black", _dark: "white" }}
-          display="flex"
-          alignItems="center"
-          justifyContent="center"
-          margin="auto"
-          top="50%"
-          left="50%"
-          transform="translate(-50%, -50%)"
+          {"A Pet's Day Out".split('').map((char, index) => (
+            <motion.span
+              key={index}
+              style={{
+                display: 'inline-block',
+                whiteSpace: char === ' ' ? 'pre' : 'normal'
+              }}
+              variants={defaultAnimations}
+            >
+              {char}
+            </motion.span>
+          ))}
+        </Text>
+        <Text
+          fontWeight="light"
+          fontSize={{ base: "lg", md: "xl", lg: "2xl" }}
+          color={{ base: "#121212", _dark: "white" }}
+          mt={2}
         >
-          <VStack spacing={4} justifySelf={"center"}>
-            <Text fontSize="2xl" fontWeight="bold" mb={6}>
-              Welcome to the Dashboard!
-            </Text>
-            <Button onClick={handleLogout} disabled={isLoggingOut} colorScheme="blue" width="100%">
-              {isLoggingOut ? 'Logging Out...' : 'Log Out'}
-            </Button>
-          </VStack>
+          {"Made with ❤️ by Tristan".split('').map((char, index) => (
+            <motion.span
+              key={index}
+              style={{
+                display: 'inline-block',
+                whiteSpace: char === ' ' ? 'pre' : 'normal'
+              }}
+              variants={defaultAnimations}
+            >
+              {char}
+            </motion.span>
+          ))}
+        </Text>
+      </motion.div>
+    </motion.div>
+
+    {!isLoggedIn ? (
+      <motion.div
+        initial="hidden"
+        animate="visible"
+        transition={{ delay: 1.25, duration: 1 }}
+        variants={defaultAnimations}
+        style={{ width: "100%", display: "flex", justifyContent: "center" }}
+      >
+        <Box
+          borderRadius="2xl"
+          p={{ base: 6, md: 8 }}
+          width="100%"
+          maxWidth="360px"
+          boxShadow="xl"
+          bg={{ base: "white", _dark: "primarySurface" }}
+        >
+          <form onSubmit={handleLogin} style={{ width: "100%" }}>
+            <VStack spacing={"1rem"}>
+              <Field label="Email" required>
+                <Input
+                  size="lg"
+                  type="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  placeholder="Enter your email"
+                  variant="subtle"
+                  boxShadow="rgba(0, 0, 0, 0.1) 10px 18px 20px -15px inset"
+                />
+              </Field>
+              <Field label="Password" required>
+                <Input
+                  size="lg"
+                  type="password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  placeholder="Enter your password"
+                  variant="subtle"
+                  boxShadow="rgba(0, 0, 0, 0.1) 10px 18px 20px -15px inset"
+                />
+              </Field>
+              {error && (
+                <Text color="red.500" fontSize="sm" mt={-2} width="100%">
+                  {error}
+                </Text>
+              )}
+              <Button
+                type="submit"
+                colorScheme="blue"
+                width="100%"
+                mt={4}
+                isLoading={isLoading}
+                borderRadius="lg"
+                size="lg"
+              >
+                Submit
+              </Button>
+            </VStack>
+          </form>
+
+          <Button
+            as="a"
+            href="/auth/google"
+            variant="outline"
+            width="100%"
+            mt={4}
+            borderRadius="lg"
+            size="lg"
+          >
+            Sign in with Google
+          </Button>
         </Box>
-      )}
-    </>
+      </motion.div>
+    ) : (
+      <Box
+        borderRadius="lg"
+        p={6}
+        width="90%"
+        maxWidth="400px"
+        boxShadow="lg"
+        bg={{ base: "white", _dark: "primarySurface" }}
+        color={{ base: "black", _dark: "white" }}
+      >
+        <VStack spacing={4}>
+          <Text fontSize="2xl" fontWeight="bold" textAlign="center">
+            Welcome to the Dashboard!
+          </Text>
+          <Button
+            onClick={handleLogout}
+            disabled={isLoggingOut}
+            colorScheme="blue"
+            width="100%"
+            size="lg"
+          >
+            {isLoggingOut ? 'Logging Out...' : 'Log Out'}
+          </Button>
+        </VStack>
+      </Box>
+    )}
+  </Box>
+</>
   );
 }
 
 export default Login;
-

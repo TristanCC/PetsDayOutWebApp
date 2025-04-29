@@ -120,7 +120,7 @@ const PetListDisplay = ({ pets, setPets, createPetPressed, setCreatePetPressed, 
               </Box>
             ) :
             <>
-                <Box  w={"100%"} p={2} bg={{ base: "primarySurfaceL", _dark: "transparent" }} rounded={"lg"}>
+                <Box  w={"100%"} p={"1.5rem"} bg={{ base: "primarySurfaceL", _dark: "transparent" }} rounded={"lg"}>
                 <HStack gap={4} w="100%" flexWrap="wrap" justify="center" justifyItems={"center"}>
 
                   {pets.map((item, index) => (

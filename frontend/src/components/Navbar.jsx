@@ -54,8 +54,9 @@ const Navbar = ({
           animationName: "fade-out, scale-out",
           animationDuration: "120ms",
           }}
+          
           >
-          <Tabs.Root value={value} onValueChange={(e) => setValue(e.value)} size="sm" variant="line">
+          <Tabs.Root value={value} onValueChange={(e) => setValue(e.value)} size="sm" variant="line"> 
             <Tabs.List>
               <Box display={"flex"} justifyContent={"space-between"} w={"100%"} alignContent={"center"} p={4}>
                 <Box className="tabs" display={"flex"}>
@@ -84,6 +85,7 @@ const Navbar = ({
               maxH={"70vh"}
               minH={"70vh"}
               overflowY={"auto"}
+              
             >
               <MyTable
                 selectedCustomer={selectedCustomer}
@@ -109,6 +111,7 @@ const Navbar = ({
               maxH={"70vh"}
               minH={"70vh"}
               overflowY={"auto"}
+              
             >
               <Present
                 value={value}

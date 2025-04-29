@@ -115,7 +115,14 @@ const Records = ({ selectedPet, preferredColors, setRecordsOpen }) => {
                         <Spinner />
                         <Text>Loading...</Text>
                     </HStack>
-                ) : (
+                ) : records.length === 0 ? (
+                    <VStack justifyContent="center" alignItems="center" mt={4}>
+                    <Text fontSize="md" fontWeight="medium" textAlign="center">
+                        No records found for this pet.
+                    </Text>
+                </VStack>
+                ):
+                (
                     <>
                         <Accordion.Root variant="enclosed" collapsible overflow={"auto"} cursor={"pointer"} rounded={"lg"} multiple>
                             {!editInstructionsOpen ? records.map((record, idx) => (
@@ -144,7 +151,7 @@ const Records = ({ selectedPet, preferredColors, setRecordsOpen }) => {
                                                         return `${month}/${day}/${year}`;
                                                     })()}
 
-                                                    {record.status === "present" ? " - New": ""}
+                                                    {record.status === "present" ? " - Newest": ""}
                                                 </Text>
                                             </HStack>
 

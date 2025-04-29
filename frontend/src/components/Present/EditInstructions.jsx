@@ -50,7 +50,7 @@ const EditInstructions = ({selectedRecord, setEditInstructionsOpen, selectedColo
       <Box>
         <VStack
           p={6}
-          spacing={4}
+          gap={"1rem"}
           bg={{ base: "primaryMidpointL", _dark: "primaryMidpoint" }}
           borderRadius="lg"
           boxShadow="md"

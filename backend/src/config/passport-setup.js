@@ -7,35 +7,52 @@ import User from '../models/User.js'; // Your User model
 
 dotenv.config();
 
+const ALLOWED_EMAILS = new Set([
+  'tristan.c.johnston@gmail.com',
+  'bob@yourcompany.com',
+]);
+
 passport.use(new GoogleStrategy({
   clientID: process.env.GOOGLE_CLIENT_ID, // Ensure this is set correctly in your .env file
   clientSecret: process.env.GOOGLE_CLIENT_SECRET, // Ensure this is set correctly
   callbackURL: process.env.GOOGLE_CALLBACK_URL || 'http://localhost:5000/auth/google/callback', // Ensure this is set correctly in your .env
 },
-async (accessToken, refreshToken, profile, done) => {
-  try {
-    let user = await User.findOne({ where: { email: profile.emails[0].value } });
+  async (accessToken, refreshToken, profile, done) => {
+    const email = profile.emails?.[0]?.value;
+    const domain = profile._json.hd; // Google’s Hosted Domain claim
 
-    if (!user) {
-      // If the user doesn't exist, create a new one
-      user = new User({
-        googleId: profile.id,
-        email: profile.emails[0].value,
-        firstName: profile.name.givenName,
-        lastName: profile.name.familyName,
+    // ✋ deny anyone not on your list or domain
+    if (
+      !ALLOWED_EMAILS.has(email) &&
+      domain !== ALLOWED_DOMAIN
+    ) {
+      return done(null, false, {
+        message: 'Your Google account is not authorized.',
       });
-      await user.save();
-    } else if (!user.googleId) {
-      // If the user exists but doesn't have a googleId, update the user's googleId
-      user.googleId = profile.id;
-      await user.save(); // Save the updated user
     }
+    try {
+      let user = await User.findOne({ where: { email: profile.emails[0].value } });
 
-    return done(null, user);
-  } catch (error) {
-    return done(error, null);
+      if (!user) {
+        // If the user doesn't exist, create a new one
+        user = new User({
+          googleId: profile.id,
+          email: profile.emails[0].value,
+          firstName: profile.name.givenName,
+          lastName: profile.name.familyName,
+        });
+        await user.save();
+      } else if (!user.googleId) {
+        // If the user exists but doesn't have a googleId, update the user's googleId
+        user.googleId = profile.id;
+        await user.save(); // Save the updated user
+      }
+
+      return done(null, user);
+    } catch (error) {
+      return done(error, null);
+    }
   }
-}
 ));
 
 

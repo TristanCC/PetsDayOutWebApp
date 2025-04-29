@@ -92,12 +92,15 @@ const MarkPresent = ({ selectedCustomer, setPresentOpen, preferredColors }) => {
                 <Table.Cell maxW="150px" overflow="hidden" whiteSpace="nowrap">
                     <Text maxW={"4rem"}>{pet.breed || "N/A"}</Text>
                 </Table.Cell>
-                <Table.Cell >
+                <Table.Cell m={0} p={0}>
                     <Checkbox.Root
+                    m={0}
+                    p={0}
                         size="lg"
                         variant="outline"
                         checked={selectedPets.some(p => p.id === pet.id)}
                         onCheckedChange={() => handleCheck(pet)}
+
                     >
                         <Checkbox.HiddenInput />
                         <Checkbox.Control>

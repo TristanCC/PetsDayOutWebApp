@@ -108,7 +108,7 @@ const Present = ({ value, preferredColors }) => {
                 <LoadingState loadingText="Fetching Present..." />
               </HStack>
           ) : (
-            <VStack w={"100%"} spacing={4} h={"100%"}>
+            <VStack w={"100%"} spacing={4} pb={"1rem"} alignItems={"self-end"}>
               {present && present.length > 0 ? present.map((customer) => {
                 if (!customer || !customer.customer || !customer.pets) return null;
                 
@@ -206,7 +206,7 @@ const Present = ({ value, preferredColors }) => {
                              borderRadius={".5rem"}
                           >
                             <HStack>
-                              <Icon as={LuCheck}
+                              <Icon as={FaCircle}
                                  boxSize={4}
                                  color={pet.completed ? "green.500" : "yellow.500"}
                                  position="absolute"
@@ -256,6 +256,7 @@ const Present = ({ value, preferredColors }) => {
                 </Box>
               )}) : <Text>No customers present</Text>}
               <Button position={"relative"} m={"1rem"} visibility={present.length >= 1 ? "visible" : "hidden"} onClick={() => handleEndDay()}>End Day</Button>
+
             </VStack>
           )}
           {recordsOpen && (

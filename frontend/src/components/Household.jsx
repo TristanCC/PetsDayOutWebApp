@@ -148,7 +148,7 @@ const Household = ({ customer, closeHouseholdPanel, preferredColors }) => {
               gap={3}
               justifyContent="space-between"
               alignItems="center"
-              colorPalette={"red"}
+              colorPalette={preferredColors}
             >
             <HStack gap={".5rem"}>
               <IconButton 
