@@ -135,8 +135,8 @@ const PetListDisplay = ({ pets, setPets, createPetPressed, setCreatePetPressed, 
                             </VStack>
 
                             <Avatar.Root shape="full" size="2xl">
-                              <Avatar.Fallback name="Segun Adebayo" />
-                              <Avatar.Image src={placeholderAvatar} />
+                              <Avatar.Fallback name={item.name} />
+                              <Avatar.Image src={item.photoUrl ? item.photoUrl : placeholderAvatar} />
                             </Avatar.Root>
 
                             </HStack>

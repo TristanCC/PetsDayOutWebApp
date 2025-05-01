@@ -139,9 +139,11 @@ const CreatePet2 = ({ customer, setCreatePetPressed, onPetCreated, petToEdit, se
       large: DogResting,
     });
   };
+
+  
   async function uploadToS3(file) {
     try {
-      const filename = `${customer.id}/${Date.now()}-${file.name.replace(/\s+/g, '-')}`;
+      const filename = `${petId}/profile.jpg`;
       
       // 1. Get presigned URL from your backend
       const response = await fetch(`/s3/s3-url?filename=${encodeURIComponent(filename)}&contentType=${encodeURIComponent(file.type)}`);
@@ -341,7 +343,7 @@ const CreatePet2 = ({ customer, setCreatePetPressed, onPetCreated, petToEdit, se
                     type="file"
                     ref={fileInputRef}
                     onChange={handleFileChange}
-                    accept="image/jpeg,image/png"
+                    accept="image/jpeg"
                     style={{
                       position: 'absolute',
                       top: 0,
