@@ -10,6 +10,8 @@ export default defineConfig({
     proxy: {
       '/auth': 'http://127.0.0.1:5000', // Use IPv4 loopback
       '/db': 'http://127.0.0.1:5000',
+      '/s3': 'http://127.0.0.1:5000',
+      
     },
   },
   });

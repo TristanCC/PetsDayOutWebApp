@@ -1,5 +1,5 @@
 import { HStack, VStack, Button, Text, Input, Box, Textarea, IconButton } from "@chakra-ui/react";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Field } from "@/components/ui/field";
 import { CloseButton } from "@/components/ui/close-button";
 import { Image } from "@chakra-ui/react";
@@ -36,6 +36,9 @@ const CreatePet2 = ({ customer, setCreatePetPressed, onPetCreated, petToEdit, se
   const [sex, setSex] = useState(petToEdit ? petToEdit.sex : "")
   const [breed, setBreed] = useState(petToEdit ? petToEdit.breed : "");
   const [image, setImage] = useState(petToEdit ? petToEdit.photoUrl : null);
+  const [imageFile, setImageFile] = useState(null);
+  const [previewSrc, setPreviewSrc] = useState(null);
+
   const [notes, setNotes] = useState(petToEdit ? petToEdit.notes : "");
 
   const placeholders = [
@@ -52,6 +55,8 @@ const CreatePet2 = ({ customer, setCreatePetPressed, onPetCreated, petToEdit, se
     { name: "Mason", breed: "Mutt" },
     { name: "Dayton", breed: "Mutt" },
   ];
+
+  const fileInputRef = useRef(null);
 
   const [randomChoice, setRandomChoice] = useState(
     placeholders[Math.floor(Math.random() * placeholders.length)]
@@ -101,10 +106,18 @@ const CreatePet2 = ({ customer, setCreatePetPressed, onPetCreated, petToEdit, se
     setSex(sex)
   }
 
-  const handleFileChange = (e) => {
-    setImage(e.target.files[0]);
-  };
-
+  function handleFileChange(e) {
+    const file = e.target.files[0]; 
+    console.log(file);
+    if (file) {
+      setImageFile(file);
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setPreviewSrc(reader.result);
+      };
+      reader.readAsDataURL(file);
+    }
+  }
 
   const deletePetFromList = (key) => {
     return setPetList(petList.filter((pet) => {
@@ -126,61 +139,108 @@ const CreatePet2 = ({ customer, setCreatePetPressed, onPetCreated, petToEdit, se
       large: DogResting,
     });
   };
-
-  const handleSubmit = async (e) => {
-    e.preventDefault(); // Prevent the default form submission behavior
+  async function uploadToS3(file) {
+    try {
+      const filename = `${customer.id}/${Date.now()}-${file.name.replace(/\s+/g, '-')}`;
+      
+      // 1. Get presigned URL from your backend
+      const response = await fetch(`/s3/s3-url?filename=${encodeURIComponent(filename)}&contentType=${encodeURIComponent(file.type)}`);
+      
+      if (!response.ok) {
+        const errorText = await response.text();
+        throw new Error(`Failed to get S3 URL: ${response.status} ${errorText}`);
+      }
   
+      const { url } = await response.json();
+  
+      // 2. Upload the file directly to S3 using the presigned URL
+      const uploadResponse = await fetch(url, {
+        method: 'PUT', // MUST match the signed method
+        headers: {
+          'Content-Type': file.type,
+          // Remove 'x-amz-acl' header as it's already in the signed URL
+        },
+        body: file
+      });
+  
+      if (!uploadResponse.ok) {
+        const errorText = await uploadResponse.text();
+        throw new Error(`S3 upload failed with status ${uploadResponse.status}: ${errorText}`);
+      }
+  
+      return url.split('?')[0];
+    } catch (error) {
+      console.error('S3 upload error:', error);
+      throw error;
+    }
+  }
+  
+  async function handleSubmit(e) {
+    e.preventDefault();
+  
+    // 1) If the user selected a new file, upload it and get back the S3 URL
+    let photoUrl = image;  // start with existing URL (if editing)
+    if (imageFile) {
+      try {
+        photoUrl = await uploadToS3(imageFile);
+      } catch (err) {
+        console.error("Image upload failed:", err);
+        toaster.create({
+          title: `Image upload failed`,
+          description: err.message || "Could not upload image",
+          type: "error",
+        });
+        return;  // stop submission on failure
+      }
+    }
+  
+    // 2) Build your petData payload, using the new photoUrl
     const petData = {
-      id: petToEdit && petToEdit.id ? petToEdit.id : undefined,
-      name: name,
-      sex: sex,
-      breed: breed,
+      id: petToEdit?.id,
+      name,
+      sex,
+      breed,
       size: sizeButton,
-      photoUrl: image,
+      photoUrl,
       ownerID: customer.id,
-      notes: notes,
+      notes,
     };
   
     console.log("Submitting pet data:", petData);
   
-    // Update petList immutably
-    if(petList) {
-      setPetList([...petList, petData]);
-    }
-
-    if (!isCreatingCustomer) {
-      // Handle non-customer creation logic
-      try {
-        const endpoint = petToEdit && petToEdit.id ? "/db/updatePet" : "/db/createPet";
-        const method = petToEdit && petToEdit.id ? "PUT" : "POST";
+    // 3) Optimistically update UI
+    if (petList) setPetList([...petList, petData]);
   
-        const response = await fetch(endpoint, {
-          method: method,
-          headers: {
-            "Content-Type": "application/json",
-          },
+    // 4) Send to your DB endpoint
+    if (!isCreatingCustomer) {
+      try {
+        const endpoint = petToEdit?.id ? "/db/updatePet" : "/db/createPet";
+        const method = petToEdit?.id ? "PUT" : "POST";
+        const res = await fetch(endpoint, {
+          method,
+          headers: { "Content-Type": "application/json" },
           body: JSON.stringify(petData),
         });
-  
-        if (!response.ok) {
-          throw new Error("Network response was not ok");
-        }
-  
+        if (!res.ok) throw new Error("Network response was not ok");
         onPetCreated();
       } catch (error) {
         console.error("Error creating/updating pet:", error);
+        // Optionally show error to user
+        toaster.create({
+          title: "Error saving pet",
+          description: error.message,
+          type: "error"
+        });
       }
     } else {
-      // Handle customer creation logic
-
       toaster.create({
         title: `Pet added to ${customer.firstName}`,
         description: "Pet has been successfully added.",
       });
       clearPets();
-      console.log("Updated petList:", petList);
     }
-  };
+  }
+  
 
   return (
     <>
@@ -215,6 +275,7 @@ const CreatePet2 = ({ customer, setCreatePetPressed, onPetCreated, petToEdit, se
             
           >
             <HStack flex={1}>
+
               <Field label="Name" required>
                 <Input
                   variant={"outline"}
@@ -240,35 +301,60 @@ const CreatePet2 = ({ customer, setCreatePetPressed, onPetCreated, petToEdit, se
                 placeholder={randomChoice.breed}
               />
             </Field>
-            <FileUploadRoot gap="1">
-              <FileUploadLabel>Upload picture (optional)</FileUploadLabel>
-              <InputGroup
-                _hover={{
-                  backgroundColor: "primaryL",
-                  _dark: { backgroundColor: "primary" },
-                  cursor: "pointer",
-                }}
-                w="full"
-                startElement={<FaCamera />}
-                overflow="hidden"
-                endElement={
-                  <FileUploadClearTrigger asChild>
-                    <CloseButton
-                      me="-1"
-                      size="xs"
-                      variant="plain"
-                      focusVisibleRing="inside"
-                      focusRingWidth="2px"
-                      pointerEvents="auto"
-                      color={{ base: "primary", _dark: "primaryL" }}
-                      bg={{ base: "blue.600", _dark: "blue.600" }}
-                    />
-                  </FileUploadClearTrigger>
-                }
-              >
-                <FileInput onChange={handleFileChange} />
-              </InputGroup>
-            </FileUploadRoot>
+            <Field label="Picture">
+              <Box w={"100%"}>
+                <Box position="relative" bg={{_dark: "primary", base: "primaryL"}} rounded={"md"}>
+                  <InputGroup
+                    _hover={{
+                      backgroundColor: "primaryL",
+                      _dark: { backgroundColor: "primary" },
+                      cursor: "pointer",
+                    }}
+                    w="full"
+                    startElement={<FaCamera />}
+                    overflow="hidden"
+                    endElement={
+                      previewSrc && (
+                        <CloseButton
+                          zIndex={99999}
+              
+                          me="-1"
+                          size="xs"
+                          variant="solid"
+                          focusVisibleRing="inside"
+                          focusRingWidth="2px"
+                          pointerEvents="auto"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            setImageFile(null);
+                            setPreviewSrc(null);
+                          }}
+                        />
+                      )
+                    }
+                  >
+                    <Text ml={"2rem"} px={2} py={3} noOfLines={1}>
+                      {imageFile ? imageFile.name : "Click to select an image"}
+                    </Text>
+                  </InputGroup>
+                  <input
+                    type="file"
+                    ref={fileInputRef}
+                    onChange={handleFileChange}
+                    accept="image/jpeg,image/png"
+                    style={{
+                      position: 'absolute',
+                      top: 0,
+                      left: 0,
+                      width: '80%',
+                      height: '100%',
+                      opacity: 0,
+                      cursor: 'pointer'
+                    }}
+                  />
+                </Box>
+              </Box>
+            </Field>
             <Field label="Size" required></Field>
           </VStack>
           <HStack

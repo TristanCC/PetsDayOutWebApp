@@ -139,6 +139,7 @@ const Records = ({ selectedPet, preferredColors, setRecordsOpen }) => {
                                     mb={1}
                                 >
                                     <MotionBox
+                                        onClick={() => toggleItem(record.id)}
                                         p=".25rem"
                                         py="1rem"
                                         bg={`${catppuccinPastelRainbow[idx % catppuccinPastelRainbow.length]}99`}
@@ -153,7 +154,7 @@ const Records = ({ selectedPet, preferredColors, setRecordsOpen }) => {
                                     >
                                         <Box position="relative">
                                             <HStack
-                                                onClick={() => toggleItem(record.id)}
+                                                
                                                 justifyContent="space-between"
                                                 cursor="pointer"
                                             >

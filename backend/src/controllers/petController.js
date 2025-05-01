@@ -2,6 +2,7 @@ import CustomerPet from '../models/CustomerPet.js'
 import Customer from '../models/Customer.js'
 import Pet from '../models/Pet.js'
 import Group from "../models/Group.js"
+import { generateUploadUrl } from '../s3/s3Client.js';
 
 // create
 
@@ -174,3 +175,20 @@ export const deletePet = async (req, res) => {
     res.status(500).json({error: "failed to delete pet"})
   }
 } 
+
+// PET IMAGES AND S3
+
+export async function getSignedUploadURL(req, res) {
+  try {
+    const { filename, contentType } = req.query;
+    if (!filename || !contentType) {
+      return res.status(400).json({ error: 'filename and contentType are required' });
+    }
+    // Generate a presigned PUT URL
+    const url = await generateUploadUrl(filename, contentType);
+    res.json({ url });
+  } catch (err) {
+    console.error('Error generating S3 URL:', err);
+    res.status(500).json({ error: 'Could not generate signed URL' });
+  }
+}

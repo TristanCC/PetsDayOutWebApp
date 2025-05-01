@@ -11,6 +11,7 @@ import './db/associations.js'; // Import associations to ensure they're loaded
 import passport from './config/passport-setup.js';
 import authRoutes from './routes/authRoutes.js';
 import mainRoutes from './routes/mainRoutes.js'
+import s3_routes from './routes/s3_routes.js'
 
 // Import models to ensure they're loaded
 import User from './models/User.js';
@@ -68,6 +69,7 @@ app.use((req, res, next) => {
 
 app.use('/auth', authRoutes);
 app.use('/', mainRoutes);
+app.use('/s3', s3_routes)
 
 // add endpoints for updating profile info: first name, last name, password
 
