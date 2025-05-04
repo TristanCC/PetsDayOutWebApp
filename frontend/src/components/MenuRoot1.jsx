@@ -144,7 +144,7 @@ const MenuRoot1 = ({ customer, preferredColors, setSelectedCustomer, updateCusto
       </MenuRoot>
 
       {presentOpen && (
-        <div>
+        <Box>
           <MarkPresent
             selectedCustomer={customer}
             setPresentOpen={setPresentOpen}
@@ -152,39 +152,39 @@ const MenuRoot1 = ({ customer, preferredColors, setSelectedCustomer, updateCusto
             updateCustomerInState={updateCustomerInState}
             preferredColors={preferredColors}
           />
-        </div>
+        </Box>
       )}
 
       {customerInfoOpen && (
-        <div ref={customerInfoRef}>
+        <Box ref={customerInfoRef}>
           <CustomerInfo
             selectedCustomer={customer}
             setCustomerInfoOpen={setCustomerInfoOpen}
             setSelectedCustomer={setSelectedCustomer}
             updateCustomerInState={updateCustomerInState}
           />
-        </div>
+        </Box>
       )}
 
       {petsPanelOpen && (
-        <div /*ref={petsPanelRef}*/>
+        <Box /*ref={petsPanelRef}*/>
           <PetList 
             customer={customer}
             closePetsPanel={() => setPetsPanelOpen(false)}
             preferredColors={preferredColors}
             updateCustomerInState={updateCustomerInState}
           />
-        </div>
+        </Box>
       )}
 
       {householdPanelOpen && (
-        <div /*ref={petsPanelRef}*/>
+        <Box /*ref={petsPanelRef}*/>
           <Household 
             customer={customer}
             closeHouseholdPanel={() => setHouseholdPanelOpen(false)}
             preferredColors={preferredColors}
           />
-        </div>
+        </Box>
       )}
     </Box>
   );

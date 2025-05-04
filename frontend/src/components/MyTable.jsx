@@ -137,6 +137,7 @@ const MyTable = ({
       {/* Fixed controls at the bottom */}
       <Box 
         position="sticky"
+        rounded={"lg"}
         bottom="0"
         bg={{ base: "white", _dark: "primary" }}
         pt={2}
@@ -149,29 +150,31 @@ const MyTable = ({
           <HStack justify={"space-between"} align={"center"} w="full">
             <Button
               ml={"1rem"}
-              variant={"solid"}
+              variant={"surface"}
               onClick={() => setOffset((prevOffset) => Math.max(prevOffset - limit, 0))}
               disabled={offset === 0}
             >
-              Previous
+              	&lt;
             </Button>
-            <Button variant="solid" onClick={handleAddCustomer}>
+            <Button variant="surface" onClick={handleAddCustomer}>
               Add Customer
             </Button>
             <Button
               mr={"1rem"}
-              variant={"solid"}
+              variant={"surface"}
               onClick={() => setOffset((prevOffset) => prevOffset + limit)}
               disabled={customers.length < limit}
             >
-              Next
+              	&gt;
             </Button>
           </HStack>
         )}
       </Box>
 
       {addCustomerOpen && (
-        <CreateCustomer setCustomerInfoOpen={setAddCustomerOpen}/>
+        <Box pos={"fixed"} zIndex={9999} left={0} right={0} margin={"auto"} top={0} bottom={0} justifySelf={"center"} alignSelf={"center"}>
+          <CreateCustomer setCustomerInfoOpen={setAddCustomerOpen}/>
+        </Box>
       )}
     </Flex>
   )

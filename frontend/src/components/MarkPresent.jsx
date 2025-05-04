@@ -81,9 +81,9 @@ const MarkPresent = ({ selectedCustomer, setPresentOpen, preferredColors }) => {
         pets.map((pet) => (
             <Table.Row key={pet.id} bg={{ base: "white", _dark: "primary" }}>
                 <Table.Cell>
-                    <Avatar.Root shape="rounded" size="xl">
-                        <Avatar.Fallback name="Segun Adebayo" />
-                        <Avatar.Image src={placeholderAvatar} />
+                    <Avatar.Root shape="rounded" size="2xl">
+                        <Avatar.Fallback name={pet.name} />
+                        <Avatar.Image src={pet.photoUrl ? pet.photoUrl:placeholderAvatar} />
                     </Avatar.Root>
                 </Table.Cell>
                 <Table.Cell maxW="150px" overflow="hidden" whiteSpace="nowrap">

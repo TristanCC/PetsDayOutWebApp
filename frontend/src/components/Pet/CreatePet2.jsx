@@ -19,6 +19,8 @@ import { motion } from "framer-motion";
 import { Toaster, toaster } from "@/components/ui/toaster"
 import { BsGenderFemale, BsGenderMale } from "react-icons/bs";
 
+import { v4 as uuidv4 } from 'uuid';
+
 const MotionBox = motion(Box);
 const MotionButton = motion(Button);
 
@@ -40,6 +42,8 @@ const CreatePet2 = ({ customer, setCreatePetPressed, onPetCreated, petToEdit, se
   const [previewSrc, setPreviewSrc] = useState(null);
 
   const [notes, setNotes] = useState(petToEdit ? petToEdit.notes : "");
+
+  const [tempImageId, setTempImageId] = useState("")
 
   const placeholders = [
     { name: "Damon", breed: "Dachshund" },
@@ -138,13 +142,24 @@ const CreatePet2 = ({ customer, setCreatePetPressed, onPetCreated, petToEdit, se
       medium: DogResting,
       large: DogResting,
     });
+    setImage("")
+    setImageFile(null)
   };
 
   
   async function uploadToS3(file) {
     try {
-      const filename = `${petId}/profile.jpg`;
-      
+      const tempImageid = uuidv4()
+      setTempImageId(tempImageid)
+
+      var filename = undefined
+      if(petToEdit) {
+        filename = `${petToEdit.id}/profile.jpg`
+      }
+      else {
+        filename = `temp-uploads/${customer.id}/${tempImageid}.jpg`;
+      }
+
       // 1. Get presigned URL from your backend
       const response = await fetch(`/s3/s3-url?filename=${encodeURIComponent(filename)}&contentType=${encodeURIComponent(file.type)}`);
       
@@ -168,6 +183,13 @@ const CreatePet2 = ({ customer, setCreatePetPressed, onPetCreated, petToEdit, se
       if (!uploadResponse.ok) {
         const errorText = await uploadResponse.text();
         throw new Error(`S3 upload failed with status ${uploadResponse.status}: ${errorText}`);
+      }
+
+      else {
+        toaster.create({
+          title: "Image upload successful!",
+          type: "success"
+        })
       }
   
       return url.split('?')[0];
@@ -195,6 +217,8 @@ const CreatePet2 = ({ customer, setCreatePetPressed, onPetCreated, petToEdit, se
         return;  // stop submission on failure
       }
     }
+    console.log({ imageFile, image, petToEdit });
+
   
     // 2) Build your petData payload, using the new photoUrl
     const petData = {
@@ -206,7 +230,9 @@ const CreatePet2 = ({ customer, setCreatePetPressed, onPetCreated, petToEdit, se
       photoUrl,
       ownerID: customer.id,
       notes,
+      tempImageId: imageFile ? tempImageId : undefined
     };
+
   
     console.log("Submitting pet data:", petData);
   
@@ -252,6 +278,7 @@ const CreatePet2 = ({ customer, setCreatePetPressed, onPetCreated, petToEdit, se
         justifySelf={"center"}
         p={0}
         mb={2}
+        w={"100%"}
         initial={{ opacity: 0, scale: 0.95, y: -20 }}
         animate={{ opacity: 1, scale: 1, y: 0 }}
         exit={{ opacity: 0, scale: 0.95, y: -20 }}
@@ -261,6 +288,8 @@ const CreatePet2 = ({ customer, setCreatePetPressed, onPetCreated, petToEdit, se
 
       </MotionBox>
       <MotionBox
+      w={"90%"}
+
         justifySelf={"center"}
         initial={{ opacity: 0, scale: 0.95, y: 20 }}
         animate={{ opacity: 1, scale: 1, y: 0 }}
@@ -271,7 +300,7 @@ const CreatePet2 = ({ customer, setCreatePetPressed, onPetCreated, petToEdit, se
           <VStack
             mb={".5rem"}
             gap={".5rem"}
-            w={"90%"}
+            w={"100%"}
             justify={"center"}
             justifySelf={"center"}
             
@@ -287,34 +316,23 @@ const CreatePet2 = ({ customer, setCreatePetPressed, onPetCreated, petToEdit, se
                   placeholder={randomChoice.name}
                 />
               </Field>
-              <Field label="Sex" required flex={1}>
-                <HStack>
-                  <IconButton onClick={() => handleClickSex("female")} variant={sex == "female" ? "solid" : "outline"}><BsGenderFemale/></IconButton>
-                  <IconButton onClick={() => handleClickSex("male")} variant={sex == "male" ? "solid" : "outline"}><BsGenderMale/></IconButton>
-                </HStack>
+              <Field label="Breed" required>
+                <Input
+                  variant={"outline"}
+                  bg={{ base: "primaryL", _dark: "primary" }}
+                  value={breed}
+                  onChange={(e) => setBreed(e.target.value)}
+                  placeholder={randomChoice.breed}
+                />
               </Field>
             </HStack>
-            <Field label="Breed" required>
-              <Input
-                variant={"outline"}
-                bg={{ base: "primaryL", _dark: "primary" }}
-                value={breed}
-                onChange={(e) => setBreed(e.target.value)}
-                placeholder={randomChoice.breed}
-              />
-            </Field>
-            <Field label="Picture">
+            <HStack w={"100%"}>
+              <Field label="Picture">
               <Box w={"100%"}>
-                <Box position="relative" bg={{_dark: "primary", base: "primaryL"}} rounded={"md"}>
+                <Box display={"flex"} justifyContent={"space-between"} w={"100%"} bg={{_dark: "primary", base: "primaryL"}} rounded={"md"}>
                   <InputGroup
-                    _hover={{
-                      backgroundColor: "primaryL",
-                      _dark: { backgroundColor: "primary" },
-                      cursor: "pointer",
-                    }}
-                    w="full"
+                  w={"100%"}
                     startElement={<FaCamera />}
-                    overflow="hidden"
                     endElement={
                       previewSrc && (
                         <CloseButton
@@ -335,8 +353,8 @@ const CreatePet2 = ({ customer, setCreatePetPressed, onPetCreated, petToEdit, se
                       )
                     }
                   >
-                    <Text ml={"2rem"} px={2} py={3} noOfLines={1}>
-                      {imageFile ? imageFile.name : "Click to select an image"}
+                    <Text flex ml={"2rem"} px={2} py={3} noOfLines={1} overflow={"clip"} textOverflow={"ellipsis"} textWrap={"nowrap"} w={"60%"}>
+                      {imageFile ? imageFile.name : "Select an image"}
                     </Text>
                   </InputGroup>
                   <input
@@ -351,12 +369,21 @@ const CreatePet2 = ({ customer, setCreatePetPressed, onPetCreated, petToEdit, se
                       width: '80%',
                       height: '100%',
                       opacity: 0,
-                      cursor: 'pointer'
+                      cursor: 'pointer',
+                      overflow: 'hidden',
+                      textWrap: "nowrap"
                     }}
                   />
                 </Box>
               </Box>
             </Field>
+            <Field label="Sex" required flex={1}>
+                <HStack>
+                  <IconButton onClick={() => handleClickSex("female")} variant={sex == "female" ? "solid" : "outline"}><BsGenderFemale/></IconButton>
+                  <IconButton onClick={() => handleClickSex("male")} variant={sex == "male" ? "solid" : "outline"}><BsGenderMale/></IconButton>
+                </HStack>
+              </Field>
+            </HStack>
             <Field label="Size" required></Field>
           </VStack>
           <HStack
@@ -365,6 +392,8 @@ const CreatePet2 = ({ customer, setCreatePetPressed, onPetCreated, petToEdit, se
             justify={"center"}
             bg={{ base: "primaryDarkL", _dark: "primary" }}
             rounded={"lg"}
+            w={"100%"}
+            justifySelf={"center"}
             mb={".5rem"}
             initial={{ opacity: 0, scale: 0.95 }}
             animate={{ opacity: 1, scale: 1 }}

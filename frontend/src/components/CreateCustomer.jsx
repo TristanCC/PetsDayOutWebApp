@@ -270,7 +270,7 @@ const CreateCustomer = ({ setCustomerInfoOpen }) => {
 
   return (
     <Box className="customerInfo" p={4}
-     bg={{ base: "primaryL", _dark: "primaryMidpoint" }} borderRadius="md"
+     
      minW={"259px"} maxW={"600px"}  w="100%">
       {/* Modal background */}
       <Box
@@ -313,25 +313,22 @@ const CreateCustomer = ({ setCustomerInfoOpen }) => {
         }}
       >
         {/* Close button */}
-        <IconButton
-          position={"absolute"}
-          top={"8"}
-          right={"6"}
-          aria-label="close create customer"
-          size={"lg"}
-          variant={"ghost"}
-          borderRadius={"1rem"}
-          onClick={() => setCustomerInfoOpen(false)}
-          zIndex={9000}
-        >
-          <LuCircleX />
-        </IconButton>
-
-        {/* Modal title */}
-        { step == 1 && (<Text fontSize={"2xl"} fontWeight={"medium"} mb={2} position={"relative"} justifySelf={"start"} bottom={"0.75rem"}>
-          Create Customer
-        </Text>
-        )}
+        <HStack align={"center"} alignItems={"center"} justify={"space-between"} pb={"0.75rem"}>
+        <Text fontSize={"2xl"} fontWeight={"medium"} mb={2} position={"relative"} justifySelf={"start"} >
+            Create Customer
+          </Text>
+          <IconButton
+            aria-label="close create customer"
+            size={"lg"}
+            variant={"ghost"}
+            borderRadius={"1rem"}
+            onClick={() => setCustomerInfoOpen(false)}
+            zIndex={9000}
+          >
+            <LuCircleX />
+          </IconButton>
+          {/* Modal title */}
+        </HStack>
 
         <Box className="customerInfoHeader" h={"100%"} >
           <form className="customerInfoForm">
@@ -401,7 +398,7 @@ const CreateCustomer = ({ setCustomerInfoOpen }) => {
                 <HStack w={"100%"} mt={"1rem"}>
                   {addPetChecked && step === 1 && (
                     <Button variant={"outline"}
-                     onClick={handleNextStep} w={"100%"} disabled={!firstName || !lastName || !phoneNumber}>
+                     onClick={handleNextStep} w={"100%"} disabled={!firstName || !lastName || !phoneNumber || (linkPhoneNumber && !verifiedLink)}>
                       Next
                     </Button>
                   )}
@@ -411,7 +408,7 @@ const CreateCustomer = ({ setCustomerInfoOpen }) => {
                     </Button>
                   )}
                   {(step === 2 || !addPetChecked) && (
-                    <Button onClick={handleSubmit} w={step === 2 ? "50%" : "100%"} disabled={!firstName || !lastName || !phoneNumber || (addPetChecked && petList.length === 0) || isLoading}>
+                    <Button onClick={handleSubmit} w={step === 2 ? "50%" : "100%"} disabled={!firstName || !lastName || !phoneNumber || (addPetChecked && petList.length === 0) || isLoading || (linkPhoneNumber && !verifiedLink) }>
                       Submit
                     </Button>
                   )}

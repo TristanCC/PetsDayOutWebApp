@@ -81,7 +81,7 @@ const Navbar = ({
               justifyContent={"center"}
               pt={"0"}
               w={"100%"}
-              h={"70vh"}
+              h={"80svh"}
               overflowY={"auto"}
               
             >

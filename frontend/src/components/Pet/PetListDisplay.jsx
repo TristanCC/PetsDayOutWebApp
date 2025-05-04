@@ -69,7 +69,7 @@ const PetListDisplay = ({ pets, setPets, createPetPressed, setCreatePetPressed, 
       visibility={recordsOpen ? "hidden" : "visible"}
       bg={{ base: "primarySurfaceL", _dark: "primarySurface" }}
       borderRadius={"1rem"}
-      p={4}
+      pb={4}
       w={!createPetPressed ? { base: "90vw", md: "80vw", lg: "800px" } : { base: "90vw", md: "50vw", lg: "25vw" }}
       minW={"350px"}
       
@@ -101,7 +101,7 @@ const PetListDisplay = ({ pets, setPets, createPetPressed, setCreatePetPressed, 
         <Separator w={"100%"} mb={"1rem"}></Separator>
       <Box className="customerInfoHeader" flex={1} w="100%">
         <Box 
-          
+         
           w={"100%"}
           data-state="open"
           _open={{
@@ -120,41 +120,42 @@ const PetListDisplay = ({ pets, setPets, createPetPressed, setCreatePetPressed, 
               </Box>
             ) :
             <>
-                <Box  w={"100%"} p={"1.5rem"} bg={{ base: "primarySurfaceL", _dark: "transparent" }} rounded={"lg"}>
+                <Box  w={"100%"} p={"0"} bg={{ base: "primarySurfaceL", _dark: "transparent" }} rounded={"lg"}>
                 <HStack gap={4} w="100%" flexWrap="wrap" justify="center" justifyItems={"center"}>
 
                   {pets.map((item, index) => (
-                    <Card.Root key={index} w="300px" variant="outline">
+                    <Card.Root key={index} w="300px" variant={"elevated"}>
                       <Card.Body>
                         <VStack>
                           
-                          <HStack align={"start"} w={"100%"} justify={"space-between"}>
-                            <VStack align={"start"}>
+                          <HStack alignItems={"center"} w={"100%"} justify={"space-between"}>
+                            
+                          <Avatar.Root shape="rounded" size="2xl">
+                              <Avatar.Fallback name={item.name} />
+                              <Avatar.Image src={item.photoUrl ? item.photoUrl : placeholderAvatar} />
+                            </Avatar.Root>
+                            <VStack align={"start"} flex={1}>
                               <Text fontSize="2xl" fontWeight="light"><HStack>{item.name} {item.sex === "male" ? <BsGenderMale/> : <BsGenderFemale/>} </HStack></Text>
                               <Text fontSize="lg" fontWeight="light">{item.breed} {item.size == "small" ? "(sm)" : item.size == "medium" ? "(md)" : "(lg)"}</Text>
                             </VStack>
 
-                            <Avatar.Root shape="full" size="2xl">
-                              <Avatar.Fallback name={item.name} />
-                              <Avatar.Image src={item.photoUrl ? item.photoUrl : placeholderAvatar} />
-                            </Avatar.Root>
-
                             </HStack>
                             <Textarea
+                            variant={"subtle"}
                               readOnly
                               resize={"none"}
                               placeholder="Preferred services and cut:&#10;Behavioral notes, special handling instructions:&#10;Payment history:"
                               minH={"5lh"}
-                              maxH={"15lh"}
                               value={item.notes}
                             />
-                            <HStack justify={"center"} w={"full"}>
-                            <Button w={"100%"} variant={"ghost"} colorPalette={"red"} mt={2} flex={"1 1 0"}
-                            onClick={() => handleDeletion(item.id)}><LuTrash2 /></Button>
-                            <Button w={"100%"} variant={"subtle"} mt={2} flex={"3 1 0"}
-                            onClick={() => {handleRecords(item);}}><LuFolderClock/></Button>
-                            <Button w={"100%"} variant={"subtle"} mt={2} flex={"3 1 0"}
-                            onClick={() => {setCreatePetPressed(true); setPetToEdit(item)}}><FaRegEdit/></Button>
+                            <HStack justify={"center"} align={"center"} mt={2} justifyItems={"center"} w={"full"} h={"100%"}>
+                              <Button w={"100%"} variant={"ghost"} colorPalette={"red"} flex={"1 1 0"}
+                              onClick={() => handleDeletion(item.id)}><LuTrash2 /></Button>
+                              <Separator display={"block"} alignSelf={"center"} justifyContent={"center"} justifySelf={"center"}  h={"2rem"} variant={"solid"} orientation={"vertical"} />
+                              <Button w={"100%"} variant={"ghost"} flex={"3 1 0"}
+                              onClick={() => {handleRecords(item);}}><LuFolderClock/></Button>
+                              <Button w={"100%"} variant={"ghost"}  flex={"3 1 0"}
+                              onClick={() => {setCreatePetPressed(true); setPetToEdit(item)}}><FaRegEdit/></Button>
                             </HStack>
                             
                         </VStack>
@@ -163,7 +164,7 @@ const PetListDisplay = ({ pets, setPets, createPetPressed, setCreatePetPressed, 
                   ))}
                 </HStack>
                 </Box>
-                <HStack justify={"center"}  w="100%">
+                <HStack justify={"center"}   w="100%" mt={"1rem"}>
                 <PopoverRoot open={open} onOpenChange={(e) => setOpen(e.open)}>
                   <PopoverTrigger asChild>
                     <Button variant="surface" disabled={customer.groupID} display={customer.groupID ? "none" : "block"}>

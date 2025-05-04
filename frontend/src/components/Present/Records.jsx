@@ -97,7 +97,7 @@ const Records = ({ selectedPet, preferredColors, setRecordsOpen }) => {
                 bg={{ base: "primarySurfaceL", _dark: "primarySurface" }}
                 
             >
-                <HStack w="100%" justifyContent="space-between" p={2}>
+                <HStack w="100%" justifyContent="space-between">
                     <HStack>
                         <IconButton variant="plain" pointerEvents="none" scale="125%" colorPalette={preferredColors}>
                             <LuFolderClock />
@@ -159,8 +159,8 @@ const Records = ({ selectedPet, preferredColors, setRecordsOpen }) => {
                                                 cursor="pointer"
                                             >
                                                 <HStack flex="1" gap="1rem" ml={".5rem"}>
-                                                    <Icon size={"md"} as={LuFolder} color={"gray.600"}/>
-                                                    <Text color={"gray.800"}>
+                                                    <Icon size={"md"} as={LuFolder}/>
+                                                    <Text>
                                                         {(() => {
                                                             const [year, month, day] = record.date.split("-");
                                                             return `${month}/${day}/${year}`;

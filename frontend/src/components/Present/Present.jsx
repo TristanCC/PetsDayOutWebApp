@@ -263,7 +263,7 @@ const Present = ({ value, preferredColors }) => {
                     ))}
                   </HStack>
                 </Box>
-              )}) : <Text>No customers present</Text>}
+              )}) : <Text alignSelf={"center"}>No customers present</Text>}
               <Button position={"relative"} m={"1rem"} visibility={present.length >= 1 ? "visible" : "hidden"} onClick={() => handleEndDay()}>End Day</Button>
 
             </VStack>

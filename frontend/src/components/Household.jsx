@@ -109,8 +109,8 @@ const Household = ({ customer, closeHouseholdPanel, preferredColors }) => {
       position="fixed"
       top={0}
       left={0}
-      w="100vw"
-      h="100vh"
+      w="100svw"
+      h="100svh"
       bg="rgba(18, 18, 18, 0.5)"
       backdropFilter="blur(1px)"
       zIndex={1000}
@@ -131,10 +131,10 @@ const Household = ({ customer, closeHouseholdPanel, preferredColors }) => {
         justifyContent="center"
         alignContent="center"
         alignItems="center"
-        p={6}
+        p={2}
         boxShadow="lg"
         bg={{ base: "primarySurfaceL", _dark: "primaryMidpoint" }}
-        maxH="90vh" // Keep modal within bounds
+        maxH="90svh" // Keep modal within bounds
         w={{ base: "90vw", md: "80vw", lg: "600px" }}
         overflowY="auto" // Make modal scrollable when needed
       >
@@ -145,12 +145,12 @@ const Household = ({ customer, closeHouseholdPanel, preferredColors }) => {
               borderRadius={"lg"}
               p={2}
               display="flex"
-              gap={3}
+    
               justifyContent="space-between"
               alignItems="center"
               colorPalette={preferredColors}
             >
-            <HStack gap={".5rem"}>
+            <HStack >
               <IconButton 
                 variant={"plain"}
                 pointerEvents={"none"}
@@ -183,7 +183,7 @@ const Household = ({ customer, closeHouseholdPanel, preferredColors }) => {
               spacing={4}
               overflowY="auto"
             >
-              <Separator mb={4} w={"80%"} alignSelf={"start"} />
+              <Separator w={"100%"} alignSelf={"start"} />
 
               <HStack
                 gap={4}
@@ -194,7 +194,7 @@ const Household = ({ customer, closeHouseholdPanel, preferredColors }) => {
               >
                 <VStack
                   w={{ base: "100%", md: "calc(50% - 1rem)" }}
-                  bg={{ base: "primarySurfaceL", _dark: "primary" }}
+                  bg={{ base: "primaryL", _dark: "primary" }}
                   p="1rem"
                   align="start"
                   rounded="md"
@@ -209,7 +209,7 @@ const Household = ({ customer, closeHouseholdPanel, preferredColors }) => {
 
                 <VStack
                   w={{ base: "100%", md: "calc(50% - 1rem)" }}
-                  bg={{ base: "primarySurfaceL", _dark: "primary" }}
+                  bg={{ base: "primaryL", _dark: "primary" }}
                   p="1rem"
                   align="start"
                   rounded="md"

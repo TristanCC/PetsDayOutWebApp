@@ -3,9 +3,12 @@
   word-break: normal;
 }
 
-body, #root, .outerWrapper {
-  min-height: 100vh;
-  max-height: 100vh;
+body, #root {
+  height: 100svh;
+}
+
+.outerWrapper {
+  min-height: 100svh;
 }
 
 #root {
@@ -110,25 +113,6 @@ body {
   flex: 1 0;
 }
 
-.customerInfo {
-  display: flex;
-  flex-direction: column;
-  
-  border-radius: 1rem;
-  align-items: center;
-  width: min-content;
-  min-width: 320px;
-  width: 33%;
-  max-width: 80%;
-  align-self: center;
-  position: fixed;
-  bottom: 0;
-  top: 0;
-  margin: auto;
-  left: 0;
-  right: 0;
-  z-index: 9999;
-}
 
 .emptyState {
   display: flex;

@@ -1,5 +1,5 @@
 // s3Client.js
-import { S3Client, PutObjectCommand } from '@aws-sdk/client-s3';
+import { S3Client, PutObjectCommand, CopyObjectCommand, DeleteObjectCommand } from '@aws-sdk/client-s3';
 import { getSignedUrl } from '@aws-sdk/s3-request-presigner';
 import dotenv from 'dotenv';
 
@@ -67,4 +67,18 @@ export async function generateUploadUrl(filename, contentType) {
       });
       throw error;
     }
+  }
+
+  export async function copyMoveAndDeleteTempImage(customerID, petID,tempImageID) {
+    await s3.send(new CopyObjectCommand({
+      Bucket: 'pets-day-out-photos',
+      CopySource: `pets-day-out-photos/temp-uploads/${customerID}/${tempImageID}.jpg`,
+      Key: `${petID}/profile.jpg`
+    }))
+    console.log('temporary bucket image copied')
+    await s3.send(new DeleteObjectCommand({
+      Bucket: 'pets-day-out-photos',
+      Key: `temp-uploads/${customerID}/${tempImageID}`
+    }))
+    console.log('temporary bucket image deleted')
   }
