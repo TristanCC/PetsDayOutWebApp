@@ -55,7 +55,18 @@ function App() {
         alignSelf={"center"}
         alignItems={"center"}
       >
-        <Box className='outerWrapper'>
+        <Box className='outerWrapper' 
+                  css={{
+                    base: {
+                    backgroundColor: "#efefef",
+                    backgroundImage: `repeating-radial-gradient(circle at 0 0, transparent 0, #efefef 5px), repeating-linear-gradient(#ffffff55, #ffffff)`,
+                  },
+                    _dark: {
+                      backgroundColor: "#1e1e1e",
+                      backgroundImage: `repeating-radial-gradient(circle at 0 0, transparent 0, #1e1e1e 5px), repeating-linear-gradient(#33333355, #222222)`
+                    }
+                  }}
+        >
           <Box className='wrapperLeft' w="100%">
             <Navbar
               isLoggedIn={isLoggedIn}

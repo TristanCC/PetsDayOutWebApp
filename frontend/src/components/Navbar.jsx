@@ -42,7 +42,7 @@ const Navbar = ({
   return (
     <>
       {isLoggedIn ? (
-        <Box colorPalette={preferredColors} zIndex="1000" bg={{ base: "primarySurfaceL", _dark: "primarySurface" }} borderRadius={"1rem"}
+        <Box colorPalette={preferredColors} zIndex="1000" bg={{ base: "primarySurfaceL", _dark: "primarySurface" }} rounded={"2xl"} maxW={"800px"} justifySelf={"center"} w={"100%"}
           position="relative" top={windowWidth > 800 ? "10%" : 0}
           
           data-state="open"
@@ -79,7 +79,7 @@ const Navbar = ({
               value="first"
               display={"flex"}
               justifyContent={"center"}
-              pt={"0"}
+              p={0}
               w={"100%"}
               h={"80svh"}
               overflowY={"auto"}
@@ -103,9 +103,9 @@ const Navbar = ({
               value="second"
               display={"flex"}
               justifyContent={"center"}
-              pt={"0"}
+              p={0}
               w={"100%"}
-              h={"70vh"}
+              h={"80svh"}
               overflowY={"auto"}
               
             >

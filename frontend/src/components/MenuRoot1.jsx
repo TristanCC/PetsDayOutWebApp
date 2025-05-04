@@ -97,7 +97,7 @@ const MenuRoot1 = ({ customer, preferredColors, setSelectedCustomer, updateCusto
             ☰
           </Button>
         </MenuTrigger>
-        <MenuContent className="menuContent" bg={{ base: "white", _dark: "primarySurface" }}>
+        <MenuContent bg={{ base: "white", _dark: "primarySurface" }}>
           <MenuItemGroup p={"0.5rem"}>{customer.firstName} {customer.lastName}</MenuItemGroup>
           <MenuSeparator />
           <MenuItem borderRadius={".75rem"} value="mark-present" onClick={handlePresent} cursor={"pointer"}>

@@ -118,14 +118,26 @@ function Login({ isLoggedIn, setIsLoggedIn }) {
   return (
 <>
   <Box
-    minHeight="100vh"
+  
     display="flex"
     flexDirection="column"
     justifyContent="center"
     alignItems="center"
-    px={4}
-    py={8}
+    w={"100svw"}
+    h={"100svh"}
     gap={{ base: "3rem", md: "5rem" }}
+    //backgroundImage={{base: "linear-gradient(120deg, #fdfbfb 0%, #ebedee 100%)", _dark: "linear-gradient(120deg,rgb(13, 13, 13) 0%,rgb(25, 25, 25) 100%)"}}
+    css={{
+      base: {
+      backgroundColor: "#efefef",
+      backgroundImage: `repeating-radial-gradient(circle at 0 0, transparent 0, #efefef 5px), repeating-linear-gradient(#ffffff55, #ffffff)`,
+    },
+      _dark: {
+        backgroundColor: "#1e1e1e",
+        backgroundImage: `repeating-radial-gradient(circle at 0 0, transparent 0, #1e1e1e 5px), repeating-linear-gradient(#33333355, #222222)`
+      }
+    }}
+    
   >
     <motion.div
       style={{
@@ -166,7 +178,7 @@ function Login({ isLoggedIn, setIsLoggedIn }) {
           color={{ base: "#121212", _dark: "white" }}
           mt={2}
         >
-          {"Made with ❤️ by Tristan".split('').map((char, index) => (
+          {"Business Dashboard".split('').map((char, index) => (
             <motion.span
               key={index}
               style={{
@@ -191,12 +203,22 @@ function Login({ isLoggedIn, setIsLoggedIn }) {
         style={{ width: "100%", display: "flex", justifyContent: "center" }}
       >
         <Box
-          borderRadius="2xl"
+          rounded={"lg"}
           p={{ base: 6, md: 8 }}
-          width="100%"
+          width="100svw"
           maxWidth="360px"
-          boxShadow="xl"
-          bg={{ base: "white", _dark: "primarySurface" }}
+          boxShadow="md"
+          bg={{ base: "primaryL", _dark: "primary" }}
+          css={{
+            base: {
+            backgroundColor: "#efefef",
+            backgroundImage: `repeating-radial-gradient(circle at 0 0, transparent 0, #efefef 5px), repeating-linear-gradient(#ffffff55, #ffffff)`,
+          },
+            _dark: {
+              backgroundColor: "#1e1e1e",
+              backgroundImage: `repeating-radial-gradient(circle at 0 0, transparent 0, #1e1e1e 5px), repeating-linear-gradient(#33333355, #222222)`
+            }
+          }}
         >
           <form onSubmit={handleLogin} style={{ width: "100%" }}>
             <VStack spacing={"1rem"}>
@@ -280,6 +302,43 @@ function Login({ isLoggedIn, setIsLoggedIn }) {
         </VStack>
       </Box>
     )}
+        <motion.div
+      style={{
+        display: "flex",
+        flexDirection: "column",
+        zIndex: 1,
+        textAlign: "center",
+        maxWidth: "100%",
+      }}
+    >
+      <motion.div
+        initial="hidden"
+        animate="visible"
+        transition={{ delayChildren: 2.5, staggerChildren: 0.025 }}
+        style={{ display: "flex", flexDirection: "column" }}
+      
+      >
+        <Text
+          fontWeight="light"
+          fontSize={{ base: "md", md: "lg", lg: "xl" }}
+          color={{ base: "#121212", _dark: "white" }}
+          mt={2}
+        >
+          {"Made with ❤️ by Tristan".split('').map((char, index) => (
+            <motion.span
+              key={index}
+              style={{
+                display: 'inline-block',
+                whiteSpace: char === ' ' ? 'pre' : 'normal'
+              }}
+              variants={defaultAnimations}
+            >
+              {char}
+            </motion.span>
+          ))}
+        </Text>
+      </motion.div>
+    </motion.div>
   </Box>
 </>
   );

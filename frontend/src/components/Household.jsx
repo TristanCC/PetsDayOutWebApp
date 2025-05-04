@@ -3,8 +3,9 @@ import { motion } from "framer-motion";
 import { Box as ChakraBox } from "@chakra-ui/react";
 import { LuHouse } from "react-icons/lu";
 import { LuTrash2 } from "react-icons/lu";
-
+import { LuCircleUserRound } from "react-icons/lu";
 import { FaRegEdit } from "react-icons/fa";
+import { FaDog } from "react-icons/fa";
 import {
   Button,
   Input,
@@ -201,7 +202,10 @@ const Household = ({ customer, closeHouseholdPanel, preferredColors }) => {
                   flex="2 1 0"
                 >
 
-                  <Text>Owners:</Text>
+                  <HStack align={"center"}>
+                    <Icon size={"2xl"}><LuCircleUserRound/></Icon>
+                    <Text fontSize={"lg"}>Owners:</Text>
+                  </HStack>
                   <Separator mb={2} w="80%" alignSelf="start" />
                   {householdMembers?.length > 0 &&
                     renderHousehold(householdMembers)}
@@ -215,7 +219,11 @@ const Household = ({ customer, closeHouseholdPanel, preferredColors }) => {
                   rounded="md"
                   flex={"1 1 0"}
                 >
-                  <Text>Pets:</Text>
+                  
+                  <HStack align={"center"}>
+                    <Icon size={"2xl"}><FaDog/></Icon>
+                    <Text fontSize={"lg"}>Pets:</Text>
+                  </HStack>
                   <Separator mb={2} w="80%" alignSelf="start" />
                   {householdPets?.length > 0 &&
                     renderHouseholdPets(householdPets)}

@@ -36,16 +36,6 @@ body {
 }
 
 
-.wrapperLeft {
-
-  flex-direction: column;
-  height: 100%;
-  max-width: 800px;
-  flex: 1 1 100%;
-  position: relative; /* Add this line */
-  align-items: center;
-  justify-content: space-around;
-}
 
 .wrapperRight {
   margin-top: 8rem;
@@ -76,11 +66,32 @@ body {
   background-color: var(--chakra-colors-blue-600);
   opacity: 0;
   transition: opacity 0.2s ease-in-out;
-  z-index: 100; /* Keeps it behind the row content */
+  z-index: 0; /* Keeps it behind the row content */
   pointer-events: none;
 }
 
 .tableRow:hover::after {
+  opacity: 0.25; /* Shows background on hover */
+}
+
+
+.markPresentRow {
+  position: relative; /* Ensures ::before is positioned correctly */
+  cursor: pointer;
+}
+
+.markPresentRow::after {
+  content: "";
+  position: absolute; /* Makes it cover the row */
+  inset: 0; /* Ensures it stretches across the entire row */
+  background-color: var(--chakra-colors-blue-600);
+  opacity: 0;
+  transition: opacity 0.2s ease-in-out;
+  z-index: 100; /* Keeps it behind the row content */
+  pointer-events: none;
+}
+
+.markPresentRow:hover::after {
   opacity: 0.25; /* Shows background on hover */
 }
 

@@ -1,5 +1,6 @@
 import { Button, Center, HStack } from "@chakra-ui/react";
 import { useState, useRef, useEffect } from 'react';
+import { IoLogOutOutline } from "react-icons/io5";
 import Login from './Login';
 import CreateCustomer from "@/components/CreateCustomer";
 
@@ -54,8 +55,8 @@ function Home({ isLoggedIn, setIsLoggedIn, preferredColors, customers, selectedC
       {isLoggedIn && (
         <>
           <HStack flex={1} justifyContent={"space-between"}>
-            <Button zIndex={99999} w={"10rem"} pos={"absolute"} margin={"auto"} left={0} right={0} bottom={0} variant="ghost" onClick={handleLogout}>
-              Log Out
+            <Button zIndex={99999} w={"10rem"} pos={"absolute"} margin={"auto"} left={0} right={0} bottom={0} variant="plain" onClick={handleLogout}>
+            <IoLogOutOutline/> 
             </Button>
           </HStack>
 

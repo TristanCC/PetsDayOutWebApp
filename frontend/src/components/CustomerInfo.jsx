@@ -130,8 +130,8 @@ const CustomerInfo = ({ selectedCustomer, setCustomerInfoOpen, updateCustomerInS
       top={0}
       left={0}
       bottom={0}
-      w="100vw"
-      h="100vh"
+      w="100svw"
+      h="100svh"
       bg="rgba(18, 18, 18, 0.5)"
       backdropFilter="blur(1px)"
       zIndex={1000}
@@ -155,7 +155,7 @@ const CustomerInfo = ({ selectedCustomer, setCustomerInfoOpen, updateCustomerInS
         flexDir="column"
         justifyContent="center"
         alignItems="center"
-        p={6}
+        p={4}
         boxShadow="lg"
         position="fixed"
         bg={{ base: "primarySurfaceL", _dark: "primaryMidpoint" }}
@@ -187,7 +187,7 @@ const CustomerInfo = ({ selectedCustomer, setCustomerInfoOpen, updateCustomerInS
             <LuCircleX />
           </IconButton>
         </Box>
-        <Separator mb={4} w="80%" alignSelf="start" />
+        <Separator mb={4} w="100%" alignSelf="start" />
 
         <form onSubmit={handleSubmit}>
           <VStack spacing={4}>

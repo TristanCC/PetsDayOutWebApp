@@ -1,6 +1,6 @@
 
 import { useEffect, useState } from "react";
-import { Button, Input, IconButton, HStack, Box, Text, VStack } from "@chakra-ui/react";
+import { Button, Input, IconButton, HStack, Box, Text, VStack, Separator } from "@chakra-ui/react";
 import { Field } from "@/components/ui/field";
 import { Textarea } from "@chakra-ui/react";
 import { LuCircleX } from "react-icons/lu";
@@ -276,8 +276,8 @@ const CreateCustomer = ({ setCustomerInfoOpen }) => {
       <Box
         className="transparentBackground"
         pos={"fixed"}
-        w={"100vw"}
-        h={"100vh"}
+        w={"100svw"}
+        h={"100svh"}
         top={"0px"}
         left={0}
         right={0}
@@ -294,7 +294,7 @@ const CreateCustomer = ({ setCustomerInfoOpen }) => {
       <Box
         bg={{ base: "primarySurfaceL", _dark: "primaryMidpoint" }}
         borderRadius={"1rem"}
-        p={"2rem"}
+
         w={"100%"}
         h={"auto"}
         cursor={"radio"}
@@ -313,8 +313,8 @@ const CreateCustomer = ({ setCustomerInfoOpen }) => {
         }}
       >
         {/* Close button */}
-        <HStack align={"center"} alignItems={"center"} justify={"space-between"} pb={"0.75rem"}>
-        <Text fontSize={"2xl"} fontWeight={"medium"} mb={2} position={"relative"} justifySelf={"start"} >
+        <HStack align={"center"} alignItems={"center"} justify={"space-between"} p={4}>
+        <Text fontSize={"2xl"} fontWeight={"medium"}  position={"relative"} justifySelf={"start"} >
             Create Customer
           </Text>
           <IconButton
@@ -329,10 +329,11 @@ const CreateCustomer = ({ setCustomerInfoOpen }) => {
           </IconButton>
           {/* Modal title */}
         </HStack>
+        <Separator mb={2} w={"100%"}/>
 
         <Box className="customerInfoHeader" h={"100%"} >
           <form className="customerInfoForm">
-            <VStack spacing={4} align="stretch">
+            <VStack spacing={4} align="stretch" p={4}>
               <Box>
                 {/* Form fields for step 1 */}
                 {step === 1 && (

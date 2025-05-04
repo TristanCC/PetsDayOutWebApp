@@ -1,13 +1,15 @@
 "use client"
 
 import { Box, Table, Text, Button, Flex } from "@chakra-ui/react"
-import { EmptyState, List, VStack, HStack } from "@chakra-ui/react"
+import { EmptyState, List, VStack, HStack, IconButton } from "@chakra-ui/react"
 import { HiColorSwatch } from "react-icons/hi"
 import { useState, useEffect, useRef } from "react"
 import MenuRoot1 from "./MenuRoot1"
 import { motion } from "framer-motion";
 import { Box as ChakraBox } from "@chakra-ui/react";
 import CreateCustomer from "./CreateCustomer"
+import { FaArrowRight } from "react-icons/fa";
+import { FaArrowLeft } from "react-icons/fa";
 
 const MyTable = ({
   selectedCustomer,
@@ -137,36 +139,37 @@ const MyTable = ({
       {/* Fixed controls at the bottom */}
       <Box 
         position="sticky"
-        rounded={"lg"}
+    rounded={"lg"}
+    w={"100%"}
+    alignSelf={"center"}
         bottom="0"
         bg={{ base: "white", _dark: "primary" }}
-        pt={2}
-        pb={2}
-        borderTop="1px solid"
+        p={4}
+       
         borderColor={{ base: "gray.100", _dark: "gray.700" }}
         zIndex={1}
       >
         {!isSearchActive && (
           <HStack justify={"space-between"} align={"center"} w="full">
-            <Button
+            <IconButton
               ml={"1rem"}
-              variant={"surface"}
+              variant={"ghost"}
               onClick={() => setOffset((prevOffset) => Math.max(prevOffset - limit, 0))}
               disabled={offset === 0}
             >
-              	&lt;
-            </Button>
-            <Button variant="surface" onClick={handleAddCustomer}>
+              	<FaArrowLeft/>
+            </IconButton>
+            <Button variant="ghost" onClick={handleAddCustomer}>
               Add Customer
             </Button>
-            <Button
+            <IconButton
               mr={"1rem"}
-              variant={"surface"}
+              variant={"ghost"}
               onClick={() => setOffset((prevOffset) => prevOffset + limit)}
               disabled={customers.length < limit}
             >
-              	&gt;
-            </Button>
+              	<FaArrowRight/>
+            </IconButton>
           </HStack>
         )}
       </Box>
