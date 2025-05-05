@@ -211,7 +211,7 @@ const Present = ({ value, preferredColors }) => {
       position="relative"
       px={"1rem"}
       py={1}
-      bg={{ base: "primarySurfaceL", _dark: "primaryMidpoint" }}
+      bg={{ base: "primaryMidpointL", _dark: "primaryMidpoint" }}
       opacity={pet.completed ? 0.5 : 1}
       cursor="pointer"
       _hover={{ boxShadow: "md" }}
@@ -233,11 +233,11 @@ const Present = ({ value, preferredColors }) => {
   </Popover.Trigger>
                         <Portal>
                           <Popover.Positioner>
-                            <Popover.Content w={"100%"} rounded={"lg"}>
-                              <Popover.Arrow />
-                              <Popover.Body p={"1rem"}>
+                            <Popover.Content w={"100%"} rounded={"lg"} bg={{ base: "primarySurfaceL", _dark: "primarySurface" }}>
+                              
+                              <Popover.Body p={"1rem"} >
                               <HStack wrap={"wrap"} maxW={"33vw"} flex={1}>
-                              <Button variant={"subtle"} flex={"min-content"} onClick={() => {
+                              <Button variant={"subtle"} flex={"min-content"} bg={{ base: "primaryMidpointL", _dark: "primaryMidpoint" }} _hover={{ bg: {base: "primaryL", _dark: "primary"}}} onClick={() => {
                                 markPetComplete(pet.id);
                                 setOpenPopoverId(null); // Close after clicking
                               }}>              
@@ -248,7 +248,7 @@ const Present = ({ value, preferredColors }) => {
                                   <Text>{"Complete"}</Text>
                                 </HStack>
                               </Button>
-                              <Button variant={"subtle"} flex={"min-content"} onClick={() => handleRecords(pet)}> 
+                              <Button variant={"subtle"} flex={"min-content"} bg={{ base: "primaryMidpointL", _dark: "primaryMidpoint" }} _hover={{ bg: {base: "primaryL", _dark: "primary"}}} onClick={() => handleRecords(pet)}> 
                                   <HStack justify={"flex-start"} w={"100%"}>
                                     <Icon fontSize={"1.25rem"} color={"purple.500"}>
                                       <LuFolderClock />

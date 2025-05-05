@@ -91,6 +91,7 @@ const MarkPresent = ({ selectedCustomer, setPresentOpen, preferredColors }) => {
                   size="2xl"
                   outline={selectedPets.includes(pet) ? "3px solid" : "none"}
                   outlineColor={selectedPets.includes(pet) ? preferredColors + ".500" : "transparent"}
+        
                 >
                         <Avatar.Fallback name={pet.name} />
                         <Avatar.Image src={pet.photoUrl ? pet.photoUrl:placeholderAvatar} />

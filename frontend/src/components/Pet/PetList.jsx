@@ -72,14 +72,13 @@ const PetList = ({ customer, preferredColors, handleEditPet, closePetsPanel }) =
       <Box
         className="transparentBackground"
         pos={"fixed"}
-        w={"100vw"}
-        h={"100vh"}
+        w={"100svw"}
+        h={"100svh"}
         top={"0px"}
         bottom={"0px"}
         backgroundColor={"rgba(18, 18, 18, 0.5)"}
         backdropFilter="blur(1px)"
-        opacity={"100%"}
-        zIndex={-1}
+        zIndex={-2}
         pointerEvents={"none"}
         overflowY={"scroll"}
       ></Box>

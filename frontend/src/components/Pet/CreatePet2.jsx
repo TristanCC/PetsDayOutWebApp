@@ -277,7 +277,6 @@ const CreatePet2 = ({ customer, setCreatePetPressed, onPetCreated, petToEdit, se
         alignSelf={"center"}
         justifySelf={"center"}
         p={0}
-        mb={2}
         w={"100%"}
         initial={{ opacity: 0, scale: 0.95, y: -20 }}
         animate={{ opacity: 1, scale: 1, y: 0 }}

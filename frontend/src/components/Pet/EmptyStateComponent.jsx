@@ -48,6 +48,7 @@ const EmptyStateComponent = ({ createPetPressed, setCreatePetPressed, setShowEmp
         </IconButton>
         {!createPetPressed ? (
             <EmptyState
+            p={4}
                 data-state="open"
                 _open={{
                     animationName: "fade-in, scale-in",

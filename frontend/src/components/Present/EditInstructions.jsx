@@ -47,13 +47,15 @@ const EditInstructions = ({selectedRecord, setEditInstructionsOpen, selectedColo
     })();
   
     return (
-      <Box>
+      <Box p={0}>
         <VStack
           
           gap={"1rem"}
           bg={{ base: "primaryMidpointL", _dark: "primaryMidpoint" }}
           borderRadius="lg"
           boxShadow="md"
+
+          p={4}
         >
           <Text fontSize="2xl" fontWeight="bold">
             {formattedDate}

@@ -110,7 +110,7 @@ function Login({ isLoggedIn, setIsLoggedIn }) {
     hidden: {
       opacity: 0,
       y: 10,
-      rotate: -90
+      rotate: -180
     },
     visible: {
       opacity: 1,
@@ -161,7 +161,7 @@ function Login({ isLoggedIn, setIsLoggedIn }) {
         style={{ display: "flex", flexDirection: "column" }}
       >
         <VStack>
-          <motion.div initial="hidden" animate="visible" variants={pawAnimations}>
+          <motion.div initial="hidden" animate="visible" variants={pawAnimations} transition={{duration: 1, ease: "backInOut"}}>
             <Icon alignSelf={"center"} color={{base: "primarySurface", _dark: "#eaeaea"}} size={{ base: "lg", md: "xl", lg: "2xl" }} scale={{ base: 1.5, md: 1.5, lg: 2 }} pb={1.5} rotate={35}><FaPaw/></Icon>
           </motion.div>
           <Text
