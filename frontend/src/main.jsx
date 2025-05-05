@@ -11,20 +11,21 @@ const customConfig = defineConfig({
   theme: {
     tokens: {
       colors: {
-        primary: { value: "#121212 " },
-        primaryMidpoint: {value: "#0F0F0F"},
-        primarySurface: { value: "#0E0E0E"},
-        primaryDarkL: { value: "#D9D9D9" }, 
-        primaryDark: { value: "#2E2E2E" }, // new dark version
-        primaryL: { value: "#EDEDED" },          // background darker white
-        primaryMidpointL: { value: "#F2F2F2" },  // 
-        primarySurfaceL: { value: "#F5F5F5" }   // foreground lighter white
-                                              
-        
+        // Dark mode
+        primary: { value: "#121212" },             // base dark bg
+        primaryMidpoint: { value: "#1A1A1A" },      // for sections/cards
+        primarySurface: { value: "#1F1F1F" },       // surfaces/panels
+        primaryD: { value: "#2E2E2E" },             // borders or subtle dividers
+        primaryDarkL: { value: "#eaeaea" },         // light text on dark bg
+  
+        // Light mode
+        primaryL: { value: "#F9FAFB" },             // light background
+        primaryMidpointL: { value: "#F3F4F6" },     // section background
+        primarySurfaceL: { value: "#FFFFFF" },      // card/surface (pure white)
       },
       fonts: {
-        body: { value: "'Inter', system-ui, sans-serif" },
-        heading: { value: "'Inter', system-ui, sans-serif" },
+        body: { value: "'poppins', 'Inter', system-ui, sans-serif" },
+        heading: { value: "'poppins','Inter', system-ui, sans-serif" },
       },
     },
   },

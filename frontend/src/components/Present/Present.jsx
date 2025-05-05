@@ -111,14 +111,14 @@ const Present = ({ value, preferredColors }) => {
     }, [openPopoverId]);
 
     return (
-      <Box w={"100%"} display={"flex"} flexDir={"column"} alignItems={"center"} p={{lg: "1rem", md: 0, sm: 0}} justifyContent={"space-between"} m={"1rem"} position={"relative"}>
+      <VStack w={"100%"} rounded={"md"} bg={{ base: "primaryL", _dark: "primaryMidpoint" }} display={"flex"} flexDir={"column"} alignItems={"center"} justifyContent={"space-between"} m={"1rem"} position={"relative"}>
           {loading ? (
               <HStack justifyContent="center" justifyItems="center">
                 <Spinner />
                 <LoadingState loadingText="Fetching Present..." />
               </HStack>
           ) : (
-            <VStack w={"100%"} spacing={4} pb={"1rem"} alignItems={"self-end"}>
+            <VStack w={"100%"} gap={4} p={4} alignItems={"self-end"}>
               {present && present.length > 0 ? present.map((customer) => {
                 if (!customer || !customer.customer || !customer.pets) return null;
                 
@@ -128,7 +128,7 @@ const Present = ({ value, preferredColors }) => {
                 <Box
                   key={customer.customer.id}
                   w="100%"
-                  bg={{ base: "white", _dark: "primary" }}
+                  bg={{ base: "primarySurfaceL", _dark: "primarySurface" }}
                   p={4}
                   rounded="lg"
                   position="relative"
@@ -209,7 +209,7 @@ const Present = ({ value, preferredColors }) => {
       position="relative"
       px={"1rem"}
       py={1}
-      bg={{ base: "primarySurfaceL", _dark: "primarySurface" }}
+      bg={{ base: "primarySurfaceL", _dark: "primaryMidpoint" }}
       opacity={pet.completed ? 0.5 : 1}
       cursor="pointer"
       _hover={{ boxShadow: "md" }}
@@ -271,7 +271,7 @@ const Present = ({ value, preferredColors }) => {
           {recordsOpen && (
             <Records selectedPet={selectedPet} preferredColors={preferredColors} setRecordsOpen={setRecordsOpen}/>
           )}
-      </Box>
+      </VStack>
   );
 };
 

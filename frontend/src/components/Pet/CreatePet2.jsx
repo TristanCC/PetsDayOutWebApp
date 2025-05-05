@@ -289,6 +289,7 @@ const CreatePet2 = ({ customer, setCreatePetPressed, onPetCreated, petToEdit, se
       </MotionBox>
       <MotionBox
       w={"90%"}
+      maxW={"360px"}
 
         justifySelf={"center"}
         initial={{ opacity: 0, scale: 0.95, y: 20 }}
@@ -310,7 +311,7 @@ const CreatePet2 = ({ customer, setCreatePetPressed, onPetCreated, petToEdit, se
               <Field label="Name" required>
                 <Input
                   variant={"outline"}
-                  bg={{ base: "primaryL", _dark: "primary" }}
+                  bg={{ base: "primaryL", _dark: "primarySurface" }}
                   value={name}
                   onChange={(e) => setName(e.target.value)}
                   placeholder={randomChoice.name}
@@ -319,7 +320,7 @@ const CreatePet2 = ({ customer, setCreatePetPressed, onPetCreated, petToEdit, se
               <Field label="Breed" required>
                 <Input
                   variant={"outline"}
-                  bg={{ base: "primaryL", _dark: "primary" }}
+                  bg={{ base: "primaryL", _dark: "primarySurface" }}
                   value={breed}
                   onChange={(e) => setBreed(e.target.value)}
                   placeholder={randomChoice.breed}
@@ -329,7 +330,7 @@ const CreatePet2 = ({ customer, setCreatePetPressed, onPetCreated, petToEdit, se
             <HStack w={"100%"}>
               <Field label="Picture">
               <Box w={"100%"}>
-                <Box display={"flex"} justifyContent={"space-between"} w={"100%"} bg={{_dark: "primary", base: "primaryL"}} rounded={"md"}>
+                <Box display={"flex"} justifyContent={"space-between"} w={"100%"} bg={{_dark: "primarySurface", base: "primaryL"}} rounded={"md"}>
                   <InputGroup
                   w={"100%"}
                     startElement={<FaCamera />}
@@ -390,7 +391,7 @@ const CreatePet2 = ({ customer, setCreatePetPressed, onPetCreated, petToEdit, se
             gap={0}
             alignItems={"end"}
             justify={"center"}
-            bg={{ base: "primaryDarkL", _dark: "primary" }}
+            bg={{ base: "primaryDarkL", _dark: "primarySurface" }}
             rounded={"lg"}
             w={"100%"}
             justifySelf={"center"}
@@ -428,7 +429,7 @@ const CreatePet2 = ({ customer, setCreatePetPressed, onPetCreated, petToEdit, se
             </MotionButton>
           </HStack>
           <Field label="Notes" mb={".5rem"}>
-            <Box w={"100%"} bg={{ base: "primaryL", _dark: "primary" }} borderRadius={"sm"}>
+            <Box w={"100%"} bg={{ base: "primaryL", _dark: "primarySurface" }} borderRadius={"sm"}>
               <Textarea
                 variant={"flushed"}
                 placeholder="Preferred services and cut:&#10;&#10;Behavioral notes, special handling instructions:"

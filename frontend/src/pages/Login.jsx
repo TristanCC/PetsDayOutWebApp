@@ -1,7 +1,9 @@
 import { useState, useEffect } from 'react';
-import { Button, Input, Box, VStack, Text, Spinner, Separator } from "@chakra-ui/react";
+import { Button, Input, Box, VStack, Text, Spinner, Separator, Icon, Image } from "@chakra-ui/react";
 import { Field } from "@/components/ui/field";
-import { motion } from "framer-motion"; // <-- fixed import
+import { motion, spring } from "framer-motion"; // <-- fixed import
+import { FaPaw } from "react-icons/fa6";
+import google from "../assets/google.png"
 
 function Login({ isLoggedIn, setIsLoggedIn }) {
   const [error, setError] = useState(null);
@@ -104,16 +106,20 @@ function Login({ isLoggedIn, setIsLoggedIn }) {
     }
   }
 
-  const panelAnimations = {
+  const pawAnimations = {
     hidden: {
       opacity: 0,
-      y: -30
+      y: 10,
+      rotate: -90
     },
     visible: {
       opacity: 1,
-      y: 0
+      y: 0,
+      rotate: 0
+      
     }
   }
+
 
   return (
 <>
@@ -154,46 +160,64 @@ function Login({ isLoggedIn, setIsLoggedIn }) {
         transition={{ staggerChildren: 0.025 }}
         style={{ display: "flex", flexDirection: "column" }}
       >
-        <Text
-          fontSize={{ base: "4xl", md: "6xl", lg: "7xl" }}
-          color={{ base: "#121212", _dark: "white" }}
-          lineHeight="shorter"
-        >
-          {"A Pet's Day Out".split('').map((char, index) => (
-            <motion.span
-              key={index}
-              style={{
-                display: 'inline-block',
-                whiteSpace: char === ' ' ? 'pre' : 'normal'
-              }}
-              variants={defaultAnimations}
-            >
-              {char}
-            </motion.span>
-          ))}
-        </Text>
-        <Text
-          fontWeight="light"
-          fontSize={{ base: "lg", md: "xl", lg: "2xl" }}
-          color={{ base: "#121212", _dark: "white" }}
-          mt={2}
-        >
-          {"Business Dashboard".split('').map((char, index) => (
-            <motion.span
-              key={index}
-              style={{
-                display: 'inline-block',
-                whiteSpace: char === ' ' ? 'pre' : 'normal'
-              }}
-              variants={defaultAnimations}
-            >
-              {char}
-            </motion.span>
-          ))}
-        </Text>
+        <VStack>
+          <motion.div initial="hidden" animate="visible" variants={pawAnimations}>
+            <Icon alignSelf={"center"} color={{base: "primarySurface", _dark: "#eaeaea"}} size={{ base: "lg", md: "xl", lg: "2xl" }} scale={{ base: 1.5, md: 1.5, lg: 2 }} pb={1.5} rotate={35}><FaPaw/></Icon>
+          </motion.div>
+          <Text
+            mt={{base: 0, lg: 4}}
+            fontSize={{ base: "4xl", md: "6xl", lg: "6xl" }}
+            color={{ base: "primarySurface", _dark: "#eaeaea" }}
+            lineHeight={1} fontWeight={"medium"}
+          >
+            {"A Pet's Day Out".split('').map((char, index) => (
+              <motion.span
+                key={index}
+                style={{
+                  display: 'inline-block',
+                  whiteSpace: char === ' ' ? 'pre' : 'normal'
+                }}
+                variants={defaultAnimations}
+              >
+                {char}
+              </motion.span>
+            ))}
+          </Text>
+          <Text
+            fontWeight="light"
+            fontSize={{ base: "xl", md: "2xl", lg: "3xl" }}
+            color={{ base: "primarySurface", _dark: "#eaeaea" }}
+
+          >
+            {"Business Dashboard".split('').map((char, index) => (
+              <motion.span
+                key={index}
+                style={{
+                  display: 'inline-block',
+                  whiteSpace: char === ' ' ? 'pre' : 'normal'
+                }}
+                variants={defaultAnimations}
+              >
+                {char}
+              </motion.span>
+            ))}
+          </Text>
+        </VStack>
       </motion.div>
     </motion.div>
-
+      {/*      colors: {
+        // Dark mode
+        primary: { value: "#121212" },             // base dark bg
+        primaryMidpoint: { value: "#1A1A1A" },      // for sections/cards
+        primarySurface: { value: "#1F1F1F" },       // surfaces/panels
+        primaryD: { value: "#2E2E2E" },             // borders or subtle dividers
+        primaryDarkL: { value: "#E0E0E0" },         // light text on dark bg
+  
+        // Light mode
+        primaryL: { value: "#F9FAFB" },             // light background
+        primaryMidpointL: { value: "#F3F4F6" },     // section background
+        primarySurfaceL: { value: "#FFFFFF" },      // card/surface (pure white)
+      }, */}
     {!isLoggedIn ? (
       <motion.div
         initial="hidden"
@@ -205,10 +229,10 @@ function Login({ isLoggedIn, setIsLoggedIn }) {
         <Box
           rounded={"lg"}
           p={{ base: 6, md: 8 }}
-          width="100svw"
+          width="90svw"
           maxWidth="360px"
           boxShadow="md"
-          bg={{ base: "primaryL", _dark: "primary" }}
+          bg={{ base: "primarySurfaceL", _dark: "primaryMidpoint" }}
           css={{
             base: {
             backgroundColor: "#efefef",
@@ -229,7 +253,7 @@ function Login({ isLoggedIn, setIsLoggedIn }) {
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   placeholder="Enter your email"
-                  variant="subtle"
+                  variant="outline"
                   boxShadow="rgba(0, 0, 0, 0.1) 10px 18px 20px -15px inset"
                 />
               </Field>
@@ -240,7 +264,7 @@ function Login({ isLoggedIn, setIsLoggedIn }) {
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   placeholder="Enter your password"
-                  variant="subtle"
+                  variant="outline"
                   boxShadow="rgba(0, 0, 0, 0.1) 10px 18px 20px -15px inset"
                 />
               </Field>
@@ -255,7 +279,7 @@ function Login({ isLoggedIn, setIsLoggedIn }) {
                 width="100%"
                 mt={4}
                 isLoading={isLoading}
-                borderRadius="lg"
+                rounded={"md"}
                 size="lg"
               >
                 Submit
@@ -269,9 +293,13 @@ function Login({ isLoggedIn, setIsLoggedIn }) {
             variant="outline"
             width="100%"
             mt={4}
-            borderRadius="lg"
+            rounded={"md"}
             size="lg"
+            colorPalette={"bg"
+            }
+            color={{base: "primarySurface", _dark: "white"}}
           >
+            <Image src={google} scale={.75}></Image>
             Sign in with Google
           </Button>
         </Box>
@@ -284,7 +312,7 @@ function Login({ isLoggedIn, setIsLoggedIn }) {
         maxWidth="400px"
         boxShadow="lg"
         bg={{ base: "white", _dark: "primarySurface" }}
-        color={{ base: "black", _dark: "white" }}
+        color={{ base: "primarySurface", _dark: "white" }}
       >
         <VStack spacing={4}>
           <Text fontSize="2xl" fontWeight="bold" textAlign="center">
@@ -321,7 +349,7 @@ function Login({ isLoggedIn, setIsLoggedIn }) {
         <Text
           fontWeight="light"
           fontSize={{ base: "md", md: "lg", lg: "xl" }}
-          color={{ base: "#121212", _dark: "white" }}
+          color={{ base: "rgba(0,0,0,.33)", _dark: "rgba(255,255,255,.25)" }}
           mt={2}
         >
           {"Made with ❤️ by Tristan".split('').map((char, index) => (

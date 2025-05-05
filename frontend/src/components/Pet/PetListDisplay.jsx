@@ -67,13 +67,13 @@ const PetListDisplay = ({ pets, setPets, createPetPressed, setCreatePetPressed, 
     return (
     <Box
       visibility={recordsOpen ? "hidden" : "visible"}
-      bg={{ base: "primarySurfaceL", _dark: "primarySurface" }}
+      bg={{ base: "primarySurfaceL", _dark: "primaryMidpoint" }}
       borderRadius={"1rem"}
-      pb={4}
-      w={!createPetPressed ? { base: "90vw", md: "80vw", lg: "800px" } : { base: "90vw", md: "50vw", lg: "25vw" }}
+      p={4}
+      w={!createPetPressed ? { base: "90vw", md: "80vw", lg: "800px" } : { base: "90vw", md: "50vw", lg: "370px" }}
       minW={"350px"}
       
-      maxH={"90vh"}
+      maxH={"80vh"}
       overflowY={"auto"}
       cursor={"radio"}
       display={"flex"}
@@ -120,12 +120,12 @@ const PetListDisplay = ({ pets, setPets, createPetPressed, setCreatePetPressed, 
               </Box>
             ) :
             <>
-                <Box  w={"100%"} p={"0"} bg={{ base: "primarySurfaceL", _dark: "transparent" }} rounded={"lg"}>
+                <Box  w={"100%"} p={4} bg={{ base: "primaryMidpointL", _dark: "primaryMidpoint" }} rounded={"lg"}>
                 <HStack gap={4} w="100%" flexWrap="wrap" justify="center" justifyItems={"center"}>
 
                   {pets.map((item, index) => (
-                    <Card.Root key={index} w="300px" variant={"elevated"}>
-                      <Card.Body>
+                    <Card.Root key={index} w="300px" variant={"outline"} bg={{ base: "primarySurfaceL", _dark: "primarySurface" }}>
+                      <Card.Body p={4}>
                         <VStack>
                           
                           <HStack alignItems={"center"} w={"100%"} justify={"space-between"}>
@@ -142,11 +142,13 @@ const PetListDisplay = ({ pets, setPets, createPetPressed, setCreatePetPressed, 
                             </HStack>
                             <Textarea
                             variant={"subtle"}
+                            bg={{ base: "primaryMidpointL", _dark: "primaryMidpoint" }} 
                               readOnly
                               resize={"none"}
-                              placeholder="Preferred services and cut:&#10;Behavioral notes, special handling instructions:&#10;Payment history:"
-                              minH={"5lh"}
+                              placeholder="Preferred services and cut:&#10;Behavioral notes, special handling instructions:"
+                              minH={"4lh"}
                               value={item.notes}
+                              rounded={"sm"}
                             />
                             <HStack justify={"center"} align={"center"} mt={2} justifyItems={"center"} w={"full"} h={"100%"}>
                               <Button w={"100%"} variant={"ghost"} colorPalette={"red"} flex={"1 1 0"}

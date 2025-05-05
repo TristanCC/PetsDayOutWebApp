@@ -36,7 +36,7 @@ const createEditableField = (
         disabled={!edit}
         placeholder={label === "Phone Number" ? "(999) 999-9999" : label}
         ref={label === "Phone Number" ? withMask("(999) 999-9999") : null}
-        backgroundColor={{ base: "primaryL", _dark: "primary" }}
+        backgroundColor={{ base: "primaryL", _dark: "primarySurface" }}
       />
       <IconButton
         aria-label={`Edit ${label}`}
@@ -159,6 +159,8 @@ const CustomerInfo = ({ selectedCustomer, setCustomerInfoOpen, updateCustomerInS
         boxShadow="lg"
         position="fixed"
         bg={{ base: "primarySurfaceL", _dark: "primaryMidpoint" }}
+        w={"90svw"}
+        maxW={"360px"}
       >
         <Box
           minW="259px"
@@ -247,6 +249,7 @@ const CustomerInfo = ({ selectedCustomer, setCustomerInfoOpen, updateCustomerInS
                 onChange={(e) => setCustomerComment(e.target.value)}
                 placeholder="Start typing..."
                 resize="vertical"
+                variant={"flushed"}
               />
             </Field>
             <Button type="submit" disabled={isSaveDisabled} width="100%" mt={2}>

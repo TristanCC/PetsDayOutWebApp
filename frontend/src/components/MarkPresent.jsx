@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback, useMemo } from "react";
-import { Tabs, VStack, Box, Text, IconButton, HStack, Table, Spinner, Separator, Button, Avatar, Checkbox, Portal} from "@chakra-ui/react";
+import { Tabs, VStack, Box, Text, IconButton, HStack, Table, Spinner, Separator, Button, Avatar, Checkbox, Portal, Image} from "@chakra-ui/react";
 import { Toaster, toaster } from "@/components/ui/toaster"
 import { motion } from "framer-motion";
 import { LuCircleX, LuBookOpenCheck } from "react-icons/lu";
@@ -46,7 +46,7 @@ const MarkPresent = ({ selectedCustomer, setPresentOpen, preferredColors }) => {
             } catch (error) {
                 console.error("Error marking present:", error);
             } finally {
-                const namesString = pets.map((pet) => pet.name).join(`, `)
+                const namesString = selectedPets.map((pet) => pet.name).join(`, `)
                 toaster.create({
                     title: `Marked Present successfully`,
                     description: `${namesString}`,
@@ -80,13 +80,18 @@ const MarkPresent = ({ selectedCustomer, setPresentOpen, preferredColors }) => {
 
     const rows = useMemo(() => (
         pets.map((pet) => (
-            <Table.Row key={pet.id} bg={{ base: "primaryL", _dark: "primary" }} 
+            <Table.Row objectFit={0} key={pet.id} bg={{ base: "primarySurfaceL", _dark: "primarySurface" }} 
             maxW={"100%"} onClick={() => handleCheck(pet)} cursor={"pointer"} className="tableRow"
             color={selectedPets.includes(pet) ? preferredColors+".500": "inherit"} 
             
             >
                 <Table.Cell textAlign={"center"}>
-                    <Avatar.Root shape="rounded" size="2xl">
+                <Avatar.Root
+                  shape="rounded"
+                  size="2xl"
+                  outline={selectedPets.includes(pet) ? "3px solid" : "none"}
+                  outlineColor={selectedPets.includes(pet) ? preferredColors + ".500" : "transparent"}
+                >
                         <Avatar.Fallback name={pet.name} />
                         <Avatar.Image src={pet.photoUrl ? pet.photoUrl:placeholderAvatar} />
                     </Avatar.Root>
@@ -120,10 +125,7 @@ const MarkPresent = ({ selectedCustomer, setPresentOpen, preferredColors }) => {
                 overflow="auto"
             >
                 <MotionBox
-                    initial={{ opacity: 0, scale: 0.9 }}
-                    animate={{ opacity: 1, scale: 1 }}
-                    exit={{ opacity: 0, scale: 0.9 }}
-                    transition={{ duration: 0.3 }}
+
                     borderRadius="lg"
                     display="flex"
                     flexDir="column"
@@ -133,9 +135,10 @@ const MarkPresent = ({ selectedCustomer, setPresentOpen, preferredColors }) => {
                     position={"fixed"}
                     w={{ base: "90svw", md: "50svw", lg: "33svw" }}
                     minW={"300px"}
+                    maxW={"600px"}
                     colorPalette={preferredColors}
             
-                    bg={{ base: "primarySurfaceL", _dark: "primarySurface" }}
+                    bg={{ base: "primarySurfaceL", _dark: "primaryMidpoint" }}
                 >
                     <HStack w="100%" justifyContent="space-between" p={4}>
                         <HStack>
@@ -168,9 +171,9 @@ const MarkPresent = ({ selectedCustomer, setPresentOpen, preferredColors }) => {
                                 <Table.Root interactive stickyHeader  size={"md"} variant={"outline"}
                                  >
                                         <Table.ColumnGroup>
-                                          <Table.Column htmlWidth="25%" />
-                                          <Table.Column htmlWidth="25%" />
-                                          <Table.Column htmlWidth="25%" />
+                                          <Table.Column htmlWidth="33%" />
+                                          <Table.Column htmlWidth="" />
+                                          <Table.Column htmlWidth="" />
                                           <Table.Column/>
                                         </Table.ColumnGroup>
                                     <Table.Header >
@@ -195,8 +198,8 @@ const MarkPresent = ({ selectedCustomer, setPresentOpen, preferredColors }) => {
                               </EmptyState.Root>
                             )}
                         </Box>
-                        <Box w={"100%"} p={4} display={pets.length > 0 ? "block" : "none"}>
-                            <Button disabled={selectedPets.length === 0} w="100%" size={"lg"}  onClick={handleConfirm} >
+                        <Box w={"100%"} p={4} display={pets.length > 0 ? "block" : "none"} bg={{ base: "primarySurfaceL", _dark: "primaryMidpoint" }}>
+                            <Button disabled={selectedPets.length === 0} w="100%" size={"lg"}  onClick={handleConfirm} rounded={"full"} >
                                 Confirm
                             </Button>
                         </Box>

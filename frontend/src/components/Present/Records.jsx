@@ -69,6 +69,8 @@ const Records = ({ selectedPet, preferredColors, setRecordsOpen }) => {
             position="fixed"
             top={0}
             left={0}
+            bottom={0}
+            margin={"auto"}
             w="100vw"
             h="100vh"
             bg="rgba(18, 18, 18, 0.5)"
@@ -92,8 +94,8 @@ const Records = ({ selectedPet, preferredColors, setRecordsOpen }) => {
                 p={4}
                 pos="fixed"
                 boxShadow="lg"
-                maxH="80vh"
-                w={{ base: "90vw", md: "50vw", lg: "450px" }}
+                maxH="80svh"
+                w={{ base: "90svw", md: "50svw", lg: "450px" }}
                 bg={{ base: "primarySurfaceL", _dark: "primarySurface" }}
                 
             >

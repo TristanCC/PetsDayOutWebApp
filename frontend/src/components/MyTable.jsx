@@ -64,7 +64,8 @@ const MyTable = ({
         key={customer.id}
         data-selected={selection.includes(customer.id) ? "" : undefined}
         className="tableRow"
-        bg={{ base: "white", _dark: "primary" }}
+        bg={{ base: "primaryMidpointL", _dark: "primaryMidpoint" }}
+        _odd={{bg: {base: "primarySurfaceL", _dark: "primarySurface"}}}
         w={"100%"}
       >
         <Table.Cell>
@@ -117,7 +118,7 @@ const MyTable = ({
         flex="1"
         overflow="auto"
       >
-        <Table.Root interactive stickyHeader striped scrollBehavior={"smooth"} overflow={"hidden"}>
+        <Table.Root  interactive stickyHeader scrollBehavior={"smooth"}  overflow={"hidden"}>
           <Table.Header bg={{ base: "white", _dark: "primary" }}>
             <Table.Row alignItems={"center"} bg={{ base: "white", _dark: "primaryMidpoint" }}>
               <Table.ColumnHeader className="columnHeader">
@@ -143,7 +144,7 @@ const MyTable = ({
     w={"100%"}
     alignSelf={"center"}
         bottom="0"
-        bg={{ base: "white", _dark: "primary" }}
+        bg={{ base: "white", _dark: "primaryMidpoint" }}
         p={4}
        
         borderColor={{ base: "gray.100", _dark: "gray.700" }}
