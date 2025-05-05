@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback, useMemo } from "react";
 import { Tabs, VStack, Box, Text, IconButton, HStack, Table, Spinner, Separator, Button, Avatar, Checkbox, Icon } from "@chakra-ui/react";
 import { Popover, Portal } from "@chakra-ui/react"
-import { motion } from "framer-motion";
+import { motion, wrap } from "framer-motion";
 import LoadingState from "../Pet/LoadingState";
 
 import { LuFolderClock } from "react-icons/lu";
@@ -137,15 +137,17 @@ const Present = ({ value, preferredColors }) => {
                   _hover={{ boxShadow: "lg", transform: "scale(1.01)" }}
                 >
                   <VStack gap={1} align={"start"} mb={"1rem"}>
-                    <HStack>
+                    <HStack w={"70%"}>
                       <Box w={"100%"}>
                         <HStack align={"start"}>
-                          <Text fontSize="lg" fontWeight="medium">
-                            {customer.customer.firstName} {customer.customer.lastName}
-                          </Text>
-                          <Text>
-                          {customer.customer.phoneNumber && `(${customer.customer.phoneNumber.slice(0,3)}) ${customer.customer.phoneNumber.slice(3,6)}-${customer.customer.phoneNumber.slice(6,10)}`}
-                          </Text>
+                          <HStack wrap={"wrap"} w={"100%"} align={"start"} justify={"start"} alignItems={"end"}>
+                            <Text fontSize="lg" fontWeight="medium">
+                              {customer.customer.firstName} {customer.customer.lastName}
+                            </Text>
+                            <Text>
+                            {customer.customer.phoneNumber && `(${customer.customer.phoneNumber.slice(0,3)}) ${customer.customer.phoneNumber.slice(3,6)}-${customer.customer.phoneNumber.slice(6,10)}`}
+                            </Text>
+                          </HStack>
                             {allComplete ? (
                               <MotionBox
                               boxSize={4}
