@@ -4,8 +4,8 @@ import MyTable from '../components/MyTable';
 import SearchPopup from './SearchPopup';
 import Login from '../pages/Login';
 import Present from './Present/Present'
-import { useCustomers } from './context/CustomerContext'; // Import the context hook
-import { Hand } from "lucide-react";
+import { useCustomers } from './context/CustomerContext';
+import { PresentCountContext } from './context/PresentCountContext';
 
 const Navbar = ({
   isLoggedIn,
@@ -16,13 +16,15 @@ const Navbar = ({
   const [value, setValue] = useState("first");
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
   const [searchResults, setSearchResults] = useState([]);
+  const [present, setPresent] = useState([]);
+  const [presentCount, setPresentCount] = useState(0);
+  const [loading, setLoading] = useState(false);
 
-  // Use the context
+  // Customer context
   const {
     customers,
     selectedCustomer,
     setSelectedCustomer,
-    fetchCustomers,
     updateCustomerInState,
     deleteCustomerInState,
     limit,
@@ -31,45 +33,95 @@ const Navbar = ({
   } = useCustomers();
 
   const handleRefresh = () => {
-    setSearchResults(null)
-  }
-
+    setSearchResults(null);
+  };
 
   useEffect(() => {
-    handleRefresh()
-  },[])
+    handleRefresh();
+  }, []);
+
+  // Calculate present count whenever present changes
+  useEffect(() => {
+    if (present && Array.isArray(present)) {
+      const count = present.reduce((total, entry) => {
+        return total + (entry.pets ? entry.pets.length : 0);
+      }, 0);
+      setPresentCount(count);
+    }
+  }, [present]);
+
+  useEffect(() => {
+    const fetchPresent = async () => {
+      try {
+        setLoading(true);
+        const response = await fetch(`/db/getPresent`);
+        if (!response.ok) throw new Error("Network error");
+        const data = await response.json();
+        setPresent(data || []);
+      } catch (error) {
+        console.error("Error fetching present customers:", error);
+        setPresent([]);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchPresent();
+  }, []);
 
   return (
     <>
       {isLoggedIn ? (
-        <Box colorPalette={preferredColors} zIndex="1000" bg={{ base: "primarySurfaceL", _dark: "primarySurface" }} rounded={"2xl"} maxW={"800px"} justifySelf={"center"} w={"100%"}
-          position="relative" top={windowWidth > 800 ? "10%" : 0}
-          
+        <Box 
+          colorPalette={preferredColors} 
+          zIndex="1000" 
+          bg={{ base: "primarySurfaceL", _dark: "primarySurface" }} 
+          rounded={"2xl"} 
+          maxW={"800px"} 
+          justifySelf={"center"} 
+          w={"100%"}
+          position="relative" 
+          top={windowWidth > 800 ? "10%" : 0}
           data-state="open"
           _open={{
-          animationName: "fade-in, scale-in",
-          animationDuration: "300ms",
+            animationName: "fade-in, scale-in",
+            animationDuration: "300ms",
           }}
           _closed={{
-          animationName: "fade-out, scale-out",
-          animationDuration: "120ms",
+            animationName: "fade-out, scale-out",
+            animationDuration: "120ms",
           }}
-          
-          >
+        >
           <Tabs.Root value={value} onValueChange={(e) => setValue(e.value)} size="sm" variant="line"> 
             <Tabs.List>
               <Box display={"flex"} justifyContent={"space-between"} w={"100%"} alignContent={"center"} p={4}>
                 <Box className="tabs" display={"flex"}>
-                  <Tabs.Trigger fontSize={windowWidth > 500 ? "2xl" : "xl"} letterSpacing="wider" value="first"
-                    onClick={handleRefresh}>
+                  <Tabs.Trigger fontSize={windowWidth > 500 ? "2xl" : "xl"} letterSpacing="wider" value="first" onClick={handleRefresh}>
                     <Text>Customers</Text>
                   </Tabs.Trigger>
                   <Tabs.Trigger fontSize={windowWidth > 500 ? "2xl" : "xl"} letterSpacing="wider" value="second">
-                    <Text>Present</Text>
+                    <Text>Present 
+                      <IconButton 
+                        size={"sm"} 
+                        scale={0.6} 
+                        pos={"absolute"} 
+                        justifyContent={"center"} 
+                        alignSelf={"center"} 
+                        right={-5} 
+                        top={-3} 
+                        rounded={"3xl"}
+                        display={presentCount? "flex" : "none"}
+                      >
+                        <Text color={"white"} fontSize={"xl"} alignSelf={"center"}>{presentCount}</Text>
+                      </IconButton>
+                    </Text>
                   </Tabs.Trigger>
                 </Box>
                 <Box>
-                  <SearchPopup preferredColors={preferredColors} setSearchResults={setSearchResults} setValue={setValue}
+                  <SearchPopup 
+                    preferredColors={preferredColors} 
+                    setSearchResults={setSearchResults} 
+                    setValue={setValue}
                   />
                 </Box>
               </Box>
@@ -83,20 +135,21 @@ const Navbar = ({
               w={"100%"}
               h={"80svh"}
               overflowY={"auto"}
-              
             >
-              <MyTable
-                selectedCustomer={selectedCustomer}
-                setSelectedCustomer={setSelectedCustomer}
-                customers={customers}
-                preferredColors={preferredColors}
-                updateCustomerInState={updateCustomerInState}
-                deleteCustomerInState={deleteCustomerInState}
-                limit={limit}
-                offset={offset}
-                setOffset={setOffset}
-                searchResults={searchResults}
-              />
+              <PresentCountContext.Provider value={{ presentCount, setPresentCount }}>
+                <MyTable
+                  selectedCustomer={selectedCustomer}
+                  setSelectedCustomer={setSelectedCustomer}
+                  customers={customers}
+                  preferredColors={preferredColors}
+                  updateCustomerInState={updateCustomerInState}
+                  deleteCustomerInState={deleteCustomerInState}
+                  limit={limit}
+                  offset={offset}
+                  setOffset={setOffset}
+                  searchResults={searchResults}
+                />
+              </PresentCountContext.Provider>
             </Tabs.Content>
 
             <Tabs.Content
@@ -107,12 +160,13 @@ const Navbar = ({
               w={"100%"}
               h={"80svh"}
               overflowY={"auto"}
-              
             >
               <Present
                 value={value}
                 preferredColors={preferredColors}
-                />
+                present={present}
+                setPresent={setPresent}
+              />
             </Tabs.Content>
           </Tabs.Root>
         </Box>

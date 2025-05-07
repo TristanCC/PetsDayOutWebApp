@@ -13,8 +13,7 @@ import { Toaster, toaster } from "@/components/ui/toaster"
 
 import Records from "./Records";
 
-const Present = ({ value, preferredColors }) => {
-    const [present, setPresent] = useState([]);
+const Present = ({ value, preferredColors, present, setPresent }) => {
     const [loading, setLoading] = useState(false);
     const [completePets, setCompletePets] = useState([])
     const [recordsOpen, setRecordsOpen] = useState(false)
@@ -266,7 +265,7 @@ const Present = ({ value, preferredColors }) => {
                   </HStack>
                 </Box>
               )}) : <Text alignSelf={"center"}>No customers present</Text>}
-              <Button position={"relative"} m={"1rem"} visibility={present.length >= 1 ? "visible" : "hidden"} onClick={() => handleEndDay()}>End Day</Button>
+              <Button position={"relative"} m={"1rem"} visibility={present? present.length >= 1 ? "visible" : "hidden" : "hidden"} onClick={() => handleEndDay()}>End Day</Button>
 
             </VStack>
           )}

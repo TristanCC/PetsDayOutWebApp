@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback, useMemo } from "react";
+import { useState, useEffect, useCallback, useMemo, useContext } from "react";
 import { Tabs, VStack, Box, Text, IconButton, HStack, Table, Spinner, Separator, Button, Avatar, Checkbox, Portal, Image} from "@chakra-ui/react";
 import { Toaster, toaster } from "@/components/ui/toaster"
 import { motion } from "framer-motion";
@@ -6,6 +6,7 @@ import { LuCircleX, LuBookOpenCheck } from "react-icons/lu";
 import { EmptyState } from "@chakra-ui/react"
 import { FaDog } from "react-icons/fa6";
 import placeholderAvatar from "../assets/Dogavi.png";
+import { PresentCountContext } from './context/PresentCountContext';
 
 const MotionBox = motion(Box);
 
@@ -14,6 +15,7 @@ const MarkPresent = ({ selectedCustomer, setPresentOpen, preferredColors }) => {
     const [pets, setPets] = useState([]);
     const [selectedPets, setSelectedPets] = useState([]);
 
+    const {presentCount, setPresentCount} = useContext(PresentCountContext)
 
     const handleCheck = useCallback((pet) => {
         setSelectedPets((prev) =>
@@ -26,38 +28,38 @@ const MarkPresent = ({ selectedCustomer, setPresentOpen, preferredColors }) => {
     
     const handleConfirm = () => {
         const markPresent = async () => {
-            try {
-                setLoading(true);
-                const response = await fetch(`/db/markPresent`, {
-                    method: "POST",
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                // Change the body of the fetch request to:
-                body: JSON.stringify({
-                    customer: selectedCustomer.id,
-                    pets: selectedPets.map(p => p.id) // Just send the IDs directly
-                })
-                                       
-                });
-                if (!response.ok) throw new Error("Network error");
-                const data = await response.json();
-                
-            } catch (error) {
-                console.error("Error marking present:", error);
-            } finally {
-                const namesString = selectedPets.map((pet) => pet.name).join(`, `)
-                toaster.create({
-                    title: `Marked Present successfully`,
-                    description: `${namesString}`,
-                    type: "success"
-                })
-                setLoading(false);
-                setPresentOpen(false)
-            }
+          try {
+            setLoading(true);
+            const response = await fetch(`/db/markPresent`, {
+              method: "POST",
+              headers: {
+                'Content-Type': 'application/json'
+              },
+              body: JSON.stringify({
+                customer: selectedCustomer.id,
+                pets: selectedPets.map(p => p.id)
+              })              
+            });
+            if (!response.ok) throw new Error("Network error");
+            
+            // Update the count based on previous value
+            setPresentCount(prev => prev + selectedPets.length);
+            
+            const namesString = selectedPets.map((pet) => pet.name).join(`, `)
+            toaster.create({
+              title: `Marked Present successfully`,
+              description: `${namesString}`,
+              type: "success"
+            });
+          } catch (error) {
+            console.error("Error marking present:", error);
+          } finally {
+            setLoading(false);
+            setPresentOpen(false);
+          }
         };
-        markPresent()
-    }
+        markPresent();
+      }
 
     useEffect(() => {
         const fetchPets = async () => {
