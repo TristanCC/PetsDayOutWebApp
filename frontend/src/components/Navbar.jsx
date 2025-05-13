@@ -1,4 +1,4 @@
-import { Tabs, VStack, Box, Text, IconButton } from "@chakra-ui/react";
+import { Tabs, VStack, Box, Text, IconButton, Icon, HStack } from "@chakra-ui/react";
 import { useState, useEffect } from "react";
 import MyTable from '../components/MyTable';
 import SearchPopup from './SearchPopup';
@@ -6,6 +6,8 @@ import Login from '../pages/Login';
 import Present from './Present/Present'
 import { useCustomers } from './context/CustomerContext';
 import { PresentCountContext } from './context/PresentCountContext';
+import { FaTableList } from "react-icons/fa6";
+import { FaUserClock } from "react-icons/fa";
 
 const Navbar = ({
   isLoggedIn,
@@ -97,24 +99,30 @@ const Navbar = ({
               <Box display={"flex"} justifyContent={"space-between"} w={"100%"} alignContent={"center"} p={4}>
                 <Box className="tabs" display={"flex"}>
                   <Tabs.Trigger fontSize={windowWidth > 500 ? "2xl" : "xl"} letterSpacing="wider" value="first" onClick={handleRefresh}>
-                    <Text>Customers</Text>
+                    <HStack>
+                      <Icon size={"xl"}><FaTableList/></Icon>
+                      <Text display={{smDown: "none", md: "block", lg: "block"}}>Customers</Text>
+                    </HStack>
                   </Tabs.Trigger>
                   <Tabs.Trigger fontSize={windowWidth > 500 ? "2xl" : "xl"} letterSpacing="wider" value="second">
-                    <Text>Present 
-                      <IconButton 
-                        size={"sm"} 
-                        scale={0.6} 
-                        pos={"absolute"} 
-                        justifyContent={"center"} 
-                        alignSelf={"center"} 
-                        right={-5} 
-                        top={-3} 
-                        rounded={"3xl"}
-                        display={presentCount? "flex" : "none"}
-                      >
-                        <Text color={"white"} fontSize={"xl"} alignSelf={"center"}>{presentCount}</Text>
-                      </IconButton>
-                    </Text>
+                    <HStack>
+                      <Icon size={"xl"}><FaUserClock/></Icon>
+                      <Text display={{smDown: "none", md: "block", lg: "block"}}>Present </Text>
+                        <IconButton
+                          size={"sm"}
+                          scale={0.6}
+                          pos={"absolute"}
+                          justifyContent={"center"}
+                          alignSelf={"center"}
+                          right={-5}
+                          top={-3}
+                          rounded={"3xl"}
+                          display={presentCount? "flex" : "none"}
+                        >
+                          <Text  color={"white"} fontSize={"xl"} alignSelf={"center"}>{presentCount}</Text>
+                        </IconButton>
+                      
+                    </HStack>
                   </Tabs.Trigger>
                 </Box>
                 <Box>

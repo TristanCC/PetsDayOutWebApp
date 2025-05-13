@@ -2,7 +2,7 @@ import { Box, Button, IconButton, HStack, Input, Text } from "@chakra-ui/react";
 import { EmptyState } from "@/components/ui/empty-state";
 import { GiSniffingDog } from "react-icons/gi";
 import { LuCircleX } from "react-icons/lu";
-import CreatePet from "./CreatePet";
+import CreatePet from "./CreatePet2";
 
 import {
     PopoverArrow,

@@ -101,7 +101,7 @@ const seedData = async () => {
 
 const resetAndSeed = async () => {
   await resetDatabase();  // Reset the database before seeding
-  await seedData();       // Then seed the database
+  //await seedData();       // Then seed the database
 };
 
 resetAndSeed();

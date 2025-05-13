@@ -96,7 +96,7 @@ const MarkPresent = ({ selectedCustomer, setPresentOpen, preferredColors }) => {
         
                 >
                         <Avatar.Fallback name={pet.name} />
-                        <Avatar.Image src={pet.photoUrl ? pet.photoUrl:placeholderAvatar} />
+                        <Avatar.Image src={pet.photoUrl} />
                     </Avatar.Root>
                 </Table.Cell>
                 <Table.Cell overflow="hidden" whiteSpace="nowrap" textAlign={"start"}>

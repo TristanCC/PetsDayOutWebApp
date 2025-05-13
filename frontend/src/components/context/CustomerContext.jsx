@@ -17,6 +17,7 @@ export const CustomerProvider = ({ children }) => {
     try {
       const response = await fetch(`/db/getCustomers?limit=${limit}&offset=${offset}`);
       const data = await response.json();
+      console.log(data)
       setCustomers(data);
     } catch (error) {
       console.error('Error fetching customers:', error);
@@ -35,19 +36,30 @@ export const CustomerProvider = ({ children }) => {
   };
 
 
-  const updateCustomerInState = (updatedCustomer) => {
-    setCustomers((prevCustomers) =>
-      prevCustomers.map((customer) =>
-        customer.id === updatedCustomer.id ? updatedCustomer : customer
-      )
-    );
-  };
-
+const updateCustomerInState = (updatedCustomer) => {
+  setCustomers(prevCustomers =>
+    prevCustomers.map(customer =>
+      customer.id === updatedCustomer.id ? updatedCustomer : customer
+    )
+  );
+};
   const deleteCustomerInState = (deletedCustomer) => {
     setCustomers((prevCustomers) =>
       prevCustomers.filter((customer) => customer.id !== deletedCustomer.id)
     );
   };
+
+  const updatePetsForCustomer = (customerId, groupID, updatedPets) => {
+  setCustomers(prevCustomers => 
+    prevCustomers.map(customer => 
+      customer.id === customerId || groupID == customer.groupID
+        ? { ...customer, pets: updatedPets }
+        : customer
+    )
+  );
+};
+
+  
 
   useEffect(() => {
     fetchCustomers();
@@ -64,6 +76,7 @@ export const CustomerProvider = ({ children }) => {
         fetchCustomers,
         updateCustomerInState,
         deleteCustomerInState,
+        updatePetsForCustomer,
         groupID,
         fetchGroupID
       }}

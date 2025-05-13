@@ -28,6 +28,7 @@ import useLinkCustomers from "./useLinkCustomers";
 import { Dog } from "lucide-react";
 
 import Records from "../Present/Records";
+import { useCustomers } from "../context/CustomerContext";
 
 const PetListDisplay = ({ pets, setPets, createPetPressed, setCreatePetPressed, closePetsPanel, customer,
    handleBack, reloadPets, preferredColors, didLinkCustomer, setDidLinkCustomer }) => {
@@ -39,25 +40,24 @@ const PetListDisplay = ({ pets, setPets, createPetPressed, setCreatePetPressed, 
     const [selectedPet, setSelectedPet] = useState({})
     
     const { searchResults, handleSearch } = useLinkCustomers(didLinkCustomer, setDidLinkCustomer, reloadPets);
+    const { updateCustomerInState } = useCustomers()
     
-    const handleDeletion = async (petID) => {
-      try {
-        alert(petID)
-        fetch(`/db/deletePet/${petID}`, {
-          method: "DELETE",
-          headers: {
-            "Content-Type": "application/json"
-          }
-        })
-        const newPets = 
-          pets.filter((pet) => {
-            return pet.id !== petID
-          })
-        setPets(newPets)
-      } catch(error) {
-        console.error("error:",error)
-      }
-    }
+// In PetListDisplay.jsx
+const handleDeletion = async (petID) => {
+  // Optimistically update
+  const updatedCustomer = {
+    ...customer,
+    pets: customer.pets.filter(p => p.id !== petID)
+  };
+  updateCustomerInState(updatedCustomer);
+
+  try {
+    await fetch(`/db/deletePet/${petID}`, { method: "DELETE" });
+  } catch (error) {
+    // Rollback on error
+    updateCustomerInState(customer);
+  }
+};
 
     const handleRecords = (pet) => {
       setSelectedPet(pet)
@@ -132,7 +132,7 @@ const PetListDisplay = ({ pets, setPets, createPetPressed, setCreatePetPressed, 
                             
                           <Avatar.Root shape="rounded" size="2xl">
                               <Avatar.Fallback name={item.name} />
-                              <Avatar.Image src={item.photoUrl ? item.photoUrl : placeholderAvatar} />
+                              <Avatar.Image src={item.photoUrl} />
                             </Avatar.Root>
                             <VStack align={"start"} flex={1}>
                               <Text fontSize="2xl" fontWeight="light"><HStack>{item.name} {item.sex === "male" ? <BsGenderMale/> : <BsGenderFemale/>} </HStack></Text>
@@ -216,8 +216,16 @@ const PetListDisplay = ({ pets, setPets, createPetPressed, setCreatePetPressed, 
             </>
             
           ) : (
-            <CreatePet customer={customer} setCreatePetPressed={handleBack} onPetCreated={() => { setCreatePetPressed(false); reloadPets(); }}
-             petToEdit={petToEdit} setPetToEdit={setPetToEdit}/>
+<CreatePet 
+  customer={customer}
+  setCreatePetPressed={handleBack}
+  onPetCreated={() => {
+    setCreatePetPressed(false);
+    reloadPets(); // Simply refresh the pet list
+  }}
+  petToEdit={petToEdit}
+  setPetToEdit={setPetToEdit}
+/>
           )}
         </Box>
       </Box>

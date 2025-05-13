@@ -4,6 +4,7 @@ import Group from '../models/Group.js';
 import Present from '../models/Present.js'
 import { Op, Sequelize } from 'sequelize';
 
+
 export const createCustomer = async (req, res) => {
   const { firstName, middleName, lastName, email, phoneNumber, customerComment } = req.body;
 
@@ -66,45 +67,105 @@ export const getCustomer = async (req, res) => {
 }
 
 export const getCustomers = async (req, res) => {
-  const { limit, offset } = req.query;
+  const { limit = 20, offset = 0 } = req.query;
+
   try {
-    const customers = await Customer.findAll({
-      limit: parseInt(limit),
-      offset: parseInt(offset),
-      order: [
-        [Sequelize.fn('lower', Sequelize.col('lastName')), 'ASC'] // <- sort case-insensitively
-      ]
+const customers = await Customer.findAll({
+  limit,
+  offset,
+  subQuery: false,
+  include: [
+    {
+      model: Pet,
+      through: { attributes: [] },
+    },
+    {
+      model: Group,
+      include: [
+        {
+          model: Customer,
+          as: "Customers",
+          include: [
+            {
+              model: Pet,
+              through: { attributes: [] },
+            },
+          ],
+        },
+      ],
+    },
+  ],
+  order: [['lastName', 'ASC']],
+});
+
+  
+    console.log("RAW customers length:", customers.length);
+    const plain = customers.map(c => c.get({ plain: true }));
+
+    const merged = plain.map(customer => {
+    // 1) direct pets
+    const direct = customer.Pets || [];
+
+    // 2) collect pets from group-mates
+    const indirect = (customer.Group?.Customers || [])
+      // skip the primary customer themself, just in case
+      .filter(c2 => c2.id !== customer.id)
+      // pull out each c2.Pets array (might be empty)
+      .flatMap(c2 => c2.Pets || []);
+
+    // 3) merge + dedupe by pet.id
+    const all = [...direct, ...indirect];
+    const seen = new Set();
+    const deduped = all.filter(pet => {
+      if (seen.has(pet.id)) return false;
+      seen.add(pet.id);
+      return true;
     });
 
-    const plainCustomers = customers.map(customer => customer.toJSON());
-    res.json(plainCustomers);
-  } catch (error) {
-    console.error('Error fetching customers:', error);
-    res.status(500).json({ error: 'Failed to fetch customers. Please try again later.' });
+    // 4) return a new customer object with only the fields you want
+    return {
+      id:           customer.id,
+      firstName:    customer.firstName,
+      lastName:     customer.lastName,
+      email:        customer.email,
+      phoneNumber: customer.phoneNumber,
+      groupID: customer.groupID,
+      // … any other top-level customer fields …
+      pets:         deduped,
+      // (optional) if you don’t need the group nest thereafter you can omit it
+    };
+  });
+      console.log(merged)
+      console.log(merged.map((guy) => guy.pet))
+
+      res.json(merged);
+    } catch (error) {
+      console.error('Error fetching customers:', error);
+      res.status(500).json({ error: 'Failed to fetch customers. Please try again later.' });
+    }
+  };
+
+
+  const sanitizeNames = (names) => {
+    return names.map((name) => name.toLowerCase()); // Convert everything to lowercase
   }
-};
 
 
-const sanitizeNames = (names) => {
-  return names.map((name) => name.toLowerCase()); // Convert everything to lowercase
-}
-
-
-const searchFirstAndLast = async (firstName, lastName) => {
-  const namesToSanitize = [firstName, lastName]
-  const names = sanitizeNames(namesToSanitize)
-  try {
-    const customer = await Customer.findAll({
-      where: {
-        firstName: { [Op.iLike]: `%${names[0]}%` },
-        lastName: { [Op.iLike]: `%${names[1]}%` }
-      }
-    })
-    return customer
-  } catch (error) {
-    console.error('Error fetching customers:', error);
+  const searchFirstAndLast = async (firstName, lastName) => {
+    const namesToSanitize = [firstName, lastName]
+    const names = sanitizeNames(namesToSanitize)
+    try {
+      const customer = await Customer.findAll({
+        where: {
+          firstName: { [Op.iLike]: `%${names[0]}%` },
+          lastName: { [Op.iLike]: `%${names[1]}%` }
+        }
+      })
+      return customer
+    } catch (error) {
+      console.error('Error fetching customers:', error);
+    }
   }
-}
 
 const searchFirst = async (firstName) => {
   const namesToSanitize = [firstName]
@@ -195,15 +256,21 @@ export const updateCustomer = async (req, res) => {
   try {
     console.log("recieved id: ", id);
     // Corrected model reference and assignment
-    const customer = await Customer.findOne({ where: { id: `${id}` } });
+    const customer = await Customer.findOne({ where: { id: `${id}` },
+        include: [
+      {
+        model: Pet,
+        through: { attributes: [] },
+      },
+      {
+        model: Group,
+      }],});
 
     if (!customer) {
       return res.status(404).json({ error: 'Customer not found' });
     }
     
     await customer.update({ firstName, middleName, lastName, email, phoneNumber, customerComment });
-
-    console.log('Customer updated successfully!!!');
     
     res.json(customer.toJSON());  // Return updated customer
   } catch (error) {

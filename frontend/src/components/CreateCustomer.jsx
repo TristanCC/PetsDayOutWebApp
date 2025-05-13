@@ -46,7 +46,7 @@ const CreateCustomer = ({ setCustomerInfoOpen }) => {
           onChange={(e) => setValue(e.target.value)}
           placeholder={label === "Phone Number" ? "(999) 999-9999" : label}
           ref={label === "Phone Number" ? withMask("(999) 999-9999") : null}
-          backgroundColor={{ base: "primaryL", _dark: "primary" }}
+          backgroundColor={{ base: "primarySurfaceL", _dark: "primarySurface" }}
         />
       </HStack>
     </Field>
@@ -362,7 +362,7 @@ const CreateCustomer = ({ setCustomerInfoOpen }) => {
                               onChange={(e) => setLinkPhoneNumber(e.target.value)}
                               placeholder={"(999) 999-9999"}
                               ref={withMask("(999) 999-9999")}
-                              backgroundColor={{ base: "primaryL", _dark: "primary" }}
+                              backgroundColor={{ base: "primarySurfaceL", _dark: "primarySurface" }}
                             />
                             <Button disabled={linkPhoneNumber.replace(/\D/g, "").length < 10} onClick={handleVerify} backgroundColor={verifiedLink? "green.500" : "blue.500"}>
                               {verifiedLink ? "Verified!" : "Verify"}

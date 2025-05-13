@@ -21,7 +21,8 @@ Pet.belongsToMany(Customer, {
 
 // Association between Customer and Group
 Customer.belongsTo(Group, { foreignKey: 'groupID' }); // Customer belongs to a Group
-Group.hasMany(Customer, { foreignKey: 'groupID' });   // Group has many Customers
+Group.hasMany(Customer, { foreignKey: 'groupID', as: 'Customers' });
+
 
 // Association between CustomerPet and Pet
 CustomerPet.belongsTo(Pet, { foreignKey: 'petID' }); // CustomerPet belongs to Pet

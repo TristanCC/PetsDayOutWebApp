@@ -1,5 +1,3 @@
-"use client"
-
 import { Box, Table, Text, Button, Flex } from "@chakra-ui/react"
 import { EmptyState, List, VStack, HStack, IconButton } from "@chakra-ui/react"
 import { HiColorSwatch } from "react-icons/hi"
@@ -10,6 +8,8 @@ import { Box as ChakraBox } from "@chakra-ui/react";
 import CreateCustomer from "./CreateCustomer"
 import { FaArrowRight } from "react-icons/fa";
 import { FaArrowLeft } from "react-icons/fa";
+import PetPills from './Pet/PetPills';
+
 
 const MyTable = ({
   selectedCustomer,
@@ -23,6 +23,10 @@ const MyTable = ({
   setOffset,
   searchResults,
 }) => {
+  const catppuccinPastelRainbow = [
+    "#89b4fa", "#74c7ec", "#94e2d5", "#a6e3a1", 
+    "#f9e2af", "#fab387", "#eba0ac", "#f5c2e7", "#cba6f7"
+];
   
   const MotionBox = motion(ChakraBox);
   const [selection, setSelection] = useState([])
@@ -58,6 +62,8 @@ const MyTable = ({
     </Box>
   )
 
+  const MAX_VISIBLE_PETS = 3
+
   const renderRows = (data) =>
     data.map((customer) => (
       <Table.Row
@@ -67,6 +73,7 @@ const MyTable = ({
         bg={{ base: "primaryMidpointL", _dark: "primaryMidpoint" }}
         _odd={{bg: {base: "primarySurfaceL", _dark: "primarySurface"}}}
         w={"100%"}
+        cursor={"default"}
       >
         <Table.Cell>
           <Text fontWeight={"medium"} zIndex={200} pos={"relative"}>
@@ -79,10 +86,13 @@ const MyTable = ({
           </Text>
         </Table.Cell>
         <Table.Cell className="email">
-          <Text zIndex={200} pos={"relative"}>
-            {customer.email ?? ""}
-          </Text>
+          {customer.pets?.length > 0 ? (
+            <PetPills customer={customer} pets={customer.pets} maxVisible={MAX_VISIBLE_PETS} />
+          ) : (
+            <Text fontStyle="italic" color="gray.500">N/A</Text>
+          )}
         </Table.Cell>
+
         <Table.Cell zIndex={200}>
           <MenuRoot1
             customer={customer}
@@ -119,16 +129,16 @@ const MyTable = ({
         overflow="auto"
       >
         <Table.Root  interactive stickyHeader scrollBehavior={"smooth"}  overflow={"hidden"}>
-          <Table.Header bg={{ base: "white", _dark: "primary" }}>
+          <Table.Header bg={{ base: "white", _dark: "primary" }} fontSize={"md"}>
             <Table.Row alignItems={"center"} bg={{ base: "white", _dark: "primaryMidpoint" }}>
               <Table.ColumnHeader className="columnHeader">
                 <Text>Name</Text>
               </Table.ColumnHeader>
               <Table.ColumnHeader className="columnHeader">
-                <Text>Phone Number</Text>
+                <Text>Number</Text>
               </Table.ColumnHeader>
               <Table.ColumnHeader className="columnHeader email">
-                <Text>Email</Text>
+                <Text>Pets</Text>
               </Table.ColumnHeader>
               <Table.ColumnHeader w={"6"} className="columnHeader" />
             </Table.Row>

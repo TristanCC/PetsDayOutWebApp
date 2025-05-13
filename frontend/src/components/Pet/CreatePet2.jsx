@@ -18,6 +18,7 @@ import { FaCamera } from "react-icons/fa6";
 import { motion } from "framer-motion";
 import { Toaster, toaster } from "@/components/ui/toaster"
 import { BsGenderFemale, BsGenderMale } from "react-icons/bs";
+import { useCustomers } from "../context/CustomerContext";
 
 import { v4 as uuidv4 } from 'uuid';
 
@@ -146,6 +147,8 @@ const CreatePet2 = ({ customer, setCreatePetPressed, onPetCreated, petToEdit, se
     setImageFile(null)
   };
 
+  const {updateCustomerInState, updatePetsForCustomer} = useCustomers()
+
   
   async function uploadToS3(file) {
     try {
@@ -250,7 +253,14 @@ const CreatePet2 = ({ customer, setCreatePetPressed, onPetCreated, petToEdit, se
           body: JSON.stringify(petData),
         });
         if (!res.ok) throw new Error("Network response was not ok");
-        onPetCreated();
+        // After successful API call in CreatePet2.jsx
+onPetCreated(updatedPet => {
+  // Only update the specific customer
+  updateCustomerInState({
+    ...customer,
+    pets: [...(customer.pets || []), updatedPet]
+  });
+});
       } catch (error) {
         console.error("Error creating/updating pet:", error);
         // Optionally show error to user
@@ -261,6 +271,7 @@ const CreatePet2 = ({ customer, setCreatePetPressed, onPetCreated, petToEdit, se
         });
       }
     } else {
+
       toaster.create({
         title: `Pet added to ${customer.firstName}`,
         description: "Pet has been successfully added.",
@@ -326,64 +337,98 @@ const CreatePet2 = ({ customer, setCreatePetPressed, onPetCreated, petToEdit, se
                 />
               </Field>
             </HStack>
-            <HStack w={"100%"}>
-              <Field label="Picture">
-              <Box w={"100%"}>
-                <Box display={"flex"} justifyContent={"space-between"} w={"100%"} bg={{_dark: "primarySurface", base: "primaryL"}} rounded={"md"}>
-                  <InputGroup
-                  w={"100%"}
-                    startElement={<FaCamera />}
-                    endElement={
-                      previewSrc && (
-                        <CloseButton
-                          zIndex={99999}
-              
-                          me="-1"
-                          size="xs"
-                          variant="solid"
-                          focusVisibleRing="inside"
-                          focusRingWidth="2px"
-                          pointerEvents="auto"
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            setImageFile(null);
-                            setPreviewSrc(null);
-                          }}
-                        />
-                      )
-                    }
-                  >
-                    <Text flex ml={"2rem"} px={2} py={3} noOfLines={1} overflow={"clip"} textOverflow={"ellipsis"} textWrap={"nowrap"} w={"60%"}>
-                      {imageFile ? imageFile.name : "Select an image"}
-                    </Text>
-                  </InputGroup>
-                  <input
-                    type="file"
-                    ref={fileInputRef}
-                    onChange={handleFileChange}
-                    accept="image/jpeg"
-                    style={{
-                      position: 'absolute',
-                      top: 0,
-                      left: 0,
-                      width: '80%',
-                      height: '100%',
-                      opacity: 0,
-                      cursor: 'pointer',
-                      overflow: 'hidden',
-                      textWrap: "nowrap"
-                    }}
-                  />
-                </Box>
-              </Box>
-            </Field>
-            <Field label="Sex" required flex={1}>
-                <HStack>
-                  <IconButton onClick={() => handleClickSex("female")} variant={sex == "female" ? "solid" : "outline"}><BsGenderFemale/></IconButton>
-                  <IconButton onClick={() => handleClickSex("male")} variant={sex == "male" ? "solid" : "outline"}><BsGenderMale/></IconButton>
-                </HStack>
-              </Field>
-            </HStack>
+<HStack w="100%" alignItems="flex-start">
+  <Box flex={1}>
+    <Field label="Picture" flex={1}>
+      <Box position="relative" w="100%">
+        <Box
+          display="flex"
+          justifyContent="space-between"
+          alignItems="center"
+          bg={{ _dark: "primarySurface", base: "primaryL" }}
+          rounded="md"
+          overflow="hidden"
+          position="relative"
+          height="3rem"
+          px={2}
+    
+        >
+          <InputGroup
+            height="100%"
+            alignItems="center"
+            flex="1"
+            startElement={<FaCamera />}
+            endElement={
+              previewSrc && (
+                <CloseButton
+                  zIndex={1}
+                  me="-1"
+                  size="xs"
+                  variant="solid"
+                  focusVisibleRing="inside"
+                  focusRingWidth="2px"
+                  pointerEvents="auto"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setImageFile(null);
+                    setPreviewSrc(null);
+                  }}
+                />
+              )
+            }
+          >
+            <Text
+              ml="2rem"
+              px={2}
+              noOfLines={1}
+              overflow="hidden"
+              textOverflow="ellipsis"
+              whiteSpace="nowrap"
+              maxW="6rem"
+            >
+              {imageFile ? imageFile.name : "Select an image"}
+            </Text>
+          </InputGroup>
+          <input
+            type="file"
+            ref={fileInputRef}
+            onChange={handleFileChange}
+            accept="image/jpeg"
+            style={{
+              position: "absolute",
+              top: 0,
+              left: 0,
+              width: "70%",
+              height: "100%",
+              opacity: 0,
+              cursor: "pointer",
+            }}
+          />
+        </Box>
+      </Box>
+    </Field>
+  </Box>
+
+  <Box>
+    <Field label="Sex" required flex={1}>
+      <HStack>
+        <IconButton
+          onClick={() => {handleClickSex("female"); }}
+          variant={sex === "female" ? "solid" : "outline"}
+        >
+          <BsGenderFemale />
+        </IconButton>
+        <IconButton
+          onClick={() => handleClickSex("male")}
+          variant={sex === "male" ? "solid" : "outline"}
+        >
+          <BsGenderMale />
+          </IconButton>
+      </HStack>
+    </Field>
+  </Box>
+</HStack>
+
             <Field label="Size" required></Field>
           </VStack>
           <HStack
@@ -454,7 +499,7 @@ const CreatePet2 = ({ customer, setCreatePetPressed, onPetCreated, petToEdit, se
             onClick={(e) => handleSubmit(e)}
             w={"100%"}
             variant={"outline"}
-            disabled={name === "" || breed === "" || sizeButton === null || sex === ""}
+            disabled={name === "" || breed === "" || sizeButton === null || sex == ""}
           >
             Save
           </Button>
