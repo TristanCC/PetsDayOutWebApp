@@ -206,7 +206,7 @@ const CreatePet2 = ({ customer, setCreatePetPressed, onPetCreated, petToEdit, se
     e.preventDefault();
   
     // 1) If the user selected a new file, upload it and get back the S3 URL
-    let photoUrl = image;  // start with existing URL (if editing)
+    let photoUrl = image || null;  // start with existing URL (if editing)
     if (imageFile) {
       try {
         photoUrl = await uploadToS3(imageFile);
@@ -245,6 +245,7 @@ const CreatePet2 = ({ customer, setCreatePetPressed, onPetCreated, petToEdit, se
     // 4) Send to your DB endpoint
     if (!isCreatingCustomer) {
       try {
+        
         const endpoint = petToEdit?.id ? "/db/updatePet" : "/db/createPet";
         const method = petToEdit?.id ? "PUT" : "POST";
         const res = await fetch(endpoint, {
@@ -252,30 +253,28 @@ const CreatePet2 = ({ customer, setCreatePetPressed, onPetCreated, petToEdit, se
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify(petData),
         });
+              toaster.create({
+        title: `Pet saved!`,
+      });
         if (!res.ok) throw new Error("Network response was not ok");
         // After successful API call in CreatePet2.jsx
-onPetCreated(updatedPet => {
-  // Only update the specific customer
-  updateCustomerInState({
-    ...customer,
-    pets: [...(customer.pets || []), updatedPet]
-  });
-});
-      } catch (error) {
-        console.error("Error creating/updating pet:", error);
-        // Optionally show error to user
-        toaster.create({
-          title: "Error saving pet",
-          description: error.message,
-          type: "error"
-        });
+          onPetCreated(updatedPet => {
+            // Only update the specific customer
+            updateCustomerInState({
+              ...customer,
+              pets: [...(customer.pets || []), updatedPet]
+            });
+          });
+          } catch (error) {
+             console.error("Error creating/updating pet:", error);
+             // Optionally show error to user
+             toaster.create({
+               title: "Error saving pet",
+               description: error.message,
+               type: "error"
+             });
       }
     } else {
-
-      toaster.create({
-        title: `Pet added to ${customer.firstName}`,
-        description: "Pet has been successfully added.",
-      });
       clearPets();
     }
   }

@@ -45,6 +45,7 @@ const SearchPopup = ({
       );
       const data = await response.json();
       // Always set as an array, even if empty.
+      console.log(data)
       setSearchResults(data);
       setValue("first")
     } catch (error) {

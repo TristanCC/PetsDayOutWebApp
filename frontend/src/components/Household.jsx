@@ -25,6 +25,9 @@ import { withMask } from "use-mask-input";
 
 import LoadingState from "./Pet/LoadingState";
 import { Spinner } from "@chakra-ui/react";
+import { FaRegTrashCan } from "react-icons/fa6";
+import { IoPersonRemoveOutline } from "react-icons/io5";
+import { Toaster, toaster } from "@/components/ui/toaster"
 
 const Household = ({ customer, closeHouseholdPanel, preferredColors }) => {
   const MotionBox = motion(ChakraBox);
@@ -35,15 +38,30 @@ const Household = ({ customer, closeHouseholdPanel, preferredColors }) => {
   const [householdPets, setHouseholdPets] = useState([]);
   const [deleteMode, setDeleteMode] = useState(false)
 
-  const handleOwnerDelete = async () => {
+const handleRemoveFromHousehold = async (memberId, groupId) => {
+  try {
+    const response = await fetch(`/db/removeFromHousehold/${memberId}/${groupId}`, {
+      method: "POST"
+    });
 
-    // handle case where 
-    try {
-        const response = await fetch('/db/deleteOwner')
-    } catch (error) {
-        console.error("error deleting owner", error)
+    if (!response.ok) {
+      const errorData = await response.json().catch(() => ({}));
+      console.error("Error removing from household:", errorData.message || response.statusText);
+      return;
     }
+
+    toaster.create({
+      title: "Successfully removed from group.",
+    });
+
+    // Refresh household list without full reload
+    setHouseholdMembers(prev => prev.filter(m => m.id !== memberId));
+  } catch (error) {
+    console.error("Error deleting owner:", error);
   }
+};
+
+
 
   useEffect(() => {
     // on mount get data from /db/getHousehold route
@@ -63,7 +81,7 @@ const Household = ({ customer, closeHouseholdPanel, preferredColors }) => {
       }
     };
     fetchHouseholdMembers();
-  }, [groupID]);
+  }, []);
 
   const renderHousehold = (data) => {
     return data.map((member) => {
@@ -80,12 +98,13 @@ const Household = ({ customer, closeHouseholdPanel, preferredColors }) => {
             {`(${member.phoneNumber.slice(0, 3)}) ${member.phoneNumber.slice(3,6)}-${member.phoneNumber.slice(6, 10)}`}
           </Text>
           <IconButton
-            size="xs"
+            size="lg"
             aria-label="Remove"
+            variant={"ghost"}
             flexShrink={0} // Prevents button from shrinking
-            visibility={deleteMode ? "visible" : "hidden"}
+            onClick={() => handleRemoveFromHousehold(member.id, member.groupID)}
           >
-            x
+            <IoPersonRemoveOutline  />
           </IconButton>
         </HStack>
       );

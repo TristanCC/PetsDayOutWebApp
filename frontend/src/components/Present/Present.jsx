@@ -10,6 +10,8 @@ import { LuArchive } from "react-icons/lu";
 import { PiDog, PiDogBold } from "react-icons/pi";
 import { FaCircle } from "react-icons/fa";
 import { Toaster, toaster } from "@/components/ui/toaster"
+import { EmptyState } from "@chakra-ui/react"
+import { GiPartyPopper } from "react-icons/gi";
 
 import Records from "./Records";
 
@@ -110,7 +112,7 @@ const Present = ({ value, preferredColors, present, setPresent }) => {
     }, [openPopoverId]);
 
     return (
-      <VStack w={"100%"} rounded={"md"} bg={{ base: "primaryL", _dark: "primaryMidpoint" }} display={"flex"} flexDir={"column"} alignItems={"center"} justifyContent={"space-between"} m={"1rem"} position={"relative"}>
+      <VStack w={"100%"} h={"100%"}  overflowY="auto" rounded={"md"} bg={{ base: "primaryL", _dark: "primaryMidpoint" }} display={"flex"} flexDir={"column"} alignItems={"center"} justifyContent={"space-between"} m={"1rem"} position={"relative"}>
           {loading ? (
               <HStack justifyContent="center" justifyItems="center">
                 <Spinner />
@@ -264,7 +266,14 @@ const Present = ({ value, preferredColors, present, setPresent }) => {
                     ))}
                   </HStack>
                 </Box>
-              )}) : <Text alignSelf={"center"}>No customers present</Text>}
+              )}) : 
+              <EmptyState.Root>
+                <EmptyState.Content>
+                  <EmptyState.Indicator> <GiPartyPopper/> </EmptyState.Indicator>
+                  <EmptyState.Title >No more pets!</EmptyState.Title>
+                  <EmptyState.Description >Enjoy the rest of your day or mark some pets present.</EmptyState.Description>
+                </EmptyState.Content>
+              </EmptyState.Root>}
               <Button position={"relative"} m={"1rem"} visibility={present? present.length >= 1 ? "visible" : "hidden" : "hidden"} onClick={() => handleEndDay()}>End Day</Button>
 
             </VStack>

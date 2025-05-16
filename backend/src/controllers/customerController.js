@@ -2,7 +2,7 @@ import Customer from '../models/Customer.js';
 import Pet from '../models/Pet.js'
 import Group from '../models/Group.js';
 import Present from '../models/Present.js'
-import { Op, Sequelize } from 'sequelize';
+import { Op, Sequelize, where } from 'sequelize';
 
 
 export const createCustomer = async (req, res) => {
@@ -66,40 +66,8 @@ export const getCustomer = async (req, res) => {
   }
 }
 
-export const getCustomers = async (req, res) => {
-  const { limit = 20, offset = 0 } = req.query;
-
-  try {
-const customers = await Customer.findAll({
-  limit,
-  offset,
-  subQuery: false,
-  include: [
-    {
-      model: Pet,
-      through: { attributes: [] },
-    },
-    {
-      model: Group,
-      include: [
-        {
-          model: Customer,
-          as: "Customers",
-          include: [
-            {
-              model: Pet,
-              through: { attributes: [] },
-            },
-          ],
-        },
-      ],
-    },
-  ],
-  order: [['lastName', 'ASC']],
-});
-
-  
-    console.log("RAW customers length:", customers.length);
+function dedupe(customers) {
+      console.log("RAW customers length:", customers.length);
     const plain = customers.map(c => c.get({ plain: true }));
 
     const merged = plain.map(customer => {
@@ -134,9 +102,45 @@ const customers = await Customer.findAll({
       pets:         deduped,
       // (optional) if you don’t need the group nest thereafter you can omit it
     };
-  });
+})
+ return merged
+}
+
+export const getCustomers = async (req, res) => {
+  const { limit = 20, offset = 0 } = req.query;
+
+  try {
+const customers = await Customer.findAll({
+  limit,
+  offset,
+  subQuery: false,
+  include: [
+    {
+      model: Pet,
+      through: { attributes: [] },
+    },
+    {
+      model: Group,
+      include: [
+        {
+          model: Customer,
+          as: "Customers",
+          include: [
+            {
+              model: Pet,
+              through: { attributes: [] },
+            },
+          ],
+        },
+      ],
+    },
+  ],
+  order: [['lastName', 'ASC']],
+});
+
+  
+      const merged = dedupe(customers)
       console.log(merged)
-      console.log(merged.map((guy) => guy.pet))
 
       res.json(merged);
     } catch (error) {
@@ -144,6 +148,7 @@ const customers = await Customer.findAll({
       res.status(500).json({ error: 'Failed to fetch customers. Please try again later.' });
     }
   };
+
 
 
   const sanitizeNames = (names) => {
@@ -159,9 +164,32 @@ const customers = await Customer.findAll({
         where: {
           firstName: { [Op.iLike]: `%${names[0]}%` },
           lastName: { [Op.iLike]: `%${names[1]}%` }
-        }
+        },
+          include: [
+    {
+      model: Pet,
+      through: { attributes: [] },
+    },
+    {
+      model: Group,
+      include: [
+        {
+          model: Customer,
+          as: "Customers",
+          include: [
+            {
+              model: Pet,
+              through: { attributes: [] },
+            },
+          ],
+        },
+      ],
+    },
+  ],
       })
-      return customer
+      const merged = dedupe(customer)
+      console.log(merged)
+      return merged
     } catch (error) {
       console.error('Error fetching customers:', error);
     }
@@ -174,9 +202,32 @@ const searchFirst = async (firstName) => {
     const customer = await Customer.findAll({
       where: {
         firstName: { [Op.iLike]: `%${names[0]}%` }
-      }
+      },
+        include: [
+    {
+      model: Pet,
+      through: { attributes: [] },
+    },
+    {
+      model: Group,
+      include: [
+        {
+          model: Customer,
+          as: "Customers",
+          include: [
+            {
+              model: Pet,
+              through: { attributes: [] },
+            },
+          ],
+        },
+      ],
+    },
+  ],
     })
-    return customer
+      const merged = dedupe(customer)
+      console.log(merged)
+      return merged
   } catch (error) {
     console.error('Error fetching customers:', error);
   }
@@ -189,9 +240,32 @@ const searchLast = async (lastName) => {
     const customer = await Customer.findAll({
       where: {
         lastName: { [Op.iLike]: `%${names[0]}%` }
-      }
+      },
+        include: [
+    {
+      model: Pet,
+      through: { attributes: [] },
+    },
+    {
+      model: Group,
+      include: [
+        {
+          model: Customer,
+          as: "Customers",
+          include: [
+            {
+              model: Pet,
+              through: { attributes: [] },
+            },
+          ],
+        },
+      ],
+    },
+  ],
     })
-    return customer
+      const merged = dedupe(customer)
+      console.log(merged)
+      return merged
   } catch (error) {
     console.error('Error fetching customers:', error);
   }
@@ -204,9 +278,32 @@ const searchPhone = async (phone) => {
     const customer = await Customer.findAll({
       where: {
         phoneNumber: { [Op.iLike]: `%${phone}%` }
-      }
+      },
+        include: [
+    {
+      model: Pet,
+      through: { attributes: [] },
+    },
+    {
+      model: Group,
+      include: [
+        {
+          model: Customer,
+          as: "Customers",
+          include: [
+            {
+              model: Pet,
+              through: { attributes: [] },
+            },
+          ],
+        },
+      ],
+    },
+  ],
     })
-    return customer
+      const merged = dedupe(customer)
+      console.log(merged)
+      return merged
   } catch (error) {
     console.error('Error fetching customers:', error);
   }
@@ -256,23 +353,50 @@ export const updateCustomer = async (req, res) => {
   try {
     console.log("recieved id: ", id);
     // Corrected model reference and assignment
-    const customer = await Customer.findOne({ where: { id: `${id}` },
+    const customer = await Customer.findAll({ where: { id: `${id}` },
         include: [
-      {
-        model: Pet,
-        through: { attributes: [] },
-      },
-      {
-        model: Group,
-      }],});
+    {
+      model: Pet,
+      through: { attributes: [] },
+    },
+    {
+      model: Group,
+      include: [
+        {
+          model: Customer,
+          as: "Customers",
+          include: [
+            {
+              model: Pet,
+              through: { attributes: [] },
+            },
+          ],
+        },
+      ],
+    },
+  ],
+    })
+    const merged = dedupe(customer)
 
     if (!customer) {
       return res.status(404).json({ error: 'Customer not found' });
     }
     
-    await customer.update({ firstName, middleName, lastName, email, phoneNumber, customerComment });
-    
-    res.json(customer.toJSON());  // Return updated customer
+    await customer[0].update({ firstName, middleName, lastName, email, phoneNumber, customerComment });
+    const updatedMerge = merged.map((guy) => {
+      return {
+        ...guy,
+        firstName,
+        middleName,
+        lastName,
+        email,
+        phoneNumber,
+        customerComment
+      };
+    });
+    console.log(updatedMerge)
+
+    res.json(updatedMerge);  // Return updated customer
   } catch (error) {
     console.error('Error updating customer:', error);
     res.status(500).json({ error: 'Failed to update customer. Please try again later.' });
@@ -336,8 +460,37 @@ export const getHousehold = async (req, res) => {
 }
 
 export const removeFromHousehold = async (req, res) => {
-  // handle case where 1 person left
-}
+  const { id, groupID } = req.params;
+
+  try {
+    const customer = await Customer.findByPk(id);
+
+    if (!customer) {
+      return res.status(404).json({ message: "Customer not found" });
+    }
+
+    await customer.update({ groupID: null });
+
+    const remainingGroupMembers = await Customer.findAll({ where: { groupID } });
+
+    if (remainingGroupMembers.length <= 1) {
+      if (remainingGroupMembers.length === 1) {
+        await remainingGroupMembers[0].update({ groupID: null });
+      }
+
+      const group = await Group.findByPk(groupID);
+      if (group) {
+        await group.destroy();
+      }
+    }
+
+    res.status(200).json({ message: "Successfully removed from group." });
+  } catch (error) {
+    console.error("Error removing from household:", error);
+    res.status(500).json({ message: "Error removing from household." });
+  }
+};
+
 
 export const verifyPhone = async (req, res) => {
   const { phoneNumber } = req.params;

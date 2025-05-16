@@ -167,7 +167,7 @@ const Records = ({ selectedPet, preferredColors, setRecordsOpen }) => {
                                                             const [year, month, day] = record.date.split("-");
                                                             return `${month}/${day}/${year}`;
                                                         })()}
-                                                        {record.status === "present" ? " - Newest" : ""}
+                                                        {record.status === "present" ? "" : ""}
                                                     </Text>
                                                 </HStack>
                                                 <Icon 
@@ -181,7 +181,7 @@ const Records = ({ selectedPet, preferredColors, setRecordsOpen }) => {
                                                 <IconButton
                                                     mr={"2rem"}
                                                     variant="ghost"
-                                                    color="white"
+                                                    color={{base: "primary", _dark: "primaryL"}}
                                                     onClick={(e) => {
                                                         e.stopPropagation();
                                                         handleEditClick(record, catppuccinPastelRainbow[idx % catppuccinPastelRainbow.length]);

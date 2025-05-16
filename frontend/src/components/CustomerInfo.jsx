@@ -116,10 +116,10 @@ const CustomerInfo = ({ selectedCustomer, setCustomerInfoOpen, updateCustomerInS
         selectedCustomer.middleName = middleName;
         selectedCustomer.lastName = lastName;
         selectedCustomer.email = email;
-        selectedCustomer.phoneNumber = phoneNumber;
+        selectedCustomer.phoneNumber = phoneNumber.replaceAll(/[()\-\ ]/g, "");
         selectedCustomer.customerComment = customerComment;
         setCustomerInfoOpen(false);
-        setPhoneNumber(formattedPhoneNumber);
+        setPhoneNumber(phoneNumber.replaceAll(/[()\-\ ]/g, ""));
       })
       .catch((error) => console.error("Error updating customer:", error));
   };
