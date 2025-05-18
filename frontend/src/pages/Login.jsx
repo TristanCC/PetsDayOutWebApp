@@ -5,6 +5,8 @@ import { motion, spring } from "framer-motion"; // <-- fixed import
 import { FaPaw } from "react-icons/fa6";
 import google from "../assets/google.png"
 
+const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
+
 function Login({ isLoggedIn, setIsLoggedIn }) {
   const [error, setError] = useState(null);
   const [email, setEmail] = useState('');
@@ -16,7 +18,7 @@ function Login({ isLoggedIn, setIsLoggedIn }) {
   useEffect(() => {
     const checkLoginStatus = async () => {
       try {
-        const response = await fetch('/auth/status', {
+        const response = await fetch(`${BACKEND_URL}/auth/status`, {
           method: 'GET',
           credentials: 'include',
         });
@@ -45,7 +47,7 @@ function Login({ isLoggedIn, setIsLoggedIn }) {
     const credentials = { email, password };
 
     try {
-      const response = await fetch('/auth/login', {
+      const response = await fetch(`${BACKEND_URL}/auth/login`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(credentials),
@@ -71,7 +73,7 @@ function Login({ isLoggedIn, setIsLoggedIn }) {
   const handleLogout = async () => {
     setIsLoggingOut(true);
     try {
-      const response = await fetch('/auth/logout', {
+      const response = await fetch(`${BACKEND_URL}/auth/logout`, {
         method: 'GET',
         credentials: 'include',
       });
