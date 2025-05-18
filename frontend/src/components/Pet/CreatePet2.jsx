@@ -210,6 +210,8 @@ const CreatePet2 = ({ customer, setCreatePetPressed, onPetCreated, petToEdit, se
     if (imageFile) {
       try {
         photoUrl = await uploadToS3(imageFile);
+        setImageFile(null);
+        setPreviewSrc(null);
       } catch (err) {
         console.error("Image upload failed:", err);
         toaster.create({
@@ -338,7 +340,7 @@ const CreatePet2 = ({ customer, setCreatePetPressed, onPetCreated, petToEdit, se
             </HStack>
 <HStack w="100%" alignItems="flex-start">
   <Box flex={1}>
-    <Field label="Picture" flex={1}>
+    <Field label="Picture" flex={1} >
       <Box position="relative" w="100%">
         <Box
           display="flex"
@@ -350,6 +352,7 @@ const CreatePet2 = ({ customer, setCreatePetPressed, onPetCreated, petToEdit, se
           position="relative"
           height="3rem"
           px={2}
+          cursor={"pointer"}
     
         >
           <InputGroup
@@ -357,6 +360,7 @@ const CreatePet2 = ({ customer, setCreatePetPressed, onPetCreated, petToEdit, se
             alignItems="center"
             flex="1"
             startElement={<FaCamera />}
+            cursor={"pointer"}
             endElement={
               previewSrc && (
                 <CloseButton
@@ -367,6 +371,7 @@ const CreatePet2 = ({ customer, setCreatePetPressed, onPetCreated, petToEdit, se
                   focusVisibleRing="inside"
                   focusRingWidth="2px"
                   pointerEvents="auto"
+                  cursor={"pointer"}
                   onClick={(e) => {
                     e.stopPropagation();
                     setImageFile(null);
@@ -383,7 +388,8 @@ const CreatePet2 = ({ customer, setCreatePetPressed, onPetCreated, petToEdit, se
               overflow="hidden"
               textOverflow="ellipsis"
               whiteSpace="nowrap"
-              maxW="6rem"
+              maxW="8rem"
+              cursor={"pointer"}
             >
               {imageFile ? imageFile.name : "Select an image"}
             </Text>

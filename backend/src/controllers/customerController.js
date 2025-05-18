@@ -70,24 +70,24 @@ function dedupe(customers) {
       console.log("RAW customers length:", customers.length);
     const plain = customers.map(c => c.get({ plain: true }));
 
-    const merged = plain.map(customer => {
-    // 1) direct pets
-    const direct = customer.Pets || [];
+const merged = plain.map(customer => {
+  const direct = customer.Pets || [];
+  const groupmates = customer.Group?.Customers || [];
 
-    // 2) collect pets from group-mates
-    const indirect = (customer.Group?.Customers || [])
-      // skip the primary customer themself, just in case
-      .filter(c2 => c2.id !== customer.id)
-      // pull out each c2.Pets array (might be empty)
-      .flatMap(c2 => c2.Pets || []);
+  const indirect = groupmates
+    .filter(c2 => c2.id !== customer.id)
+    .flatMap(c2 => c2.Pets || []);
 
-    // 3) merge + dedupe by pet.id
-    const all = [...direct, ...indirect];
-    const seen = new Set();
-    const deduped = all.filter(pet => {
-      if (seen.has(pet.id)) return false;
-      seen.add(pet.id);
-      return true;
+  console.log(`\nCustomer: ${customer.firstName}`);
+  console.log("Direct pets:", direct.map(p => p.name));
+  console.log("Groupmate pets:", indirect.map(p => p.name));
+
+  const all = [...direct, ...indirect];
+  const seen = new Set();
+  const deduped = all.filter(pet => {
+    if (seen.has(pet.id)) return false;
+    seen.add(pet.id);
+    return true;
     });
 
     // 4) return a new customer object with only the fields you want
@@ -111,24 +111,33 @@ export const getCustomers = async (req, res) => {
 
   try {
 const customers = await Customer.findAll({
+  // ⚠️ Temporarily remove limit/offset to debug
+  // limit,
+  // offset,
   limit,
   offset,
-  subQuery: false,
+  subQuery: true,
+  distinct: true, // important for pagination + include
   include: [
     {
       model: Pet,
       through: { attributes: [] },
+      required: false,
     },
     {
       model: Group,
+      required: false,
       include: [
         {
           model: Customer,
           as: "Customers",
+          separate: true,
+          required: false,
           include: [
             {
               model: Pet,
               through: { attributes: [] },
+              required: false,
             },
           ],
         },
