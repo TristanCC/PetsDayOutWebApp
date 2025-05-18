@@ -158,7 +158,7 @@ const CreatePet2 = ({ customer, setCreatePetPressed, onPetCreated, petToEdit, se
       const tempImageid = uuidv4()
       setTempImageId(tempImageid)
 
-      var filename = undefined
+      let filename 
       if(petToEdit) {
         filename = `${petToEdit.id}/profile.jpg`
       }

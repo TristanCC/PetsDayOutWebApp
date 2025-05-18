@@ -39,6 +39,10 @@ console.log(' env variables loaded: ', {  accessKeyId: process.env.AWS_ACCESS_KE
 export async function generateUploadUrl(filename, contentType) {
     try {
       console.log('Generating URL for:', { filename, contentType });
+
+      if (!filename || !contentType) {
+        return res.status(400).json({ error: "filename and contentType are required" });
+      }
       
       const command = new PutObjectCommand({
         Bucket: 'pets-day-out-photos',
