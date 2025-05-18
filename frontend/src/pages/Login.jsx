@@ -19,7 +19,7 @@ function Login({ isLoggedIn, setIsLoggedIn }) {
   useEffect(() => {
     const checkLoginStatus = async () => {
       try {
-        const response = await fetch(`${BACKEND_URL}/auth/status`, {
+        const response = await fetch(`/auth/status`, {
           method: 'GET',
           credentials: 'include',
         });
@@ -48,7 +48,7 @@ function Login({ isLoggedIn, setIsLoggedIn }) {
     const credentials = { email, password };
 
     try {
-      const response = await fetch(`${BACKEND_URL}/auth/login`, {
+      const response = await fetch(`/auth/login`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(credentials),
