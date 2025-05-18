@@ -10,6 +10,8 @@ import { PresentCountContext } from './context/PresentCountContext';
 
 const MotionBox = motion(Box);
 
+const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
+
 const MarkPresent = ({ selectedCustomer, setPresentOpen, preferredColors }) => {
     const [loading, setLoading] = useState(false);
     const [pets, setPets] = useState([]);
@@ -30,7 +32,7 @@ const MarkPresent = ({ selectedCustomer, setPresentOpen, preferredColors }) => {
         const markPresent = async () => {
           try {
             setLoading(true);
-            const response = await fetch(`/db/markPresent`, {
+            const response = await fetch(`${BACKEND_URL}/db/markPresent`, {
               method: "POST",
               headers: {
                 'Content-Type': 'application/json'
@@ -65,7 +67,7 @@ const MarkPresent = ({ selectedCustomer, setPresentOpen, preferredColors }) => {
         const fetchPets = async () => {
             try {
                 setLoading(true);
-                const response = await fetch(`/db/getPets/${selectedCustomer.id}`);
+                const response = await fetch(`${BACKEND_URL}/db/getPets/${selectedCustomer.id}`);
                 if (!response.ok) throw new Error("Network error");
                 const data = await response.json();
                 setPets(Array.isArray(data) ? data : []);

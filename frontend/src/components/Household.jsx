@@ -29,6 +29,9 @@ import { FaRegTrashCan } from "react-icons/fa6";
 import { IoPersonRemoveOutline } from "react-icons/io5";
 import { Toaster, toaster } from "@/components/ui/toaster"
 
+const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
+
+
 const Household = ({ customer, closeHouseholdPanel, preferredColors }) => {
   const MotionBox = motion(ChakraBox);
 
@@ -40,7 +43,7 @@ const Household = ({ customer, closeHouseholdPanel, preferredColors }) => {
 
 const handleRemoveFromHousehold = async (memberId, groupId) => {
   try {
-    const response = await fetch(`/db/removeFromHousehold/${memberId}/${groupId}`, {
+    const response = await fetch(`${BACKEND_URL}/db/removeFromHousehold/${memberId}/${groupId}`, {
       method: "POST"
     });
 
@@ -68,7 +71,7 @@ const handleRemoveFromHousehold = async (memberId, groupId) => {
     const fetchHouseholdMembers = async () => {
       try {
         setLoading(true);
-        const response = await fetch(`/db/getHousehold/${groupID}`);
+        const response = await fetch(`${BACKEND_URL}/db/getHousehold/${groupID}`);
         if (!response.ok) {
           throw new Error("Network response was not ok");
         }
@@ -81,7 +84,7 @@ const handleRemoveFromHousehold = async (memberId, groupId) => {
       }
     };
     fetchHouseholdMembers();
-  }, []);
+  }, [groupID]);
 
   const renderHousehold = (data) => {
     return data.map((member) => {

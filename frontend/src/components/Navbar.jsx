@@ -9,6 +9,8 @@ import { PresentCountContext } from './context/PresentCountContext';
 import { FaTableList } from "react-icons/fa6";
 import { FaUserClock } from "react-icons/fa";
 
+const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
+
 const Navbar = ({
   isLoggedIn,
   setIsLoggedIn,
@@ -56,7 +58,7 @@ const Navbar = ({
     const fetchPresent = async () => {
       try {
         setLoading(true);
-        const response = await fetch(`/db/getPresent`);
+        const response = await fetch(`${BACKEND_URL}/db/getPresent`);
         if (!response.ok) throw new Error("Network error");
         const data = await response.json();
         setPresent(data || []);

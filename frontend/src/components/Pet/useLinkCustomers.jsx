@@ -1,5 +1,8 @@
 import { useState } from "react";
 
+const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
+
+
 const useLinkCustomers = (didLinkCustomer, setDidLinkCustomer, reloadPets) => {
   const [searchResults, setSearchResults] = useState(null);
 
@@ -16,7 +19,7 @@ const useLinkCustomers = (didLinkCustomer, setDidLinkCustomer, reloadPets) => {
         return;
       }
       const response = await fetch(
-        `/db/findCustomer?firstName=&lastName=&phone=${formattedPhoneNumber}`
+        `${BACKEND_URL}/db/findCustomer?firstName=&lastName=&phone=${formattedPhoneNumber}`
       );
       const data = await response.json();
       console.log(data);
@@ -37,7 +40,7 @@ const useLinkCustomers = (didLinkCustomer, setDidLinkCustomer, reloadPets) => {
 
   const handleLink = async (currentID, targetID) => {
     try {
-      const response = await fetch(`/db/linkCustomers`, {
+      const response = await fetch(`${BACKEND_URL}/db/linkCustomers`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",

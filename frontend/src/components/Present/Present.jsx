@@ -15,6 +15,9 @@ import { GiPartyPopper } from "react-icons/gi";
 
 import Records from "./Records";
 
+const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
+
+
 const Present = ({ value, preferredColors, present, setPresent }) => {
     const [loading, setLoading] = useState(false);
     const [completePets, setCompletePets] = useState([])
@@ -26,7 +29,7 @@ const Present = ({ value, preferredColors, present, setPresent }) => {
 
     const handleEndDay = async () => {
       try {
-        const response = await fetch("/db/archivePresentCustomers", {
+        const response = await fetch(`${BACKEND_URL}/db/archivePresentCustomers`, {
           method: "PATCH",
         });
     

@@ -16,6 +16,9 @@ import { Field } from "@/components/ui/field";
 import { LuCircleX } from "react-icons/lu";
 import { withMask } from "use-mask-input";
 
+const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
+
+
 const createEditableField = (
   label,
   value,
@@ -94,7 +97,7 @@ const CustomerInfo = ({ selectedCustomer, setCustomerInfoOpen, updateCustomerInS
     // Format the phone number before sending the payload
     const formattedPhoneNumber = phoneNumber.replaceAll(/[()\-\ ]/g, "");
 
-    fetch(`/db/updateCustomer/${selectedCustomer.id}`, {
+    fetch(`${BACKEND_URL}/db/updateCustomer/${selectedCustomer.id}`, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",

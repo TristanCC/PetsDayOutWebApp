@@ -14,6 +14,8 @@ import { withMask } from "use-mask-input";
 
 import CreatePet from "./Pet/CreatePet2";
 
+const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
+
 
 const CreateCustomer = ({ setCustomerInfoOpen }) => {
   // State variables for form fields
@@ -95,7 +97,7 @@ const CreateCustomer = ({ setCustomerInfoOpen }) => {
         phoneNumber: formattedPhoneNumber,
       });
   
-      response = await fetch('/db/createCustomer', {
+      response = await fetch(`${BACKEND_URL}/db/createCustomer`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json"
@@ -138,7 +140,7 @@ const CreateCustomer = ({ setCustomerInfoOpen }) => {
     if (addPetChecked && petList.length > 0) {
       try {
         for (const pet of petList) {
-          response = await fetch('/db/createPet', {
+          response = await fetch(`${BACKEND_URL}/db/createPet`, {
             method: "POST",
             headers: {
               "Content-Type": "application/json"
@@ -167,7 +169,7 @@ const CreateCustomer = ({ setCustomerInfoOpen }) => {
     if(verifiedLink) {
       const handleLink = async (currentID, targetID) => {
         try {
-          const response = await fetch(`/db/linkCustomers`, {
+          const response = await fetch(`${BACKEND_URL}/db/linkCustomers`, {
             method: "PUT",
             headers: {
               "Content-Type": "application/json",
@@ -213,7 +215,7 @@ const CreateCustomer = ({ setCustomerInfoOpen }) => {
   const handleVerify = async () => {
     try {
       const formattedPhoneNumber = linkPhoneNumber.replaceAll(/[()\-\ ]/g, "");
-      const response = await fetch(`/db/verifyPhone/${formattedPhoneNumber}`, {
+      const response = await fetch(`${BACKEND_URL}/db/verifyPhone/${formattedPhoneNumber}`, {
         method: "GET",
         headers: {
           "Content-Type": "application/json"

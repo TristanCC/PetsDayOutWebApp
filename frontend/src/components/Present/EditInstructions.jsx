@@ -2,6 +2,9 @@ import {useState, useEffect} from 'react'
 import {Box, Text, Textarea, Button, HStack, VStack} from "@chakra-ui/react"
 import { Toaster, toaster } from "@/components/ui/toaster"
 
+const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
+
+
 const EditInstructions = ({selectedRecord, setEditInstructionsOpen, selectedColor}) => {
     
     const [prevText, setPrevText] = useState(selectedRecord.instructions ? selectedRecord.instructions : "")
@@ -11,7 +14,7 @@ const EditInstructions = ({selectedRecord, setEditInstructionsOpen, selectedColo
     const handleSave = async () => {
       setIsSaving(true);
       try {
-        const response = await fetch(`/db/updateRecord/${selectedRecord.id}`, {
+        const response = await fetch(`${BACKEND_URL}/db/updateRecord/${selectedRecord.id}`, {
           method: "PATCH",
           headers: {
             "Content-Type": "application/json",

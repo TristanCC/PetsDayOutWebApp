@@ -30,6 +30,9 @@ import { Dog } from "lucide-react";
 import Records from "../Present/Records";
 import { useCustomers } from "../context/CustomerContext";
 
+const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
+
+
 const PetListDisplay = ({ pets, setPets, createPetPressed, setCreatePetPressed, closePetsPanel, customer,
    handleBack, reloadPets, preferredColors, didLinkCustomer, setDidLinkCustomer }) => {
     const [hasGroup, setHasGroup] = useState(false)
@@ -52,7 +55,7 @@ const handleDeletion = async (petID) => {
   updateCustomerInState(updatedCustomer);
 
   try {
-    await fetch(`/db/deletePet/${petID}`, { method: "DELETE" });
+    await fetch(`${BACKEND_URL}/db/deletePet/${petID}`, { method: "DELETE" });
   } catch (error) {
     // Rollback on error
     updateCustomerInState(customer);

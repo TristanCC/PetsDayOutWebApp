@@ -16,6 +16,7 @@ const createEditableField = (label, value, setValue, required) => (
   </Field>
 );
 
+
 const CustomerCreationPet = ({ petName, setPetName, petBreed, setPetBreed, petSize, setPetSize, petNotes, setPetNotes, petList }) => {
   return (
     <Box>

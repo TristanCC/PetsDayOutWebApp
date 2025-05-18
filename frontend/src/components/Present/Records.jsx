@@ -9,6 +9,9 @@ import EditInstructions from "./EditInstructions";
 
 const MotionBox = motion(Box);
 
+const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
+
+
 const Records = ({ selectedPet, preferredColors, setRecordsOpen }) => {
     const [loading, setLoading] = useState(false);
     const [records, setRecords] = useState([]);
@@ -33,7 +36,7 @@ const Records = ({ selectedPet, preferredColors, setRecordsOpen }) => {
         const getRecords = async () => {
             setLoading(true);
             try {
-                const response = await fetch(`/db/getRecords/${selectedPet.id}`);
+                const response = await fetch(`${BACKEND_URL}/db/getRecords/${selectedPet.id}`);
                 const data = await response.json();
 
                 const sortedRecords = [...(data.records || [])].sort((a, b) =>

@@ -6,6 +6,9 @@ import PetListDisplay from "./PetListDisplay";
 import { useCustomers } from "../context/CustomerContext";
 import { Spinner } from "@chakra-ui/react";
 
+const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
+
+
 const PetList = ({ customer, preferredColors, handleEditPet, closePetsPanel }) => {
   const [pets, setPets] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -25,7 +28,7 @@ const PetList = ({ customer, preferredColors, handleEditPet, closePetsPanel }) =
   const reloadPets = async () => {
     try {
       setLoading(true);
-      const response = await fetch(`/db/getPets/${customer.id}`);
+      const response = await fetch(`${BACKEND_URL}/db/getPets/${customer.id}`);
       if (!response.ok) {
         throw new Error('Network response was not ok');
       }
@@ -43,7 +46,7 @@ const PetList = ({ customer, preferredColors, handleEditPet, closePetsPanel }) =
     const fetchPets = async () => {
       try {
         setLoading(true);
-        const response = await fetch(`/db/getPets/${customer.id}`);
+        const response = await fetch(`${BACKEND_URL}/db/getPets/${customer.id}`);
         if (!response.ok) {
           throw new Error('Network response was not ok');
         }

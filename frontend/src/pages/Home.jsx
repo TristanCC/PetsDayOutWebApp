@@ -3,6 +3,7 @@ import { useState, useRef, useEffect } from 'react';
 import { IoLogOutOutline } from "react-icons/io5";
 import Login from './Login';
 import CreateCustomer from "@/components/CreateCustomer";
+const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
 function Home({ isLoggedIn, setIsLoggedIn, preferredColors, customers, selectedCustomer, setSelectedCustomer, updateCustomerInState, createCustomerRef }) {
   const [customerInfoOpen, setCustomerInfoOpen] = useState(false);
@@ -34,7 +35,7 @@ function Home({ isLoggedIn, setIsLoggedIn, preferredColors, customers, selectedC
   const handleLogout = async () => {
     setIsLoggingOut(true);
     try {
-      const response = await fetch('/auth/logout', {
+      const response = await fetch(`${BACKEND_URL}/auth/logout`, {
         method: 'GET',
         credentials: 'include',
       });

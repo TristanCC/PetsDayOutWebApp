@@ -1,5 +1,8 @@
 import { createContext, useContext, useState, useEffect } from 'react';
 
+const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
+
+
 const CustomerContext = createContext();
 
 export const CustomerProvider = ({ children }) => {
@@ -15,7 +18,7 @@ export const CustomerProvider = ({ children }) => {
 
   const fetchCustomers = async () => {
     try {
-      const response = await fetch(`/db/getCustomers?limit=${limit}&offset=${offset}`);
+      const response = await fetch(`${BACKEND_URL}/db/getCustomers?limit=${limit}&offset=${offset}`);
       const data = await response.json();
       console.log(data)
       setCustomers(data);
@@ -27,7 +30,7 @@ export const CustomerProvider = ({ children }) => {
 
   const fetchGroupID = async (customerId) => {
     try {
-      const response = await fetch(`/db/getCustomer/${customerId}`);
+      const response = await fetch(`${BACKEND_URL}/db/getCustomer/${customerId}`);
       const data = await response.json();
       setGroupID(data.groupID); // Update groupID in state
     } catch (error) {

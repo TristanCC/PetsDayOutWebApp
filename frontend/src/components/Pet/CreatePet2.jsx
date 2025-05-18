@@ -25,6 +25,9 @@ import { v4 as uuidv4 } from 'uuid';
 const MotionBox = motion(Box);
 const MotionButton = motion(Button);
 
+const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
+
+
 const CreatePet2 = ({ customer, setCreatePetPressed, onPetCreated, petToEdit, setPetToEdit, 
   petList,setPetList, isCreatingCustomer }) => {
   const [sizeButton, setSizeButton] = useState(petToEdit && petToEdit.size ? petToEdit.size.toLowerCase().trim() : null);
@@ -164,7 +167,7 @@ const CreatePet2 = ({ customer, setCreatePetPressed, onPetCreated, petToEdit, se
       }
 
       // 1. Get presigned URL from your backend
-      const response = await fetch(`/s3/s3-url?filename=${encodeURIComponent(filename)}&contentType=${encodeURIComponent(file.type)}`);
+      const response = await fetch(`${BACKEND_URL}/s3/s3-url?filename=${encodeURIComponent(filename)}&contentType=${encodeURIComponent(file.type)}`);
       
       if (!response.ok) {
         const errorText = await response.text();
@@ -248,7 +251,7 @@ const CreatePet2 = ({ customer, setCreatePetPressed, onPetCreated, petToEdit, se
     if (!isCreatingCustomer) {
       try {
         
-        const endpoint = petToEdit?.id ? "/db/updatePet" : "/db/createPet";
+        const endpoint = petToEdit?.id ? `${BACKEND_URL}/db/updatePet` : `${BACKEND_URL}/db/createPet`;
         const method = petToEdit?.id ? "PUT" : "POST";
         const res = await fetch(endpoint, {
           method,

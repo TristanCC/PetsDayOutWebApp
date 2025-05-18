@@ -21,6 +21,9 @@ import PetList from './Pet/PetList';
 import Household from "./Household";
 import MarkPresent from "./MarkPresent"
 
+const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
+
+
 const MenuRoot1 = ({ customer, preferredColors, setSelectedCustomer, updateCustomerInState, deleteCustomerInState }) => {
   const [presentOpen, setPresentOpen] = useState(false);
   const [customerInfoOpen, setCustomerInfoOpen] = useState(false);
@@ -54,7 +57,7 @@ const MenuRoot1 = ({ customer, preferredColors, setSelectedCustomer, updateCusto
     if (!confirmDelete) return;
 
     try {
-      const response = await fetch(`db/deleteCustomer/${customer.id}`, {
+      const response = await fetch(`${BACKEND_URL}db/deleteCustomer/${customer.id}`, {
         method: "DELETE",
         headers: {
           "Content-Type": "application/json",

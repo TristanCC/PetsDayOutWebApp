@@ -5,6 +5,8 @@ import { LuSearch } from 'react-icons/lu';
 import { Input, Button, Text } from '@chakra-ui/react';
 import { withMask } from 'use-mask-input';
 
+const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
+
 const SearchPopup = ({
   preferredColors,
   setSearchResults,
@@ -41,7 +43,7 @@ const SearchPopup = ({
     try {
       const formattedPhoneNumber = phoneSearch.replaceAll(/[()\-\ ]/g, "");
       const response = await fetch(
-        `/db/findCustomer?firstName=${firstNameSearch}&lastName=${lastNameSearch}&phone=${formattedPhoneNumber}`
+        `${BACKEND_URL}/db/findCustomer?firstName=${firstNameSearch}&lastName=${lastNameSearch}&phone=${formattedPhoneNumber}`
       );
       const data = await response.json();
       // Always set as an array, even if empty.
