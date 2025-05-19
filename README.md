@@ -1,7 +1,7 @@
 
 <div align="center">
 
-# PetsDayOutWebApp
+# Pets Day Out Customer Management System
 
 [![License](https://img.shields.io/badge/License-Placeholder-blue.svg)](LICENSE)
 [![GitHub Stars](https://img.shields.io/github/stars/TristanCC/PetsDayOutWebApp?style=social)](https://github.com/TristanCC/PetsDayOutWebApp)
