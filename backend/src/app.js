@@ -34,7 +34,7 @@ app.options('*', cors(corsOptions)); // Handle preflight requests
 // Middleware
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-
+app.set('trust-proxy', 1)
 // Session middleware
 app.use(session({
   secret: process.env.SESSION_SECRET,
