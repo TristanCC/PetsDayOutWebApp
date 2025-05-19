@@ -274,7 +274,7 @@ const Present = ({ value, preferredColors, present, setPresent }) => {
                 <EmptyState.Content>
                   <EmptyState.Indicator> <GiPartyPopper/> </EmptyState.Indicator>
                   <EmptyState.Title >No more pets!</EmptyState.Title>
-                  <EmptyState.Description >Enjoy the rest of your day or mark some pets present.</EmptyState.Description>
+                  <EmptyState.Description mt={-3} textAlign={"center"} justifySelf={"center"} >Enjoy the rest of your day or mark some pets present.</EmptyState.Description>
                 </EmptyState.Content>
               </EmptyState.Root>}
               <Button position={"relative"} m={"1rem"} visibility={present? present.length >= 1 ? "visible" : "hidden" : "hidden"} onClick={() => handleEndDay()}>End Day</Button>

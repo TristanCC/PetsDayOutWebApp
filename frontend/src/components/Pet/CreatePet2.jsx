@@ -21,6 +21,8 @@ import { BsGenderFemale, BsGenderMale } from "react-icons/bs";
 import { useCustomers } from "../context/CustomerContext";
 
 import { v4 as uuidv4 } from 'uuid';
+import imageCompression from 'browser-image-compression';
+
 
 const MotionBox = motion(Box);
 const MotionButton = motion(Button);
@@ -152,6 +154,28 @@ const CreatePet2 = ({ customer, setCreatePetPressed, onPetCreated, petToEdit, se
 
   const {updateCustomerInState, updatePetsForCustomer} = useCustomers()
 
+  async function handleCompressImage(file) {
+
+  const fileOfImage = file;
+  console.log('originalFile instanceof Blob', fileOfImage instanceof Blob); // true
+  console.log(`originalFile size ${fileOfImage.size / 1024 / 1024} MB`);
+
+  const options = {
+    maxSizeMB: 1,
+    maxWidthOrHeight: 200,
+    useWebWorker: true,
+  }
+  try {
+    const compressedFile = await imageCompression(file, options);
+    console.log('compressedFile instanceof Blob', compressedFile instanceof Blob); // true
+    console.log(`compressedFile size ${compressedFile.size / 1024 / 1024} MB`); // smaller than maxSizeMB
+
+    return compressedFile; 
+  } catch (error) {
+    console.log(error);
+  }
+
+}
   
   async function uploadToS3(file) {
     try {
@@ -175,15 +199,17 @@ const CreatePet2 = ({ customer, setCreatePetPressed, onPetCreated, petToEdit, se
       }
   
       const { url } = await response.json();
-  
+
+      // 1.5 process the image
+      const compressedImage = await handleCompressImage(file)
       // 2. Upload the file directly to S3 using the presigned URL
       const uploadResponse = await fetch(url, {
         method: 'PUT', // MUST match the signed method
         headers: {
-          'Content-Type': file.type,
+          'Content-Type': compressedImage.type,
           // Remove 'x-amz-acl' header as it's already in the signed URL
         },
-        body: file
+        body: compressedImage
       });
   
       if (!uploadResponse.ok) {
