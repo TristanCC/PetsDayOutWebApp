@@ -9,7 +9,7 @@
 
 </div>
 
-This web application, PetsDayOutWebApp, is designed to manage customer and pet information for a pet grooming or daycare business. It provides features such as customer and pet management, and tracking pet attendance. The frontend is built using React and Vite, while the backend uses Node.js, Express, and PostgreSQL.
+This web application, is designed to manage customer and pet information for a pet grooming or daycare business. It provides features such as customer and pet management, and tracking pet attendance. The frontend is built using React and Vite, while the backend uses Node.js, Express, and PostgreSQL.
 
 ## Table of Contents
 
