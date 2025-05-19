@@ -39,7 +39,7 @@ const CreatePet2 = ({ customer, setCreatePetPressed, onPetCreated, petToEdit, se
   });
 
   const [name, setName] = useState(petToEdit ? petToEdit.name : "");
-  const [sex, setSex] = useState(petToEdit ? petToEdit.sex : null)
+  const [sex, setSex] = useState(petToEdit ? petToEdit.sex : "")
   const [breed, setBreed] = useState(petToEdit ? petToEdit.breed : "");
   const [image, setImage] = useState(petToEdit ? petToEdit.photoUrl : null);
   const [imageFile, setImageFile] = useState(null);
@@ -507,7 +507,7 @@ const CreatePet2 = ({ customer, setCreatePetPressed, onPetCreated, petToEdit, se
             onClick={(e) => handleSubmit(e)}
             w={"100%"}
             variant={"outline"}
-            disabled={name === "" || breed === "" || sizeButton === null || sex == ""}
+            disabled={!name || !breed || !sizeButton || !sex}
           >
             Save
           </Button>

@@ -1,27 +1,33 @@
-// backend/src/db/pool.js
-
 import { Sequelize } from 'sequelize';
 import dotenv from 'dotenv';
-
 dotenv.config();
 
-const sequelize = new Sequelize(process.env.DATABASE_URL, {
-  dialect: 'postgres',
-  logging: false,
-  dialectOptions: process.env.NODE_ENV === 'production'
-    ? {
-        ssl: {
-          require: true,
-          rejectUnauthorized: false,
-        },
-      }
-    : {},
-  pool: {
-    max: 5,
-    min: 0,
-    acquire: 30000,
-    idle: 10000
-  }
-});
+let sequelize;
+
+if (process.env.NODE_ENV === 'production') {
+  // On Railway: use the single DATABASE_URL
+  sequelize = new Sequelize(process.env.DATABASE_URL, {
+    dialect: 'postgres',
+    logging: false,
+    dialectOptions: {
+      ssl: { require: true, rejectUnauthorized: false }
+    },
+    pool: { max: 5, min: 0, acquire: 30000, idle: 10000 },
+  });
+} else {
+  // Local development: use separate host/user/password
+  sequelize = new Sequelize(
+    process.env.DB_NAME,
+    process.env.DB_USER,
+    process.env.DB_PASSWORD,
+    {
+      host: process.env.DB_HOST,
+      port: process.env.DB_PORT || 5432,
+      dialect: 'postgres',
+      logging: console.log,  // optional: log SQL in dev
+      pool: { max: 5, min: 0, acquire: 30000, idle: 10000 },
+    }
+  );
+}
 
 export default sequelize;
