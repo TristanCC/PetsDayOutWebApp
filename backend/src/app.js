@@ -22,7 +22,7 @@ dotenv.config();
 
 const app = express();
 const PORT = process.env.PORT || 5000;
-
+app.set('trust proxy', 1);
 // CORS setup
 const corsOptions = {
   origin: process.env.FRONTEND_URL || 'http://localhost:5173',
@@ -34,7 +34,6 @@ app.options('*', cors(corsOptions)); // Handle preflight requests
 // Middleware
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-app.set('trust-proxy', 1)
 // Session middleware
 app.use(session({
   secret: process.env.SESSION_SECRET,
