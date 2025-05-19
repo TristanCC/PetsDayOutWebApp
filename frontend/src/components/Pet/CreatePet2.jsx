@@ -39,7 +39,7 @@ const CreatePet2 = ({ customer, setCreatePetPressed, onPetCreated, petToEdit, se
   });
 
   const [name, setName] = useState(petToEdit ? petToEdit.name : "");
-  const [sex, setSex] = useState(petToEdit ? petToEdit.sex : "")
+  const [sex, setSex] = useState(petToEdit ? petToEdit.sex : null)
   const [breed, setBreed] = useState(petToEdit ? petToEdit.breed : "");
   const [image, setImage] = useState(petToEdit ? petToEdit.photoUrl : null);
   const [imageFile, setImageFile] = useState(null);
