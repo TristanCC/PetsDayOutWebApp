@@ -12,7 +12,7 @@ if (process.env.NODE_ENV === 'production') {
     dialectOptions: {
       ssl: { require: true, rejectUnauthorized: false }
     },
-    pool: { max: 5, min: 0, acquire: 30000, idle: 10000 },
+    pool: { max: 3, min: 0, acquire: 30000, idle: 10000 },
   });
 } else {
   // Local development: use separate host/user/password
@@ -24,8 +24,8 @@ if (process.env.NODE_ENV === 'production') {
       host: process.env.DB_HOST,
       port: process.env.DB_PORT || 5432,
       dialect: 'postgres',
-      logging: console.log,  // optional: log SQL in dev
-      pool: { max: 5, min: 0, acquire: 30000, idle: 10000 },
+      logging: false,
+      pool: { max: 3, min: 0, acquire: 30000, idle: 10000 },
     }
   );
 }

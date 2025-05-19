@@ -10,9 +10,12 @@ const PetPills = ({ pets, maxVisible = 3 }) => {
     return <Text fontStyle="italic" color="gray.500">N/A</Text>;
   }
 
+  const sortedPets = [...pets].sort((a, b) => a.name.localeCompare(b.name));
+
+
   return (
     <HStack maxW="20rem" overflow="hidden" wrap="wrap" spacing={2}>
-      {pets.slice(0, maxVisible).map((pet, idx) => (
+      {sortedPets.slice(0, maxVisible).map((pet, idx) => (
         <Box
           key={pet.id}
           bg={`${catppuccinPastelRainbow[idx % catppuccinPastelRainbow.length]}77`}
@@ -26,7 +29,7 @@ const PetPills = ({ pets, maxVisible = 3 }) => {
           </Text>
         </Box>
       ))}
-      {pets.length > maxVisible && (
+      {sortedPets.length > maxVisible && (
         <Text fontSize="sm" lineHeight={1}>
           +{pets.length - maxVisible} more
         </Text>
