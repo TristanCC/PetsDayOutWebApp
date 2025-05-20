@@ -135,14 +135,14 @@ const MenuRoot1 = ({ customer, preferredColors, setSelectedCustomer, updateCusto
             </div>
             <Text fontSize={"1rem"}>Household</Text>
           </MenuItem>
-          <MenuItem borderRadius={".75rem"} value="delete-customer" onClick={handleDeleteCustomer} cursor={"pointer"} >
+          {/* <MenuItem borderRadius={".75rem"} value="delete-customer" onClick={handleDeleteCustomer} cursor={"pointer"} >
             <div>
               <Icon fontSize={"1.25rem"} color={"red.500"}>
                 <LuArchive />
               </Icon>
             </div>
             <Text fontSize={"1rem"}>Archive Customer</Text>
-          </MenuItem>
+          </MenuItem> */}
         </MenuContent>
       </MenuRoot>
 
