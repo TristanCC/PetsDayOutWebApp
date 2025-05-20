@@ -65,9 +65,9 @@ const EditInstructions = ({selectedRecord, setEditInstructionsOpen, selectedColo
           </Text>
   
           <Textarea
-                              wordBreak="break-word"  // Ensures long words break
-                              whiteSpace="normal"  // Allows text to wrap
-                              overflowWrap="break-word"  // Alternative to wordBreak
+            wordBreak="break-word"  // Ensures long words break
+            whiteSpace="normal"  // Allows text to wrap
+            overflowWrap="break-word"  // Alternative to wordBreak
             bg={{ base: "primarySurfaceL", _dark: "primarySurface" }}
             rounded="lg"
             p={4}

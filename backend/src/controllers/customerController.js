@@ -609,7 +609,9 @@ export const getPresent = async (req, res) => {
     }, {});
 
     const groupedArray = Object.values(grouped);
+    console.log(groupedArray)
     res.json(groupedArray);
+
   } catch (error) {
     console.error('Error getting present customers:', error);
     res.status(500).json({ message: "Server error" });
