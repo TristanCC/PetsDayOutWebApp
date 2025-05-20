@@ -62,7 +62,7 @@ const Present = ({ value, preferredColors, present, setPresent }) => {
         const fetchPresent = async () => {
             try {
                 setLoading(true);
-                const response = await fetch(`/db/getPresent`);
+                const response = await fetch(`${BACKEND_URL}/db/getPresent`);
                 if (!response.ok) throw new Error("Network error");
                 const data = await response.json();
                 setPresent(data || []); 
@@ -80,7 +80,7 @@ const Present = ({ value, preferredColors, present, setPresent }) => {
 
     const markPetComplete = useCallback(async (petId) => {
       try {
-        const res = await fetch('/db/togglePetComplete', {
+        const res = await fetch(`${BACKEND_URL}/db/togglePetComplete`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ petID: petId })
