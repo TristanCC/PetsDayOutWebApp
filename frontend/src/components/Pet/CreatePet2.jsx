@@ -1,4 +1,4 @@
-import { HStack, VStack, Button, Text, Input, Box, Textarea, IconButton } from "@chakra-ui/react";
+import { HStack, VStack, Button, Text, Input, Box, Textarea, IconButton, Spinner } from "@chakra-ui/react";
 import { useState, useEffect, useRef } from "react";
 import { Field } from "@/components/ui/field";
 import { CloseButton } from "@/components/ui/close-button";
@@ -50,6 +50,8 @@ const CreatePet2 = ({ customer, setCreatePetPressed, onPetCreated, petToEdit, se
   const [notes, setNotes] = useState(petToEdit ? petToEdit.notes : "");
 
   const [tempImageId, setTempImageId] = useState("")
+
+  const [loading, setLoading] = useState(false)
 
   const placeholders = [
     { name: "Damon", breed: "Dachshund" },
@@ -233,6 +235,7 @@ const CreatePet2 = ({ customer, setCreatePetPressed, onPetCreated, petToEdit, se
   
   async function handleSubmit(e) {
     e.preventDefault();
+    setLoading(true)
   
     // 1) If the user selected a new file, upload it and get back the S3 URL
     let photoUrl = image || null;  // start with existing URL (if editing)
@@ -308,6 +311,7 @@ const CreatePet2 = ({ customer, setCreatePetPressed, onPetCreated, petToEdit, se
     } else {
       clearPets();
     }
+    setLoading(false)
   }
   
 
@@ -535,7 +539,7 @@ const CreatePet2 = ({ customer, setCreatePetPressed, onPetCreated, petToEdit, se
             variant={"outline"}
             disabled={!name || !breed || !sizeButton || !sex}
           >
-            Save
+            {loading ? (<Spinner size="md" />) : "Save"}
           </Button>
           
           {!isCreatingCustomer && (
