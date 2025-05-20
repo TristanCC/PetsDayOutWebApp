@@ -53,6 +53,15 @@ const CreatePet2 = ({ customer, setCreatePetPressed, onPetCreated, petToEdit, se
 
   const [loading, setLoading] = useState(false)
 
+  // refresh key prevents caching of image for proper updating
+
+  const [refreshKey, setRefreshKey] = useState(Date.now());
+
+  const handleRefresh = () => {
+    setRefreshKey(Date.now());
+  };
+
+
   const placeholders = [
     { name: "Damon", breed: "Dachshund" },
     { name: "Elena", breed: "Dachshund" },
@@ -186,7 +195,8 @@ const CreatePet2 = ({ customer, setCreatePetPressed, onPetCreated, petToEdit, se
 
       let filename 
       if(petToEdit) {
-        filename = `${petToEdit.id}/profile.jpg`
+        handleRefresh()
+        filename = `${petToEdit.id}/profile.jpg?cb=${refreshKey}`
       }
       else {
         filename = `temp-uploads/${customer.id}/${tempImageid}.jpg`;
@@ -226,7 +236,8 @@ const CreatePet2 = ({ customer, setCreatePetPressed, onPetCreated, petToEdit, se
         })
       }
   
-      return url.split('?')[0];
+      return `${url.split('?')[0]}?cb=${refreshKey}`;
+
     } catch (error) {
       console.error('S3 upload error:', error);
       throw error;
