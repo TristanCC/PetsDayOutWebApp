@@ -173,7 +173,7 @@ const CreatePet2 = ({ customer, setCreatePetPressed, onPetCreated, petToEdit, se
 
   const options = {
     maxSizeMB: 1,
-    maxWidthOrHeight: 200,
+    maxWidthOrHeight: 400,
     useWebWorker: true,
   }
   try {

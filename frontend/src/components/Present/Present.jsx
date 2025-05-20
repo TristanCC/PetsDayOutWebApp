@@ -80,6 +80,7 @@ const Present = ({ value, preferredColors, present, setPresent }) => {
 
     const markPetComplete = useCallback(async (petId) => {
       try {
+        
         const res = await fetch(`${BACKEND_URL}/db/togglePetComplete`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
