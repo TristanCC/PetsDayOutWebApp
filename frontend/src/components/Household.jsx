@@ -120,7 +120,7 @@ const handleRemoveFromHousehold = async (memberId, groupId) => {
       return (
         <HStack key={member.id} w={"100%"} justify={"space-between"} minH={"2rem"}>
           <Text>
-            {member.name} {member.breed}
+            {member.name} ({member.breed})
           </Text>
         </HStack>
       );
