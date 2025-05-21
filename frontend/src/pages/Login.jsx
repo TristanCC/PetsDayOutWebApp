@@ -8,7 +8,7 @@ import google from "../assets/google.png"
 
 const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
-function Login({ isLoggedIn, setIsLoggedIn }) {
+function Login({ isLoggedIn, setIsLoggedIn, setUser }) {
   const [error, setError] = useState(null);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -41,35 +41,47 @@ function Login({ isLoggedIn, setIsLoggedIn }) {
     checkLoginStatus();
   }, [setIsLoggedIn]);
 
+const handleLogin = async (e) => {
+  e.preventDefault();
+  setIsLoading(true);
+  const credentials = { email, password };
 
-  const handleLogin = async (e) => {
-    e.preventDefault();
-    setIsLoading(true);
-    const credentials = { email, password };
+  try {
+    const response = await fetch(`${BACKEND_URL}/auth/login`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(credentials),
+      credentials: 'include',
+    });
 
-    try {
-      const response = await fetch(`${BACKEND_URL}/auth/login`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(credentials),
-        credentials: 'include',
-      });
-
-      if (!response.ok) {
-        const errorData = await response.json();
-        setError(errorData.error || 'Login failed.');
-        return;
-      }
-
-      setError(null);
-      setIsLoggedIn(true);
-    } catch (error) {
-      console.error('Error during login:', error);
-      setError('An error occurred during login.');
-    } finally {
-      setIsLoading(false);
+    if (!response.ok) {
+      const errorData = await response.json();
+      setError(errorData.error || 'Login failed.');
+      return;
     }
-  };
+    
+    const data = await response.json();
+    console.log('Login response:', data); // For debugging
+    
+    // Only call setUser if it exists
+    if (typeof setUser === 'function') {
+      console.log("setUser exists")
+      setUser(data.user || {
+        id: data.userId,
+        email: email,
+        preferredColor: 'blue' // Default
+      });
+    }
+    
+    setError(null);
+    setIsLoggedIn(true);
+  } catch (error) {
+    console.error('Login error:', error);
+    setError('An error occurred during login.');
+  } finally {
+    setIsLoading(false);
+  }
+};
 
   const handleLogout = async () => {
     setIsLoggingOut(true);

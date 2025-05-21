@@ -19,5 +19,6 @@ router.get('/google/callback',
   authController.googleCallback
 );
 router.get('/logout', authController.logout);
+router.put('/:id/:color', authController.preferredColor)
 
 export default router;

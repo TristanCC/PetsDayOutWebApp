@@ -16,6 +16,7 @@ const Navbar = ({
   setIsLoggedIn,
   preferredColors,
   setPreferredColors,
+  setUser
 }) => {
   const [value, setValue] = useState("first");
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
@@ -181,7 +182,7 @@ const Navbar = ({
           </Tabs.Root>
         </Box>
       ) : (
-        <Login isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} />
+        <Login isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} setUser={setUser} />
       )}
     </>
   );

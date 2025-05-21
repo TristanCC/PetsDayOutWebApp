@@ -1,5 +1,5 @@
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Box, chakra, IconButton, HStack } from "@chakra-ui/react";
 import { ColorModeButton } from "@/components/ui/color-mode";
 import { LuPaintbrushVertical } from "react-icons/lu";
@@ -16,14 +16,38 @@ import Navbar from './components/Navbar';
 import Home from './pages/Home';
 import Login from './pages/Login';
 import { CustomerProvider } from './components/context/CustomerContext'; // Import the provider
-
+const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [preferredColors, setPreferredColors] = useState('blue');
+  const [user, setUser] = useState({
+    id: null,
+    email: '',
+    preferredColor: 'blue' // default
+  });
+  const [preferredColors, setPreferredColors] = useState("blue");
+
 
   const handleColorModeChange = (colorMode) => {
     setPreferredColors(colorMode);
+    const handleUpdate = async () => {
+      try {
+        const response = await fetch(`${BACKEND_URL}/auth/${user.id}/${colorMode}`, {
+          method: "PUT",
+          
+        })
+        if(!response.ok) {
+          throw new Error("response was not ok")
+        }
+      } catch (error) {
+        console.error("error updating preferred color", error)
+      }
+    }
+    handleUpdate()
   };
+
+  useEffect(() => {
+    setPreferredColors(user.preferredColor)
+  },[user])
 
   
 
@@ -73,6 +97,7 @@ function App() {
               setIsLoggedIn={setIsLoggedIn}
               preferredColors={preferredColors}
               setPreferredColors={setPreferredColors}
+              setUser={setUser}
             />
             <Box className='wrapperInner'>
               <BrowserRouter>
@@ -85,6 +110,7 @@ function App() {
                         setIsLoggedIn={setIsLoggedIn}
                         preferredColors={preferredColors}
                         setPreferredColors={setPreferredColors}
+                        setUser={setUser}
                       />
                     }
                   />

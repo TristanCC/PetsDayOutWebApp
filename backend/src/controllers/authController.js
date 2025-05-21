@@ -34,6 +34,8 @@
 //  })(req, res, next);
 //};
 
+import User from "../models/User.js"
+
 export const login = (req, res, next, passport) => {
   passport.authenticate('local', (err, user, info) => {
     if (err)      return res.status(500).json({ error: 'Internal server error' });
@@ -57,6 +59,7 @@ export const login = (req, res, next, passport) => {
             email: user.email,
             firstName: user.firstName,
             lastName: user.lastName,
+            preferredColor: user.preferredColor || "blue"
           },
         });
       });
@@ -103,3 +106,24 @@ export const logout = (req, res) => {
     });
   });
 };
+
+export const preferredColor = async (req, res) => {
+  const {id, color} = req.params
+
+  try {
+    const user = await User.findOne({where: {id: id}})
+    if(!user){
+      return res.status(404).json({message: "user not found"})
+    }
+
+    await user.update({preferredColor: color})
+
+    return res.status(200).json({message: `successfully updated preferred color to ${color} for ${user}`})
+
+
+
+  } catch (error) {
+    console.error("error", error)
+    res.status(500).json({ message: "Error updating preferred color."})
+  }
+}
