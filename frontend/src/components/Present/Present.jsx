@@ -130,7 +130,7 @@ const Present = ({ value, preferredColors, present, setPresent }) => {
                 const allComplete = customer.pets.every(p => p.completed);
                 
                 return (
-                <MotionBox
+                <Box
                   key={customer.customer.id}
                   w="100%"
                   bg={{ base: "primarySurfaceL", _dark: "primarySurface" }}
@@ -140,8 +140,8 @@ const Present = ({ value, preferredColors, present, setPresent }) => {
                   boxShadow="md"
                   transition="all 0.2s"
                   _hover={{ boxShadow: "lg", transform: "scale(1.01)" }}
-                  initial={{ opacity: 0, y: "20px"}}
-                  animate={{ opacity: 1, y: 0 }}
+                  //initial={{ opacity: 0, y: "20px"}}
+                  //animate={{ opacity: 1, y: 0 }}
                 >
                   <VStack gap={1} align={"start"} mb={"1rem"}>
                     <HStack w={"70%"}>
@@ -156,7 +156,7 @@ const Present = ({ value, preferredColors, present, setPresent }) => {
                             </Text>
                           </HStack>
                             {allComplete ? (
-                              <MotionBox
+                              <Box
                               boxSize={4}
                               bg={allComplete ? "green.500" : "yellow.500"}
                               borderRadius="full"
@@ -176,7 +176,7 @@ const Present = ({ value, preferredColors, present, setPresent }) => {
                             />
                             
                           ) :
-                          <MotionBox
+                          <Box
                           boxSize={4}
                           bg={allComplete ? "green.500" : "yellow.500"}
                           borderRadius="full"
@@ -271,7 +271,7 @@ const Present = ({ value, preferredColors, present, setPresent }) => {
                       </Popover.Root>
                     ))}
                   </HStack>
-                </MotionBox>
+                </Box>
               )}) : 
               <EmptyState.Root>
                 <EmptyState.Content>
@@ -280,12 +280,13 @@ const Present = ({ value, preferredColors, present, setPresent }) => {
                   <EmptyState.Description mt={-3} textAlign={"center"} justifySelf={"center"} >Enjoy the rest of your day or mark some pets present.</EmptyState.Description>
                 </EmptyState.Content>
               </EmptyState.Root>}
-              <MotionBox
-                initial={{ opacity: 0, y: "40px"}}
-                animate={{ opacity: 1, y: 0 }}>
+              <Box
+                //</VStack>initial={{ opacity: 0, y: "40px"}}
+                //</VStack>animate={{ opacity: 1, y: 0 }}
+              >
                 <Button
                  position={"relative"} m={"1rem"} visibility={present? present.length >= 1 ? "visible" : "hidden" : "hidden"} onClick={() => handleEndDay()}>End Day</Button>
-              </MotionBox>
+              </Box>
 
             </VStack>
           )}
