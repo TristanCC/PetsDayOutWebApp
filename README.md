@@ -17,9 +17,7 @@ This web application, is designed to manage customer and pet information for a p
 - [Installation](#installation)
 - [Running the Project](#running-the-project)
 - [Dependencies](#dependencies)
-- [Contributing](#contributing)
-- [License](#license)
-- [Contact](#contact)
+
 
 ## Features
 
@@ -127,7 +125,4 @@ This web application, is designed to manage customer and pet information for a p
 -   `react-router-dom`: DOM bindings for React Router.
 -   `vite`: Build tool and development server.
 
-## License
-
-This project is licensed under the [MIT](LICENSE).
 
