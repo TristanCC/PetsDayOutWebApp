@@ -127,24 +127,7 @@ This web application, is designed to manage customer and pet information for a p
 -   `react-router-dom`: DOM bindings for React Router.
 -   `vite`: Build tool and development server.
 
-## Contributing
-
-Contributions are welcome! To contribute:
-
-1.  Fork the repository.
-2.  Create a new branch for your feature or bug fix.
-3.  Commit your changes.
-4.  Push to your fork.
-5.  Submit a pull request.
-
 ## License
 
-This project is licensed under the [Placeholder License](LICENSE).
+This project is licensed under the [MIT](LICENSE).
 
-## Contact
-
-For questions or contributions, contact:
-
-*   [Placeholder Maintainer](mailto:placeholder@example.com)
-*   [Placeholder Contributor](mailto:placeholdercontributor@example.com)
-```
