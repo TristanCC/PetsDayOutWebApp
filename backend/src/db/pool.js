@@ -4,7 +4,7 @@ dotenv.config();
 
 let sequelize;
 
-if (process.env.NODE_ENV === 'production') {
+if (process.env.DATABASE_URL ) {
   // On Railway: use the single DATABASE_URL
   console.log("NODE_ENV:", process.env.NODE_ENV);
   console.log("DATABASE_URL:", process.env.DATABASE_URL || "MISSING");
